@@ -8,15 +8,18 @@ import "./index.css";
 import App from "./App";
 
 import { AuthContextProvider } from "./context/AuthContext";
+import { RestaurantsContextProvider } from "./context/RestaurantsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <RestaurantsContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </RestaurantsContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

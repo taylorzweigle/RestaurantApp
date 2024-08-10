@@ -1,7 +1,7 @@
 //Taylor Zweigle, 2024
 import { useState } from "react";
 
-import * as ACTIONS from "../actions";
+import * as ACTIONS from "../actions/actions";
 
 import { useAuthContext } from "./useAuthContext";
 
@@ -11,7 +11,7 @@ export const useLogin = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { dispatch } = useAuthContext();
+  const { dispatchAuth } = useAuthContext();
 
   const login = async (username, password) => {
     setLoading(true);
@@ -34,7 +34,7 @@ export const useLogin = () => {
     if (res.ok) {
       localStorage.setItem("user", JSON.stringify(json));
 
-      dispatch({ type: ACTIONS.LOGIN, payload: json });
+      dispatchAuth({ type: ACTIONS.LOGIN, payload: json });
 
       setLoading(false);
     }
