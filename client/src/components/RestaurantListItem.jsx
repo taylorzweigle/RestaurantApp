@@ -9,11 +9,11 @@ const RestaurantListItem = ({ restaurant, city, state, type, rating }) => {
     let stars = [];
 
     for (let i = 0; i < count; i++) {
-      stars.push(<StarIcon fontSize="small" />);
+      stars.push(<StarIcon key={i} fontSize="small" />);
     }
 
     for (let i = count; i < 5; i++) {
-      stars.push(<StarBorderIcon fontSize="small" />);
+      stars.push(<StarBorderIcon key={i} fontSize="small" />);
     }
 
     return stars;

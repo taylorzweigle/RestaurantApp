@@ -6,7 +6,7 @@ const Restaurant = require("../models/restaurantModel");
 const getRestaurants = async (req, res) => {
   const creationUser = req.user._id;
 
-  const restaurants = await Restaurant.find({ creationUser });
+  const restaurants = await Restaurant.find({ creationUser }).sort({ creationTime: -1 });
 
   res.status(200).json(restaurants);
 };

@@ -1,5 +1,6 @@
 //Taylor Zweigle, 2024
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import * as Actions from "../actions/actions";
 
@@ -29,7 +30,15 @@ const HomePage = () => {
   }, [dispatchRestaurants, user]);
 
   return (
-    <>
+    <div>
+      <div className="flex flex-row justify-between items-center p-4">
+        <Link to="/restaurant">
+          <button className="p-4 bg-sky-600 text-white">Add Restaurant</button>
+        </Link>
+        <button className="p-4 bg-rose-600 text-white" onClick={() => logout()}>
+          Logout
+        </button>
+      </div>
       {restaurants &&
         restaurants.map((restaurant) => (
           <RestaurantListItem
@@ -41,8 +50,7 @@ const HomePage = () => {
             rating={restaurant.rating}
           />
         ))}
-      <button onClick={() => logout()}>Logout</button>
-    </>
+    </div>
   );
 };
 
