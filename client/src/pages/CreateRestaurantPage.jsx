@@ -22,6 +22,7 @@ const CreateRestaurantPage = () => {
   const [stateError, setStateError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [ratingError, setRatingError] = useState("");
+  const [costError, setCostError] = useState("");
   const [visitedError, setVisitedError] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,7 @@ const CreateRestaurantPage = () => {
       state: data.state,
       type: data.type,
       rating: data.rating,
+      cost: data.cost,
       visited: data.visited === "Yes" ? true : data.visited === "No" ? false : null,
       creationTime: new Date(),
     };
@@ -68,6 +70,9 @@ const CreateRestaurantPage = () => {
       }
       if (json.error.includes("rating")) {
         setRatingError("Rating is required");
+      }
+      if (json.error.includes("cost")) {
+        setCostError("Cost is required");
       }
       if (json.error.includes("visited")) {
         setVisitedError("Visited is required");
@@ -97,6 +102,7 @@ const CreateRestaurantPage = () => {
     setStateError("");
     setTypeError("");
     setRatingError("");
+    setCostError("");
     setVisitedError("");
   };
 
@@ -104,7 +110,7 @@ const CreateRestaurantPage = () => {
     <div>
       <div className="text-xl">Add Restaurant</div>
       <RestaurantForm
-        errors={{ restaurantError, cityError, stateError, typeError, ratingError, visitedError }}
+        errors={{ restaurantError, cityError, stateError, typeError, ratingError, costError, visitedError }}
         loading={{ loading }}
         onSubmit={handleOnSubmit}
         onCancel={handleOnCancel}

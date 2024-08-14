@@ -24,6 +24,10 @@ const restaurantSchema = new Schema({
     type: Number,
     required: true,
   },
+  cost: {
+    type: String,
+    required: true,
+  },
   visited: {
     type: Boolean,
     required: true,

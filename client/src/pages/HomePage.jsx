@@ -48,6 +48,7 @@ const HomePage = () => {
               state={restaurant.state}
               type={restaurant.type}
               rating={restaurant.rating}
+              cost={restaurant.cost}
             />
           </Link>
         ))}

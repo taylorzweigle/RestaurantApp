@@ -9,6 +9,7 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
   const [state, setState] = useState("");
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
+  const [cost, setCost] = useState("");
   const [visited, setVisited] = useState("");
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
       setState(data.state);
       setType(data.type);
       setRating(data.rating);
+      setCost(data.cost);
       setVisited(data.visited);
     }
   }, [data]);
@@ -97,6 +99,21 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
             <option value="5">5</option>
           </select>
           {errors.ratingError && <div className="text-md text-red-600">{errors.ratingError}</div>}
+          <label htmlFor="cost">Cost</label>
+          <select
+            id="cost"
+            name="cost"
+            className="p-4 bg-white border border-gray-400"
+            value={cost}
+            onChange={(e) => setCost(e.target.value)}
+          >
+            <option value=""></option>
+            <option value="$">$</option>
+            <option value="$$">$$</option>
+            <option value="$$$">$$$</option>
+            <option value="$$$$">$$$$</option>
+          </select>
+          {errors.costError && <div className="text-md text-red-600">{errors.costError}</div>}
           <label htmlFor="visited">Visited</label>
           <select
             id="visited"
@@ -122,7 +139,7 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
       )}
       <button
         className="p-4 bg-sky-600 text-white"
-        onClick={(e) => onSubmit(e, { restaurant, city, state, type, rating, visited })}
+        onClick={(e) => onSubmit(e, { restaurant, city, state, type, rating, cost, visited })}
       >
         {loading.loading ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
       </button>

@@ -5,7 +5,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-const RestaurantListItem = ({ restaurant, city, state, type, rating, onClick }) => {
+const RestaurantListItem = ({ restaurant, city, state, type, rating, cost }) => {
   const renderStars = (count) => {
     let stars = [];
 
@@ -26,7 +26,7 @@ const RestaurantListItem = ({ restaurant, city, state, type, rating, onClick }) 
         <div className="flex flex-col gap-0">
           <div className="text-lg">{restaurant}</div>
           <div className="text-md">{`${city}, ${state}`}</div>
-          <div className="text-md">{type}</div>
+          <div className="text-md">{`${type} | ${cost}`}</div>
           <div className="flex flex-row gap-0 pt-1">{renderStars(rating)}</div>
         </div>
         <ChevronRightIcon fontSize="medium" />

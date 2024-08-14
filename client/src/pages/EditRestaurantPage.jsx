@@ -25,6 +25,7 @@ const CreateRestaurantPage = () => {
   const [state, setState] = useState("");
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
+  const [cost, setCost] = useState("");
   const [visited, setVisited] = useState("");
 
   const [restaurantError, setRestaurantError] = useState("");
@@ -32,6 +33,7 @@ const CreateRestaurantPage = () => {
   const [stateError, setStateError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [ratingError, setRatingError] = useState("");
+  const [costError, setCostError] = useState("");
   const [visitedError, setVisitedError] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,7 @@ const CreateRestaurantPage = () => {
         setState(json.json.state);
         setType(json.json.type);
         setRating(json.json.rating);
+        setCost(json.json.cost);
         setVisited(json.json.visited ? "Yes" : "No");
       }
     };
@@ -76,6 +79,7 @@ const CreateRestaurantPage = () => {
     setState(data.state);
     setType(data.type);
     setRating(data.rating);
+    setCost(data.cost);
     setVisited(data.visited);
 
     const newRestaurant = {
@@ -84,6 +88,7 @@ const CreateRestaurantPage = () => {
       state: data.state,
       type: data.type,
       rating: data.rating,
+      cost: data.cost,
       visited: data.visited === "Yes" ? true : data.visited === "No" ? false : null,
       creationTime: new Date(),
     };
@@ -105,6 +110,9 @@ const CreateRestaurantPage = () => {
       }
       if (json.error.includes("rating")) {
         setRatingError("Rating is required");
+      }
+      if (json.error.includes("cost")) {
+        setCostError("Cost is required");
       }
       if (json.error.includes("visited")) {
         setVisitedError("Visited is required");
@@ -154,6 +162,7 @@ const CreateRestaurantPage = () => {
     setStateError("");
     setTypeError("");
     setRatingError("");
+    setCostError("");
     setVisitedError("");
   };
 
@@ -161,8 +170,8 @@ const CreateRestaurantPage = () => {
     <div>
       <div className="text-xl">Edit Restaurant</div>
       <RestaurantForm
-        data={{ restaurant, city, state, type, rating, visited }}
-        errors={{ restaurantError, cityError, stateError, typeError, ratingError, visitedError }}
+        data={{ restaurant, city, state, type, rating, cost, visited }}
+        errors={{ restaurantError, cityError, stateError, typeError, ratingError, costError, visitedError }}
         loading={{ loading, deleteLoading }}
         onSubmit={handleOnSubmit}
         onDelete={handleOnDelete}
