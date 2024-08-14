@@ -10,7 +10,7 @@ import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { getRestaurants } from "../api/restaurants";
 
-import RestaurantListItem from "../components/RestaurantListItem";
+import RestaurantListItem from "../components/lists/RestaurantListItem";
 
 const HomePage = () => {
   const { user } = useAuthContext();
@@ -41,14 +41,15 @@ const HomePage = () => {
       </div>
       {restaurants &&
         restaurants.map((restaurant) => (
-          <RestaurantListItem
-            key={restaurant._id}
-            restaurant={restaurant.restaurant}
-            city={restaurant.city}
-            state={restaurant.state}
-            type={restaurant.type}
-            rating={restaurant.rating}
-          />
+          <Link key={restaurant._id} to={`/restaurant/${restaurant._id}`}>
+            <RestaurantListItem
+              restaurant={restaurant.restaurant}
+              city={restaurant.city}
+              state={restaurant.state}
+              type={restaurant.type}
+              rating={restaurant.rating}
+            />
+          </Link>
         ))}
     </div>
   );

@@ -51,22 +51,6 @@ const createRestaurant = async (req, res) => {
   }
 };
 
-const deleteRestaurant = async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid restaurant id" });
-  }
-
-  const restaurant = await Restaurant.findOneAndDelete({ _id: id });
-
-  if (!restaurant) {
-    return res.status(404).json({ error: "No restaurant found" });
-  }
-
-  res.status(200).json(restaurant);
-};
-
 const updateRestaurant = async (req, res) => {
   const { id } = req.params;
 
@@ -83,10 +67,26 @@ const updateRestaurant = async (req, res) => {
   }
 };
 
+const deleteRestaurant = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "Invalid restaurant id" });
+  }
+
+  const restaurant = await Restaurant.findOneAndDelete({ _id: id });
+
+  if (!restaurant) {
+    return res.status(404).json({ error: "No restaurant found" });
+  }
+
+  res.status(200).json(restaurant);
+};
+
 module.exports = {
   getRestaurants,
   getRestaurant,
   createRestaurant,
-  deleteRestaurant,
   updateRestaurant,
+  deleteRestaurant,
 };

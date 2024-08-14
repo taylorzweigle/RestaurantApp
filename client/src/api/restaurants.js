@@ -51,12 +51,14 @@ export const createRestaurant = async (body, token) => {
   }
 };
 
-export const deleteRestaurant = async (id, token) => {
+export const updateRestaurant = async (id, body, token) => {
   const res = await fetch(`${API_URL}/api/restaurants/${id}`, {
-    method: "DELETE",
+    method: "PATCH",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify(body),
   });
 
   const json = await res.json();
@@ -69,14 +71,12 @@ export const deleteRestaurant = async (id, token) => {
   }
 };
 
-export const updateRestaurant = async (id, body, token) => {
+export const deleteRestaurant = async (id, token) => {
   const res = await fetch(`${API_URL}/api/restaurants/${id}`, {
-    method: "PATCH",
+    method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body),
   });
 
   const json = await res.json();

@@ -5,8 +5,8 @@ const {
   getRestaurants,
   getRestaurant,
   createRestaurant,
-  deleteRestaurant,
   updateRestaurant,
+  deleteRestaurant,
 } = require("../controllers/restaurantController");
 
 const requireAuth = require("../middleware/requireAuth");
@@ -21,8 +21,8 @@ router.get("/:id", getRestaurant);
 
 router.post("/", createRestaurant);
 
-router.delete("/:id", deleteRestaurant);
-
 router.patch("/:id", updateRestaurant);
+
+router.delete("/:id", deleteRestaurant);
 
 module.exports = router;
