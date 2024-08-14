@@ -32,7 +32,6 @@ const CreateRestaurantPage = () => {
   const [cityError, setCityError] = useState("");
   const [stateError, setStateError] = useState("");
   const [typeError, setTypeError] = useState("");
-  const [ratingError, setRatingError] = useState("");
   const [costError, setCostError] = useState("");
   const [visitedError, setVisitedError] = useState("");
 
@@ -108,9 +107,6 @@ const CreateRestaurantPage = () => {
       if (json.error.includes("type")) {
         setTypeError("Type is required");
       }
-      if (json.error.includes("rating")) {
-        setRatingError("Rating is required");
-      }
       if (json.error.includes("cost")) {
         setCostError("Cost is required");
       }
@@ -161,7 +157,6 @@ const CreateRestaurantPage = () => {
     setCityError("");
     setStateError("");
     setTypeError("");
-    setRatingError("");
     setCostError("");
     setVisitedError("");
   };
@@ -171,7 +166,7 @@ const CreateRestaurantPage = () => {
       <div className="text-xl">Edit Restaurant</div>
       <RestaurantForm
         data={{ restaurant, city, state, type, rating, cost, visited }}
-        errors={{ restaurantError, cityError, stateError, typeError, ratingError, costError, visitedError }}
+        errors={{ restaurantError, cityError, stateError, typeError, costError, visitedError }}
         loading={{ loading, deleteLoading }}
         onSubmit={handleOnSubmit}
         onDelete={handleOnDelete}

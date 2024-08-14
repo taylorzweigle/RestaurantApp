@@ -30,28 +30,31 @@ const HomePage = () => {
   }, [dispatchRestaurants, user]);
 
   return (
-    <div>
-      <div className="flex flex-row justify-between items-center p-4">
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-row justify-between items-center">
         <Link to="/restaurant">
-          <button className="p-4 bg-sky-600 text-white">Add Restaurant</button>
+          <button className="p-4 bg-sky-600 text-white rounded-md">Add Restaurant</button>
         </Link>
-        <button className="p-4 bg-rose-600 text-white" onClick={() => logout()}>
+        <button className="p-4 bg-rose-600 text-white rounded-md" onClick={() => logout()}>
           Logout
         </button>
       </div>
-      {restaurants &&
-        restaurants.map((restaurant) => (
-          <Link key={restaurant._id} to={`/restaurant/${restaurant._id}`}>
-            <RestaurantListItem
-              restaurant={restaurant.restaurant}
-              city={restaurant.city}
-              state={restaurant.state}
-              type={restaurant.type}
-              rating={restaurant.rating}
-              cost={restaurant.cost}
-            />
-          </Link>
-        ))}
+      <div className="flex flex-col gap-4">
+        {restaurants &&
+          restaurants.map((restaurant) => (
+            <Link key={restaurant._id} to={`/restaurant/${restaurant._id}`}>
+              <RestaurantListItem
+                restaurant={restaurant.restaurant}
+                city={restaurant.city}
+                state={restaurant.state}
+                type={restaurant.type}
+                rating={restaurant.rating}
+                cost={restaurant.cost}
+                visited={restaurant.visited}
+              />
+            </Link>
+          ))}
+      </div>
     </div>
   );
 };
