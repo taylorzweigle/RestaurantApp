@@ -1,28 +1,127 @@
 //Taylor Zweigle, 2024
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 
 import DataUsageIcon from "@mui/icons-material/DataUsage";
 
-const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel }) => {
-  const [restaurant, setRestaurant] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [type, setType] = useState("");
-  const [rating, setRating] = useState("");
-  const [cost, setCost] = useState("");
-  const [visited, setVisited] = useState("");
+import * as Actions from "../../actions/actions";
 
-  useEffect(() => {
-    if (data) {
-      setRestaurant(data.restaurant);
-      setCity(data.city);
-      setState(data.state);
-      setType(data.type);
-      setRating(data.rating);
-      setCost(data.cost);
-      setVisited(data.visited);
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
+
+import {
+  getRestaurants,
+  createRestaurant,
+  updateRestaurant,
+  deleteRestaurant,
+} from "../../api/restaurants";
+
+const RestaurantForm = ({ id, data, edit }) => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: data
+      ? {
+          restaurant: data.restaurant,
+          city: data.city,
+          state: data.state,
+          type: data.type,
+          rating: data.rating,
+          cost: data.cost,
+          visited: data.visited,
+        }
+      : undefined,
+  });
+
+  const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+  const { dispatchRestaurants } = useRestaurantsContext();
+
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnSubmit = async (data) => {
+    if (!user) {
+      return;
     }
-  }, [data]);
+
+    const newRestaurant = {
+      restaurant: data.restaurant,
+      city: data.city,
+      state: data.state,
+      type: data.type,
+      rating: data.rating,
+      cost: data.cost,
+      visited: data.visited === "Yes" ? true : data.visited === "No" ? false : null,
+      creationTime: new Date(),
+    };
+
+    const json = edit
+      ? await updateRestaurant(id, newRestaurant, user.token)
+      : await createRestaurant(newRestaurant, user.token);
+
+    if (json.error) {
+      if (json.error.includes("restaurant")) {
+        setError("restaurant", { message: "Restaurant is required" });
+      }
+      if (json.error.includes("city")) {
+        setError("city", { message: "City is required" });
+      }
+      if (json.error.includes("state")) {
+        setError("state", { message: "State is required" });
+      }
+      if (json.error.includes("type")) {
+        setError("type", { message: "Type is required" });
+      }
+      if (json.error.includes("cost")) {
+        setError("cost", { message: "Cost is required" });
+      }
+      if (json.error.includes("visited")) {
+        setError("visited", { message: "Visited is required" });
+      }
+    }
+
+    if (json.json) {
+      if (edit) {
+        const restaurants = await getRestaurants(user.token);
+
+        if (restaurants.json) {
+          dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
+        }
+      } else {
+        dispatchRestaurants({ type: Actions.CREATE_RESTAURANT, payload: json.json });
+      }
+
+      navigate(-1);
+    }
+  };
+
+  const handleOnDelete = async () => {
+    setIsLoading(true);
+
+    if (isLoading) {
+      return;
+    }
+
+    const json = await deleteRestaurant(id, user.token);
+
+    if (json.json) {
+      dispatchRestaurants({ type: Actions.DELETE_RESTAURANT, payload: json.json });
+
+      navigate(-1);
+    }
+  };
+
+  const handleOnCancel = () => {
+    setIsCanceling(true);
+
+    navigate(-1);
+  };
 
   return (
     <>
@@ -33,18 +132,16 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
             type="text"
             id="restaurant"
             name="restaurant"
-            className="p-4 border border-gray-400"
-            value={restaurant}
-            onChange={(e) => setRestaurant(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("restaurant", { required: "Restaurant is required" })}
           />
-          {errors.restaurantError && <div className="text-md text-red-600">{errors.restaurantError}</div>}
+          {errors.restaurant && <div className="text-md text-red-600">{errors.restaurant.message}</div>}
           <label htmlFor="city">City</label>
           <select
             id="city"
             name="city"
-            className="p-4 bg-white border border-gray-400"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("city", { required: "City is required" })}
           >
             <option value=""></option>
             <option value="Addison">Addison</option>
@@ -59,53 +156,62 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
             <option value="Plano">Plano</option>
             <option value="The Colony">The Colony</option>
           </select>
-          {errors.cityError && <div className="text-md text-red-600">{errors.cityError}</div>}
+          {errors.city && <div className="text-md text-red-600">{errors.city.message}</div>}
           <label htmlFor="state">State</label>
           <select
             id="state"
             name="state"
-            className="p-4 bg-white border border-gray-400"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("state", { required: "State is required" })}
           >
             <option value=""></option>
             <option value="TX">TX</option>
           </select>
-          {errors.stateError && <div className="text-md text-red-600">{errors.stateError}</div>}
+          {errors.state && <div className="text-md text-red-600">{errors.state.message}</div>}
           <label htmlFor="type">Type</label>
-          <input
-            type="text"
+          <select
             id="type"
             name="type"
-            className="p-4 border border-gray-400"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          />
-          {errors.typeError && <div className="text-md text-red-600">{errors.typeError}</div>}
+            className="bg-white border border-gray-400 p-4"
+            {...register("type", { required: "Type is required" })}
+          >
+            <option value=""></option>
+            <option value="American">American</option>
+            <option value="Bar">Bar</option>
+            <option value="BBQ">BBQ</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Italian">Italian</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Poke">Poke</option>
+            <option value="Pub">Pub</option>
+            <option value="Sandwhich">Sandwhich</option>
+            <option value="Seafood">Seafood</option>
+            <option value="Southwestern">Southwestern</option>
+            <option value="Steakhouse">Steakhouse</option>
+            <option value="Wings">Wings</option>
+          </select>
+          {errors.type && <div className="text-md text-red-600">{errors.type.message}</div>}
           <label htmlFor="rating">Rating</label>
           <select
             id="rating"
             name="rating"
-            className="p-4 bg-white border border-gray-400"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("rating")}
           >
             <option value=""></option>
-            <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
-          {errors.ratingError && <div className="text-md text-red-600">{errors.ratingError}</div>}
+          {errors.rating && <div className="text-md text-red-600">{errors.rating.message}</div>}
           <label htmlFor="cost">Cost</label>
           <select
             id="cost"
             name="cost"
-            className="p-4 bg-white border border-gray-400"
-            value={cost}
-            onChange={(e) => setCost(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("cost", { required: "Cost is required" })}
           >
             <option value=""></option>
             <option value="$">$</option>
@@ -113,35 +219,31 @@ const RestaurantForm = ({ data, errors, loading, onSubmit, onDelete, onCancel })
             <option value="$$$">$$$</option>
             <option value="$$$$">$$$$</option>
           </select>
-          {errors.costError && <div className="text-md text-red-600">{errors.costError}</div>}
+          {errors.cost && <div className="text-md text-red-600">{errors.cost.message}</div>}
           <label htmlFor="visited">Visited</label>
           <select
             id="visited"
             name="visited"
-            className="p-4 bg-white border border-gray-400"
-            value={visited}
-            onChange={(e) => setVisited(e.target.value)}
+            className="bg-white border border-gray-400 p-4"
+            {...register("visited", { required: "Visited is required" })}
           >
             <option value=""></option>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
-          {errors.visitedError && <div className="text-md text-red-600">{errors.visitedError}</div>}
+          {errors.visited && <div className="text-md text-red-600">{errors.visited.message}</div>}
         </div>
       </form>
-      <button className="p-4 bg-slate-600 text-white" onClick={onCancel}>
-        Cancel
+      <button className="bg-slate-600 text-white p-4" onClick={handleOnCancel}>
+        {isCanceling ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Cancel"}
       </button>
-      {onDelete && (
-        <button className="p-4 bg-red-600 text-white" onClick={onDelete}>
-          {loading.deleteLoading ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Delete"}
+      {edit && (
+        <button className="bg-red-600 text-white p-4" onClick={handleOnDelete}>
+          {isLoading ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Delete"}
         </button>
       )}
-      <button
-        className="p-4 bg-sky-600 text-white"
-        onClick={(e) => onSubmit(e, { restaurant, city, state, type, rating, cost, visited })}
-      >
-        {loading.loading ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
+      <button className="bg-sky-600 text-white p-4" onClick={handleSubmit(handleOnSubmit)}>
+        {isSubmitting ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
       </button>
     </>
   );
