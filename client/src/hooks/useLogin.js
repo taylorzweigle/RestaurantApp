@@ -5,7 +5,10 @@ import * as ACTIONS from "../actions/actions";
 
 import { useAuthContext } from "./useAuthContext";
 
-const API_URL = process.env.NODE_ENV === "production" ? "" : "http://localhost:5000";
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://restaurant-app-server-ten.vercel.app"
+    : "http://localhost:5000";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
