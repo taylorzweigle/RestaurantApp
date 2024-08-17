@@ -146,6 +146,7 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value=""></option>
             <option value="Addison">Addison</option>
             <option value="Allen">Allen</option>
+            <option value="Aubrey">Aubrey</option>
             <option value="Carrollton">Carrollton</option>
             <option value="Coppell">Coppell</option>
             <option value="Dallas">Dallas</option>
