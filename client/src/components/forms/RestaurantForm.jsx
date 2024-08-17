@@ -146,6 +146,7 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value=""></option>
             <option value="Addison">Addison</option>
             <option value="Allen">Allen</option>
+            <option value="Anna">Anna</option>
             <option value="Aubrey">Aubrey</option>
             <option value="Carrollton">Carrollton</option>
             <option value="Coppell">Coppell</option>
@@ -181,6 +182,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           >
             <option value=""></option>
             <option value="American">American</option>
+            <option value="Bagel">Bagel</option>
             <option value="Bar">Bar</option>
             <option value="BBQ">BBQ</option>
             <option value="Breakfast">Breakfast</option>
@@ -199,6 +201,7 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value="Southwestern">Southwestern</option>
             <option value="Steakhouse">Steakhouse</option>
             <option value="Sushi">Sushi</option>
+            <option value="Taco">Taco</option>
             <option value="Winery">Winery</option>
             <option value="Wings">Wings</option>
           </select>
