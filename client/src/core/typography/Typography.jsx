@@ -30,7 +30,7 @@ const Typography = ({ children, variant, color, customColor, bold, truncate, wra
 
   switch (color) {
     case "primary":
-      colorClass = "text-slate-900";
+      colorClass = "text-slate-800";
       break;
     case "secondary":
       colorClass = "text-slate-500";
@@ -50,7 +50,7 @@ const Typography = ({ children, variant, color, customColor, bold, truncate, wra
 
   return (
     <p
-      className={`${variantClass} ${colorClass} ${bold ? "font-bold" : null} ${
+      className={`${variantClass} ${colorClass} ${bold ? "font-semibold" : null} ${
         truncate && "line-clamp-1"
       } ${wrap && "break-normal"} ${center && "text-center"}`}
     >
