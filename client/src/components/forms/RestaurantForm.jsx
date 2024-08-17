@@ -146,14 +146,17 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value=""></option>
             <option value="Addison">Addison</option>
             <option value="Allen">Allen</option>
+            <option value="Carrollton">Carrollton</option>
             <option value="Coppell">Coppell</option>
             <option value="Dallas">Dallas</option>
+            <option value="Fairview">Fairview</option>
             <option value="Fort Worth">Fort Worth</option>
             <option value="Frisco">Frisco</option>
             <option value="Grapevine">Grapevine</option>
             <option value="Irving">Irving</option>
             <option value="McKinney">McKinney</option>
             <option value="Plano">Plano</option>
+            <option value="Southlake">Southlake</option>
             <option value="The Colony">The Colony</option>
           </select>
           {errors.city && <div className="text-md text-red-600">{errors.city.message}</div>}
@@ -180,14 +183,22 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value="Bar">Bar</option>
             <option value="BBQ">BBQ</option>
             <option value="Breakfast">Breakfast</option>
+            <option value="Burger">Burger</option>
+            <option value="Cajun">Cajun</option>
+            <option value="Food Court">Food Court</option>
+            <option value="Indian">Indian</option>
             <option value="Italian">Italian</option>
             <option value="Mexican">Mexican</option>
+            <option value="Pizza">Pizza</option>
             <option value="Poke">Poke</option>
             <option value="Pub">Pub</option>
+            <option value="Salad">Salad</option>
             <option value="Sandwhich">Sandwhich</option>
             <option value="Seafood">Seafood</option>
             <option value="Southwestern">Southwestern</option>
             <option value="Steakhouse">Steakhouse</option>
+            <option value="Sushi">Sushi</option>
+            <option value="Winery">Winery</option>
             <option value="Wings">Wings</option>
           </select>
           {errors.type && <div className="text-md text-red-600">{errors.type.message}</div>}

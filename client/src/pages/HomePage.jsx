@@ -43,9 +43,14 @@ const HomePage = () => {
     <>
       <div className="fixed flex flex-col justify-between w-full bg-white shadow-md">
         <div className="flex flex-row justify-between items-center p-4">
-          <Typography variant="title" color="primary">
-            Restaurants
-          </Typography>
+          <div className="flex flex-row items-end gap-1">
+            <Typography variant="title" color="primary">
+              Restaurants
+            </Typography>
+            <Typography variant="subheading" color="primary">
+              {`(${restaurants ? restaurants.length : 0})`}
+            </Typography>
+          </div>
           <IconButton onClick={() => logout()}>
             <MenuIcon />
           </IconButton>
