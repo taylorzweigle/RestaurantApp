@@ -2,19 +2,24 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import AddIcon from "@mui/icons-material/Add";
+
 import * as Actions from "../actions/actions";
 
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useLogout } from "../hooks/useLogout";
+//import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { getRestaurants } from "../api/restaurants";
+
+import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
+import Typography from "../core/typography/Typography";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 
 const HomePage = () => {
   const { user } = useAuthContext();
-  const { logout } = useLogout();
+  //const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   useEffect(() => {
@@ -30,32 +35,26 @@ const HomePage = () => {
   }, [dispatchRestaurants, user]);
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex flex-row justify-between items-center">
-        <Link to="/restaurant">
-          <button className="p-4 bg-sky-600 text-white rounded-md">Add Restaurant</button>
-        </Link>
-        <button className="p-4 bg-rose-600 text-white rounded-md" onClick={() => logout()}>
-          Logout
-        </button>
+    <>
+      <div className="fixed flex flex-row gap-2 items-center w-full h-24 bg-white p-4 shadow-md">
+        <Typography variant="title" color="primary">
+          Restaurants
+        </Typography>
       </div>
-      <div className="flex flex-col gap-4">
+      <Link to="/restaurant">
+        <FloatingActionButton>
+          <AddIcon />
+        </FloatingActionButton>
+      </Link>
+      <div className="flex flex-col gap-0 pt-24">
         {restaurants &&
           restaurants.map((restaurant) => (
             <Link key={restaurant._id} to={`/restaurant/${restaurant._id}`}>
-              <RestaurantListItem
-                restaurant={restaurant.restaurant}
-                city={restaurant.city}
-                state={restaurant.state}
-                type={restaurant.type}
-                rating={restaurant.rating}
-                cost={restaurant.cost}
-                visited={restaurant.visited}
-              />
+              <RestaurantListItem restaurant={restaurant} />
             </Link>
           ))}
       </div>
-    </div>
+    </>
   );
 };
 
