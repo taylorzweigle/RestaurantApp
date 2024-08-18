@@ -13,7 +13,10 @@ import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { getRestaurants } from "../api/restaurants";
 
+import Divider from "../core/divider/Divider";
 import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
+import Menu from "../core/menu/Menu";
+import MenuItem from "../core/menu/MenuItem";
 import Tab from "../core/tab/Tab";
 import Typography from "../core/typography/Typography";
 
@@ -25,6 +28,7 @@ const HomePage = () => {
   const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
+  const [menuOpen, setMenuOpen] = useState(false);
   const [tab, setTab] = useState("Visited");
 
   useEffect(() => {
@@ -51,9 +55,18 @@ const HomePage = () => {
               {`(${restaurants ? restaurants.length : 0})`}
             </Typography>
           </div>
-          <IconButton onClick={() => logout()}>
-            <MenuIcon />
-          </IconButton>
+          <div>
+            <IconButton onClick={() => setMenuOpen(!menuOpen)}>
+              <MenuIcon />
+            </IconButton>
+            <Menu open={menuOpen} direction="right">
+              <MenuItem onClick={() => {}}>Home</MenuItem>
+              <MenuItem onClick={() => {}}>Restaurants</MenuItem>
+              <Divider />
+              <MenuItem onClick={() => {}}>Settings</MenuItem>
+              <MenuItem onClick={() => logout()}>Logout</MenuItem>
+            </Menu>
+          </div>
         </div>
         <div className="flex flex-row gap-0 w-full">
           <Tab value="Visited" selected={tab === "Visited"} onClick={() => setTab("Visited")} />
@@ -69,11 +82,7 @@ const HomePage = () => {
         {restaurants &&
           restaurants
             .filter((restaurant) => restaurant.visited === (tab === "Visited"))
-            .map((restaurant) => (
-              <Link key={restaurant._id} to={`/restaurant/${restaurant._id}`}>
-                <RestaurantListItem restaurant={restaurant} />
-              </Link>
-            ))}
+            .map((restaurant) => <RestaurantListItem key={restaurant._id} restaurant={restaurant} />)}
       </div>
     </>
   );

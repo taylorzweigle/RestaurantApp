@@ -10,12 +10,7 @@ import * as Actions from "../../actions/actions";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
-import {
-  getRestaurants,
-  createRestaurant,
-  updateRestaurant,
-  deleteRestaurant,
-} from "../../api/restaurants";
+import { getRestaurants, createRestaurant, updateRestaurant } from "../../api/restaurants";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const {
@@ -43,7 +38,6 @@ const RestaurantForm = ({ id, data, edit }) => {
   const { dispatchRestaurants } = useRestaurantsContext();
 
   const [isCanceling, setIsCanceling] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnSubmit = async (data) => {
     if (!user) {
@@ -96,22 +90,6 @@ const RestaurantForm = ({ id, data, edit }) => {
       } else {
         dispatchRestaurants({ type: Actions.CREATE_RESTAURANT, payload: json.json });
       }
-
-      navigate(-1);
-    }
-  };
-
-  const handleOnDelete = async () => {
-    setIsLoading(true);
-
-    if (isLoading) {
-      return;
-    }
-
-    const json = await deleteRestaurant(id, user.token);
-
-    if (json.json) {
-      dispatchRestaurants({ type: Actions.DELETE_RESTAURANT, payload: json.json });
 
       navigate(-1);
     }
@@ -182,6 +160,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           >
             <option value=""></option>
             <option value="American">American</option>
+            <option value="Asian">Asian</option>
             <option value="Bagel">Bagel</option>
             <option value="Bar">Bar</option>
             <option value="BBQ">BBQ</option>
@@ -202,6 +181,7 @@ const RestaurantForm = ({ id, data, edit }) => {
             <option value="Steakhouse">Steakhouse</option>
             <option value="Sushi">Sushi</option>
             <option value="Taco">Taco</option>
+            <option value="Vietnamese">Vietnamese</option>
             <option value="Winery">Winery</option>
             <option value="Wings">Wings</option>
           </select>
@@ -252,11 +232,6 @@ const RestaurantForm = ({ id, data, edit }) => {
       <button className="bg-slate-600 text-white p-4" onClick={handleOnCancel}>
         {isCanceling ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Cancel"}
       </button>
-      {edit && (
-        <button className="bg-red-600 text-white p-4" onClick={handleOnDelete}>
-          {isLoading ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Delete"}
-        </button>
-      )}
       <button className="bg-sky-600 text-white p-4" onClick={handleSubmit(handleOnSubmit)}>
         {isSubmitting ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
       </button>
