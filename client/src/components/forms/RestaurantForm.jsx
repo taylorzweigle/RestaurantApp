@@ -13,6 +13,9 @@ import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 import { getRestaurants, createRestaurant, updateRestaurant } from "../../api/restaurants";
 import { CITIES, COST, RATING, TYPES } from "../../api/attributes";
 
+import SelectInput from "../../core/selectInput/SelectInput";
+import TextInput from "../../core/textInput/TextInput";
+
 const RestaurantForm = ({ id, data, edit }) => {
   const {
     register,
@@ -105,93 +108,44 @@ const RestaurantForm = ({ id, data, edit }) => {
   return (
     <>
       <form>
-        <div className="flex flex-col gap-0">
-          <label htmlFor="restaurant">Restaurant</label>
-          <input
+        <div className="flex flex-col gap-4">
+          <TextInput
             type="text"
-            id="restaurant"
-            name="restaurant"
-            className="bg-white border border-gray-400 p-4"
+            label="Restaurant"
+            error={errors.restaurant && errors.restaurant.message}
             {...register("restaurant", { required: "Restaurant is required" })}
           />
-          {errors.restaurant && <div className="text-md text-red-600">{errors.restaurant.message}</div>}
-          <label htmlFor="city">City</label>
-          <select
-            id="city"
-            name="city"
-            className="bg-white border border-gray-400 p-4"
+          <SelectInput
+            label="City"
+            options={CITIES}
+            error={errors.city && errors.city.message}
             {...register("city", { required: "City is required" })}
-          >
-            <option value=""></option>
-            {CITIES.map((city) => (
-              <option key={city} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-          {errors.city && <div className="text-md text-red-600">{errors.city.message}</div>}
-          <label htmlFor="type">Type</label>
-          <select
-            id="type"
-            name="type"
-            className="bg-white border border-gray-400 p-4"
+          />
+          <SelectInput
+            label="Type"
+            options={TYPES}
+            error={errors.type && errors.type.message}
             {...register("type", { required: "Type is required" })}
-          >
-            <option value=""></option>
-            {TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          {errors.type && <div className="text-md text-red-600">{errors.type.message}</div>}
-          <label htmlFor="cost">Cost</label>
-          <select
-            id="cost"
-            name="cost"
-            className="bg-white border border-gray-400 p-4"
+          />
+          <SelectInput
+            label="Cost"
+            options={COST}
+            error={errors.cost && errors.cost.message}
             {...register("cost", { required: "Cost is required" })}
-          >
-            <option value=""></option>
-            {COST.map((cost) => (
-              <option key={cost} value={cost}>
-                {cost}
-              </option>
-            ))}
-          </select>
-          {errors.cost && <div className="text-md text-red-600">{errors.cost.message}</div>}
-          <label htmlFor="visited">Visited</label>
-          <select
-            id="visited"
-            name="visited"
-            className="bg-white border border-gray-400 p-4"
+          />
+          <SelectInput
+            label="Visited"
+            options={["No", "Yes"]}
+            error={errors.visited && errors.visited.message}
             {...register("visited", { required: "Visited is required" })}
-          >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-          </select>
-          {errors.visited && <div className="text-md text-red-600">{errors.visited.message}</div>}
-          <label htmlFor="rating">Rating</label>
-          <select
-            id="rating"
-            name="rating"
-            className="bg-white border border-gray-400 p-4"
-            {...register("rating")}
-          >
-            <option value=""></option>
-            {RATING.map((rating) => (
-              <option key={rating} value={rating}>
-                {rating}
-              </option>
-            ))}
-          </select>
-          {errors.rating && <div className="text-md text-red-600">{errors.rating.message}</div>}
+          />
+          <SelectInput label="Rating" options={RATING} {...register("rating")} />
         </div>
       </form>
-      <button className="bg-slate-600 text-white p-4" onClick={handleOnCancel}>
+      <button className="bg-slate-600 text-white p-4 rounded-full" onClick={handleOnCancel}>
         {isCanceling ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Cancel"}
       </button>
-      <button className="bg-sky-600 text-white p-4" onClick={handleSubmit(handleOnSubmit)}>
+      <button className="bg-sky-600 text-white p-4 rounded-full" onClick={handleSubmit(handleOnSubmit)}>
         {isSubmitting ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
       </button>
     </>

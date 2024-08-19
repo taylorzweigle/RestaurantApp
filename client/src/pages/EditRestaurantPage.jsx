@@ -38,7 +38,7 @@ const EditRestaurantPage = () => {
   }, [params.id, user]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 p-4">
       <div className="text-xl">Edit Restaurant</div>
       {data && <RestaurantForm id={params.id} data={data} edit />}
     </div>
