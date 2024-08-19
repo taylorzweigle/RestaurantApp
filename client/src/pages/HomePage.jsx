@@ -1,35 +1,23 @@
 //Taylor Zweigle, 2024
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-
-import AddIcon from "@mui/icons-material/Add";
-import MenuIcon from "@mui/icons-material/Menu";
+import React, { useEffect } from "react";
 
 import * as Actions from "../actions/actions";
 
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { getRestaurants } from "../api/restaurants";
+import { CITIES, TYPES } from "../api/attributes";
 
 import Divider from "../core/divider/Divider";
-import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
-import Menu from "../core/menu/Menu";
-import MenuItem from "../core/menu/MenuItem";
-import Tab from "../core/tab/Tab";
 import Typography from "../core/typography/Typography";
 
-import RestaurantListItem from "../components/lists/RestaurantListItem";
-import IconButton from "../core/iconButton/IconButton";
+import PageHeader from "../components/headers/PageHeader";
 
 const HomePage = () => {
   const { user } = useAuthContext();
-  const { logout } = useLogout();
-  const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [tab, setTab] = useState("Visited");
+  const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -44,47 +32,77 @@ const HomePage = () => {
   }, [dispatchRestaurants, user]);
 
   return (
-    <>
-      <div className="fixed flex flex-col justify-between w-full bg-white shadow-md">
-        <div className="flex flex-row justify-between items-center p-4">
-          <div className="flex flex-row items-end gap-1">
-            <Typography variant="title" color="primary">
-              Restaurants
-            </Typography>
-            <Typography variant="subheading" color="primary">
-              {`(${restaurants ? restaurants.length : 0})`}
-            </Typography>
+    <div className="flex flex-col">
+      <div className="bg-white shadow-md">
+        <PageHeader title="Home" />
+      </div>
+      {restaurants && (
+        <div>
+          <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-row justify-between items-center">
+              <Typography variant="subheading" color="primary">
+                Total
+              </Typography>
+              <Typography variant="title" color="primary">
+                {restaurants.length}
+              </Typography>
+            </div>
+            <div className="flex flex-row justify-between items-center">
+              <Typography variant="subheading" color="primary">
+                Visited
+              </Typography>
+              <Typography variant="title" color="primary">
+                {restaurants.filter((restaurant) => restaurant.visited).length}
+              </Typography>
+            </div>
+            <div className="flex flex-row justify-between items-center">
+              <Typography variant="subheading" color="primary">
+                To Visit
+              </Typography>
+              <Typography variant="title" color="primary">
+                {restaurants.filter((restaurant) => !restaurant.visited).length}
+              </Typography>
+            </div>
           </div>
-          <div>
-            <IconButton onClick={() => setMenuOpen(!menuOpen)}>
-              <MenuIcon />
-            </IconButton>
-            <Menu open={menuOpen} direction="right">
-              <MenuItem onClick={() => {}}>Home</MenuItem>
-              <MenuItem onClick={() => {}}>Restaurants</MenuItem>
-              <Divider />
-              <MenuItem onClick={() => {}}>Settings</MenuItem>
-              <MenuItem onClick={() => logout()}>Logout</MenuItem>
-            </Menu>
+          <Divider />
+          <div className="flex flex-col gap-4 p-4">
+            <Typography variant="heading" color="primary" bold>
+              Cities
+            </Typography>
+            <div className="flex flex-col gap-2">
+              {CITIES.map((city) => (
+                <div key={city} className="flex flex-row justify-between items-center">
+                  <Typography variant="subheading" color="primary">
+                    {city}
+                  </Typography>
+                  <Typography variant="title" color="primary">
+                    {restaurants.filter((restaurant) => restaurant.city === city).length}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+          </div>
+          <Divider />
+          <div className="flex flex-col gap-4 p-4">
+            <Typography variant="heading" color="primary" bold>
+              Types
+            </Typography>
+            <div className="flex flex-col gap-2">
+              {TYPES.map((type) => (
+                <div key={type} className="flex flex-row justify-between items-center">
+                  <Typography variant="subheading" color="primary">
+                    {type}
+                  </Typography>
+                  <Typography variant="title" color="primary">
+                    {restaurants.filter((restaurant) => restaurant.type === type).length}
+                  </Typography>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="flex flex-row gap-0 w-full">
-          <Tab value="Visited" selected={tab === "Visited"} onClick={() => setTab("Visited")} />
-          <Tab value="To Visit" selected={tab === "To Visit"} onClick={() => setTab("To Visit")} />
-        </div>
-      </div>
-      <Link to="/restaurant">
-        <FloatingActionButton>
-          <AddIcon />
-        </FloatingActionButton>
-      </Link>
-      <div className="flex flex-col gap-0 pt-32">
-        {restaurants &&
-          restaurants
-            .filter((restaurant) => restaurant.visited === (tab === "Visited"))
-            .map((restaurant) => <RestaurantListItem key={restaurant._id} restaurant={restaurant} />)}
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

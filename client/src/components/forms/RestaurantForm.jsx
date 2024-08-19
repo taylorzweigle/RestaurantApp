@@ -11,6 +11,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
 import { getRestaurants, createRestaurant, updateRestaurant } from "../../api/restaurants";
+import { CITIES, TYPES } from "../../api/attributes";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const {
@@ -122,22 +123,11 @@ const RestaurantForm = ({ id, data, edit }) => {
             {...register("city", { required: "City is required" })}
           >
             <option value=""></option>
-            <option value="Addison">Addison</option>
-            <option value="Allen">Allen</option>
-            <option value="Anna">Anna</option>
-            <option value="Aubrey">Aubrey</option>
-            <option value="Carrollton">Carrollton</option>
-            <option value="Coppell">Coppell</option>
-            <option value="Dallas">Dallas</option>
-            <option value="Fairview">Fairview</option>
-            <option value="Fort Worth">Fort Worth</option>
-            <option value="Frisco">Frisco</option>
-            <option value="Grapevine">Grapevine</option>
-            <option value="Irving">Irving</option>
-            <option value="McKinney">McKinney</option>
-            <option value="Plano">Plano</option>
-            <option value="Southlake">Southlake</option>
-            <option value="The Colony">The Colony</option>
+            {CITIES.map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
           </select>
           {errors.city && <div className="text-md text-red-600">{errors.city.message}</div>}
           <label htmlFor="state">State</label>
@@ -159,31 +149,11 @@ const RestaurantForm = ({ id, data, edit }) => {
             {...register("type", { required: "Type is required" })}
           >
             <option value=""></option>
-            <option value="American">American</option>
-            <option value="Asian">Asian</option>
-            <option value="Bagel">Bagel</option>
-            <option value="Bar">Bar</option>
-            <option value="BBQ">BBQ</option>
-            <option value="Breakfast">Breakfast</option>
-            <option value="Burger">Burger</option>
-            <option value="Cajun">Cajun</option>
-            <option value="Food Court">Food Court</option>
-            <option value="Indian">Indian</option>
-            <option value="Italian">Italian</option>
-            <option value="Mexican">Mexican</option>
-            <option value="Pizza">Pizza</option>
-            <option value="Poke">Poke</option>
-            <option value="Pub">Pub</option>
-            <option value="Salad">Salad</option>
-            <option value="Sandwhich">Sandwhich</option>
-            <option value="Seafood">Seafood</option>
-            <option value="Southwestern">Southwestern</option>
-            <option value="Steakhouse">Steakhouse</option>
-            <option value="Sushi">Sushi</option>
-            <option value="Taco">Taco</option>
-            <option value="Vietnamese">Vietnamese</option>
-            <option value="Winery">Winery</option>
-            <option value="Wings">Wings</option>
+            {TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
           </select>
           {errors.type && <div className="text-md text-red-600">{errors.type.message}</div>}
           <label htmlFor="rating">Rating</label>
