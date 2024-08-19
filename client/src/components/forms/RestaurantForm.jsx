@@ -11,7 +11,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
 import { getRestaurants, createRestaurant, updateRestaurant } from "../../api/restaurants";
-import { CITIES, TYPES } from "../../api/attributes";
+import { CITIES, COST, RATING, TYPES } from "../../api/attributes";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const {
@@ -48,7 +48,7 @@ const RestaurantForm = ({ id, data, edit }) => {
     const newRestaurant = {
       restaurant: data.restaurant,
       city: data.city,
-      state: data.state,
+      state: "TX",
       type: data.type,
       rating: data.rating,
       cost: data.cost,
@@ -130,17 +130,6 @@ const RestaurantForm = ({ id, data, edit }) => {
             ))}
           </select>
           {errors.city && <div className="text-md text-red-600">{errors.city.message}</div>}
-          <label htmlFor="state">State</label>
-          <select
-            id="state"
-            name="state"
-            className="bg-white border border-gray-400 p-4"
-            {...register("state", { required: "State is required" })}
-          >
-            <option value=""></option>
-            <option value="TX">TX</option>
-          </select>
-          {errors.state && <div className="text-md text-red-600">{errors.state.message}</div>}
           <label htmlFor="type">Type</label>
           <select
             id="type"
@@ -156,21 +145,6 @@ const RestaurantForm = ({ id, data, edit }) => {
             ))}
           </select>
           {errors.type && <div className="text-md text-red-600">{errors.type.message}</div>}
-          <label htmlFor="rating">Rating</label>
-          <select
-            id="rating"
-            name="rating"
-            className="bg-white border border-gray-400 p-4"
-            {...register("rating")}
-          >
-            <option value=""></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          {errors.rating && <div className="text-md text-red-600">{errors.rating.message}</div>}
           <label htmlFor="cost">Cost</label>
           <select
             id="cost"
@@ -179,10 +153,11 @@ const RestaurantForm = ({ id, data, edit }) => {
             {...register("cost", { required: "Cost is required" })}
           >
             <option value=""></option>
-            <option value="$">$</option>
-            <option value="$$">$$</option>
-            <option value="$$$">$$$</option>
-            <option value="$$$$">$$$$</option>
+            {COST.map((cost) => (
+              <option key={cost} value={cost}>
+                {cost}
+              </option>
+            ))}
           </select>
           {errors.cost && <div className="text-md text-red-600">{errors.cost.message}</div>}
           <label htmlFor="visited">Visited</label>
@@ -192,11 +167,25 @@ const RestaurantForm = ({ id, data, edit }) => {
             className="bg-white border border-gray-400 p-4"
             {...register("visited", { required: "Visited is required" })}
           >
-            <option value=""></option>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
           {errors.visited && <div className="text-md text-red-600">{errors.visited.message}</div>}
+          <label htmlFor="rating">Rating</label>
+          <select
+            id="rating"
+            name="rating"
+            className="bg-white border border-gray-400 p-4"
+            {...register("rating")}
+          >
+            <option value=""></option>
+            {RATING.map((rating) => (
+              <option key={rating} value={rating}>
+                {rating}
+              </option>
+            ))}
+          </select>
+          {errors.rating && <div className="text-md text-red-600">{errors.rating.message}</div>}
         </div>
       </form>
       <button className="bg-slate-600 text-white p-4" onClick={handleOnCancel}>
