@@ -39,34 +39,46 @@ const HomePage = () => {
     <>
       <div className="flex flex-col">
         <div className="bg-white shadow-md">
-          <PageHeader title="Home" />
+          <PageHeader />
         </div>
         {restaurants && (
           <div>
-            <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-col gap-4 p-4">
               <div className="flex flex-row justify-between items-center">
-                <Typography variant="subheading" color="primary">
-                  Total
+                <Typography variant="heading" color="primary" bold>
+                  Restaurants
                 </Typography>
-                <Typography variant="title" color="primary">
-                  {restaurants.length}
-                </Typography>
+                <Link to="/restaurants">
+                  <Typography variant="body1" color="link" bold>
+                    See All
+                  </Typography>
+                </Link>
               </div>
-              <div className="flex flex-row justify-between items-center">
-                <Typography variant="subheading" color="primary">
-                  Visited
-                </Typography>
-                <Typography variant="title" color="primary">
-                  {restaurants.filter((restaurant) => restaurant.visited).length}
-                </Typography>
-              </div>
-              <div className="flex flex-row justify-between items-center">
-                <Typography variant="subheading" color="primary">
-                  To Visit
-                </Typography>
-                <Typography variant="title" color="primary">
-                  {restaurants.filter((restaurant) => !restaurant.visited).length}
-                </Typography>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row justify-between items-center">
+                  <Typography variant="subheading" color="primary">
+                    Total
+                  </Typography>
+                  <Typography variant="subheading" color="primary" bold>
+                    {restaurants.length}
+                  </Typography>
+                </div>
+                <div className="flex flex-row justify-between items-center">
+                  <Typography variant="subheading" color="primary">
+                    Visited
+                  </Typography>
+                  <Typography variant="subheading" color="primary" bold>
+                    {restaurants.filter((restaurant) => restaurant.visited).length}
+                  </Typography>
+                </div>
+                <div className="flex flex-row justify-between items-center">
+                  <Typography variant="subheading" color="primary">
+                    To Visit
+                  </Typography>
+                  <Typography variant="subheading" color="primary" bold>
+                    {restaurants.filter((restaurant) => !restaurant.visited).length}
+                  </Typography>
+                </div>
               </div>
             </div>
             <Divider />
@@ -80,7 +92,7 @@ const HomePage = () => {
                     <Typography variant="subheading" color="primary">
                       {city}
                     </Typography>
-                    <Typography variant="title" color="primary">
+                    <Typography variant="subheading" color="primary" bold>
                       {restaurants.filter((restaurant) => restaurant.city === city).length}
                     </Typography>
                   </div>
@@ -98,7 +110,7 @@ const HomePage = () => {
                     <Typography variant="subheading" color="primary">
                       {type}
                     </Typography>
-                    <Typography variant="title" color="primary">
+                    <Typography variant="subheading" color="primary" bold>
                       {restaurants.filter((restaurant) => restaurant.type === type).length}
                     </Typography>
                   </div>
@@ -116,7 +128,7 @@ const HomePage = () => {
                     <Typography variant="subheading" color="primary">
                       {rating}
                     </Typography>
-                    <Typography variant="title" color="primary">
+                    <Typography variant="subheading" color="primary" bold>
                       {restaurants.filter((restaurant) => restaurant.rating === rating).length}
                     </Typography>
                   </div>
@@ -134,7 +146,7 @@ const HomePage = () => {
                     <Typography variant="subheading" color="primary">
                       {cost}
                     </Typography>
-                    <Typography variant="title" color="primary">
+                    <Typography variant="subheading" color="primary" bold>
                       {restaurants.filter((restaurant) => restaurant.cost === cost).length}
                     </Typography>
                   </div>

@@ -23,7 +23,7 @@ const Button = ({ children, variant, loading, onClick }) => {
       break;
     case "text":
       variantClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-200 sm:dark:hover:bg-slate-700 active:bg-slate-200 active:dark:bg-slate-700";
+        "bg-transparent dark:bg-transparent sm:hover:bg-slate-200 sm:dark:hover:bg-slate-200 active:bg-slate-200 active:dark:bg-slate-200";
       break;
     default:
       variantClass =

@@ -35,6 +35,9 @@ const Typography = ({ children, variant, color, customColor, bold, truncate, wra
     case "secondary":
       colorClass = "text-slate-500";
       break;
+    case "link":
+      colorClass = "text-teal-500";
+      break;
     case "error":
       colorClass = "text-rose-500";
       break;

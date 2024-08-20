@@ -39,17 +39,12 @@ const PageHeader = ({ title }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center p-4">
-      <div className="flex flex-row items-end gap-1">
-        <Typography variant="title" color="primary">
-          {title}
-        </Typography>
-      </div>
+    <div className="flex flex-row items-center gap-2 p-4">
       <div>
         <IconButton onClick={() => setMenuOpen(!menuOpen)}>
           <MenuIcon />
         </IconButton>
-        <Menu open={menuOpen} direction="right">
+        <Menu open={menuOpen} direction="left">
           <MenuItem onClick={handleHomeClick}>Home</MenuItem>
           <MenuItem onClick={handleRestaurantsClick}>Restaurants</MenuItem>
           <Divider />
@@ -57,6 +52,9 @@ const PageHeader = ({ title }) => {
           <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
         </Menu>
       </div>
+      <Typography variant="title" color="primary">
+        {title}
+      </Typography>
     </div>
   );
 };
