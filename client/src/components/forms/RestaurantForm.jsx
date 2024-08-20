@@ -118,35 +118,44 @@ const RestaurantForm = ({ id, data, edit }) => {
           <SelectInput
             label="City"
             options={CITIES}
+            value={data && data.city}
             error={errors.city && errors.city.message}
             {...register("city", { required: "City is required" })}
           />
           <SelectInput
             label="Type"
             options={TYPES}
+            value={data && data.type}
             error={errors.type && errors.type.message}
             {...register("type", { required: "Type is required" })}
           />
           <SelectInput
             label="Cost"
             options={COST}
+            value={data && data.cost}
             error={errors.cost && errors.cost.message}
             {...register("cost", { required: "Cost is required" })}
           />
           <SelectInput
             label="Visited"
             options={["No", "Yes"]}
+            value={data && data.visited}
             error={errors.visited && errors.visited.message}
             {...register("visited", { required: "Visited is required" })}
           />
-          <SelectInput label="Rating" options={RATING} {...register("rating")} />
+          <SelectInput
+            label="Rating"
+            options={RATING}
+            value={data && data.rating}
+            {...register("rating")}
+          />
         </div>
       </form>
       <button className="bg-slate-600 text-white p-4 rounded-full" onClick={handleOnCancel}>
-        {isCanceling ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Cancel"}
+        {isCanceling ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Cancel"}
       </button>
       <button className="bg-sky-600 text-white p-4 rounded-full" onClick={handleSubmit(handleOnSubmit)}>
-        {isSubmitting ? <DataUsageIcon fontSize="sm" className="animate-spin" /> : "Save"}
+        {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
       </button>
     </>
   );

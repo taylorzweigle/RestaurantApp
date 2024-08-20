@@ -16,6 +16,7 @@ import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 import IconButton from "../../core/iconButton/IconButton";
 import Menu from "../../core/menu/Menu";
 import MenuItem from "../../core/menu/MenuItem";
+import Typography from "../../core/typography/Typography";
 
 const RestaurantListItem = ({ restaurant }) => {
   const { user } = useAuthContext();
@@ -27,7 +28,7 @@ const RestaurantListItem = ({ restaurant }) => {
     let stars = [];
 
     for (let i = 0; i < count; i++) {
-      stars.push(<StarIcon key={i} fontSize="small" className="text-amber-600" />);
+      stars.push(<StarIcon key={i} fontSize="small" className="text-amber-500" />);
     }
 
     for (let i = count; i < 5; i++) {
@@ -46,13 +47,15 @@ const RestaurantListItem = ({ restaurant }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center bg-white border-b border-slate-400 p-4">
+    <div className="flex flex-row justify-between items-center bg-white border-b border-slate-400 pt-3 pr-4 pb-3 pl-4">
       <div className="flex flex-col gap-0">
         <div className="flex flex-row items-center gap-2">
-          <div className="text-lg font-semibold">{restaurant.restaurant}</div>
+          <Typography variant="body1" bold>
+            {restaurant.restaurant}
+          </Typography>
         </div>
-        <div className="text-md">{`${restaurant.city}, ${restaurant.state}`}</div>
-        <div className="text-md">{`${restaurant.type} | ${restaurant.cost}`}</div>
+        <Typography variant="body2">{`${restaurant.city}, ${restaurant.state}`}</Typography>
+        <Typography variant="body2">{`${restaurant.type} | ${restaurant.cost}`}</Typography>
         {restaurant.rating && (
           <div className="flex flex-row gap-0 pt-1">{renderStars(restaurant.rating)}</div>
         )}

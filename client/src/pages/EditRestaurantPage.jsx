@@ -6,6 +6,8 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import { getRestaurant } from "../api/restaurants";
 
+import Typography from "../core/typography/Typography";
+
 import RestaurantForm from "../components/forms/RestaurantForm";
 
 const EditRestaurantPage = () => {
@@ -39,7 +41,9 @@ const EditRestaurantPage = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div className="text-xl">Edit Restaurant</div>
+      <Typography variant="heading" color="primary">
+        Edit Restaurant
+      </Typography>
       {data && <RestaurantForm id={params.id} data={data} edit />}
     </div>
   );

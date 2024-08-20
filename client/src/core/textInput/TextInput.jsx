@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 
 import Typography from "../typography/Typography";
 
-const TextInput = forwardRef(({ type, label, error, ...props }, ref) => {
+const TextInput = forwardRef(({ type, label, value, error, onChange, ...props }, ref) => {
   return (
     <>
       <input
@@ -11,8 +11,10 @@ const TextInput = forwardRef(({ type, label, error, ...props }, ref) => {
         id={label}
         type={type}
         placeholder={label}
+        value={value}
         {...props}
-        className="bg-white border border-slate-400 hover:border-teal-600 text-slate-950 text-md w-full rounded-full px-4 h-12"
+        onChange={onChange}
+        className="bg-slate-50 border border-slate-600 hover:border-teal-600 text-slate-950 text-md w-full rounded-full px-6 h-12"
       />
       {error && (
         <Typography variant="body2" color="error">
