@@ -35,6 +35,20 @@ const HomePage = () => {
     }
   }, [dispatchRestaurants, user]);
 
+  const getCityCount = (city) => {
+    let count = 0;
+
+    for (let i = 0; i < restaurants.length; i++) {
+      for (let j = 0; j < restaurants[i].locations.length; j++) {
+        if (restaurants[i].locations[j].city === city) {
+          count = count + 1;
+        }
+      }
+    }
+
+    return count;
+  };
+
   return (
     <>
       <div className="flex flex-col">
@@ -93,7 +107,7 @@ const HomePage = () => {
                       {city}
                     </Typography>
                     <Typography variant="subheading" color="primary" bold>
-                      {restaurants.filter((restaurant) => restaurant.city === city).length}
+                      {getCityCount(city)}
                     </Typography>
                   </div>
                 ))}

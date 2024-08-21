@@ -5,6 +5,7 @@ export const CITIES = [
   "Anna",
   "Aubrey",
   "Carrollton",
+  "Colleyville",
   "Coppell",
   "Dallas",
   "Fairview",
