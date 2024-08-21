@@ -24,8 +24,7 @@ const EditRestaurantPage = () => {
       if (json.json) {
         setData({
           restaurant: json.json.restaurant,
-          city: json.json.city,
-          state: json.json.state,
+          locations: json.json.locations,
           type: json.json.type,
           rating: json.json.rating,
           cost: json.json.cost,

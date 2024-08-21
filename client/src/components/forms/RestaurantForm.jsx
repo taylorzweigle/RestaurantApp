@@ -26,8 +26,7 @@ const RestaurantForm = ({ id, data, edit }) => {
     defaultValues: data
       ? {
           restaurant: data.restaurant,
-          city: data.city,
-          state: data.state,
+          locations: data.locations[0].city,
           type: data.type,
           rating: data.rating,
           cost: data.cost,
@@ -50,8 +49,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
     const newRestaurant = {
       restaurant: data.restaurant,
-      city: data.city,
-      state: "TX",
+      locations: [{ city: data.locations, state: "TX" }],
       type: data.type,
       rating: data.rating,
       cost: data.cost,
@@ -67,11 +65,8 @@ const RestaurantForm = ({ id, data, edit }) => {
       if (json.error.includes("restaurant")) {
         setError("restaurant", { message: "Restaurant is required" });
       }
-      if (json.error.includes("city")) {
-        setError("city", { message: "City is required" });
-      }
-      if (json.error.includes("state")) {
-        setError("state", { message: "State is required" });
+      if (json.error.includes("locations")) {
+        setError("locations", { message: "Location is required" });
       }
       if (json.error.includes("type")) {
         setError("type", { message: "Type is required" });
@@ -116,11 +111,11 @@ const RestaurantForm = ({ id, data, edit }) => {
             {...register("restaurant", { required: "Restaurant is required" })}
           />
           <SelectInput
-            label="City"
+            label="Location"
             options={CITIES}
-            value={data && data.city}
-            error={errors.city && errors.city.message}
-            {...register("city", { required: "City is required" })}
+            value={data && data.locations[0]}
+            error={errors.locations && errors.locations.message}
+            {...register("locations", { required: "Location is required" })}
           />
           <SelectInput
             label="Type"

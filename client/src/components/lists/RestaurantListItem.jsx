@@ -16,6 +16,7 @@ import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 import IconButton from "../../core/iconButton/IconButton";
 import Menu from "../../core/menu/Menu";
 import MenuItem from "../../core/menu/MenuItem";
+import Tag from "../../core/tag/Tag";
 import Typography from "../../core/typography/Typography";
 
 const RestaurantListItem = ({ restaurant }) => {
@@ -54,11 +55,17 @@ const RestaurantListItem = ({ restaurant }) => {
             {restaurant.restaurant}
           </Typography>
         </div>
-        <Typography variant="body2">{`${restaurant.city}, ${restaurant.state}`}</Typography>
-        <Typography variant="body2">{`${restaurant.type} | ${restaurant.cost}`}</Typography>
-        {restaurant.rating && (
-          <div className="flex flex-row gap-0 pt-1">{renderStars(restaurant.rating)}</div>
-        )}
+        <div className="flex flex-col gap-1">
+          <Typography variant="body2">{`${restaurant.type} | ${restaurant.cost}`}</Typography>
+          <div className="flex flex-row items-center gap-2">
+            {restaurant.locations.map((location) => (
+              <Tag key={location.city}>{`${location.city}, ${location.state}`}</Tag>
+            ))}
+          </div>
+          {restaurant.rating && (
+            <div className="flex flex-row gap-0 pt-1">{renderStars(restaurant.rating)}</div>
+          )}
+        </div>
       </div>
       <div>
         <IconButton onClick={() => setMenuOpen(!menuOpen)}>
