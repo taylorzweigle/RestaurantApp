@@ -12,10 +12,14 @@ import Menu from "../../core/menu/Menu";
 import MenuItem from "../../core/menu/MenuItem";
 import Typography from "../../core/typography/Typography";
 
+import LogoutModal from "../modals/LogoutModal";
+
 const PageHeader = ({ title }) => {
   const { logout } = useLogout();
   const navigate = useNavigate();
 
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleHomeClick = () => {
@@ -34,28 +38,42 @@ const PageHeader = ({ title }) => {
   };
 
   const handleLogoutClick = () => {
+    setLogoutModalOpen(true);
     setMenuOpen(false);
+  };
+
+  const onLogout = () => {
+    setLogoutLoading(true);
     logout();
+    setLogoutLoading(false);
   };
 
   return (
-    <div className="flex flex-row items-center gap-2 p-4">
-      <div>
-        <IconButton onClick={() => setMenuOpen(!menuOpen)}>
-          <MenuIcon />
-        </IconButton>
-        <Menu open={menuOpen} direction="left">
-          <MenuItem onClick={handleHomeClick}>Home</MenuItem>
-          <MenuItem onClick={handleRestaurantsClick}>Restaurants</MenuItem>
-          <Divider />
-          <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
-          <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
-        </Menu>
+    <>
+      <LogoutModal
+        open={logoutModalOpen}
+        loading={logoutLoading}
+        onLogoutClick={onLogout}
+        onCancelClick={() => setLogoutModalOpen(false)}
+      />
+      <div className="flex flex-row items-center gap-2 p-4">
+        <div>
+          <IconButton onClick={() => setMenuOpen(!menuOpen)}>
+            <MenuIcon />
+          </IconButton>
+          <Menu open={menuOpen} direction="left">
+            <MenuItem onClick={handleHomeClick}>Home</MenuItem>
+            <MenuItem onClick={handleRestaurantsClick}>Restaurants</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+          </Menu>
+        </div>
+        <Typography variant="title" color="primary">
+          {title}
+        </Typography>
       </div>
-      <Typography variant="title" color="primary">
-        {title}
-      </Typography>
-    </div>
+    </>
   );
 };
 

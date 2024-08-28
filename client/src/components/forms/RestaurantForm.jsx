@@ -146,10 +146,10 @@ const RestaurantForm = ({ id, data, edit }) => {
           />
         </div>
       </form>
-      <button className="bg-slate-600 text-white p-4 rounded-full" onClick={handleOnCancel}>
+      <button className="bg-slate-600 text-white p-4 rounded-md" onClick={handleOnCancel}>
         {isCanceling ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Cancel"}
       </button>
-      <button className="bg-sky-600 text-white p-4 rounded-full" onClick={handleSubmit(handleOnSubmit)}>
+      <button className="bg-sky-600 text-white p-4 rounded-md" onClick={handleSubmit(handleOnSubmit)}>
         {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
       </button>
     </>

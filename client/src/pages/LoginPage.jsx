@@ -5,6 +5,10 @@ import { useLogin } from "../hooks/useLogin";
 
 import logo from "../img/Logo.svg";
 
+import Button from "../core/button/Button";
+import TextInput from "../core/textInput/TextInput";
+import Typography from "../core/typography/Typography";
+
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,18 +22,33 @@ const LoginPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <img src={logo} alt="logo" width="128" height="128" />
-      <input label="Username" type="text" onChange={(e) => setUsername(e.target.value)} value={username} />
-      <input
-        label="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
-      {error && <p>{error}</p>}
-      <button>{loading ? "O" : "Login"}</button>
-    </form>
+    <div className="flex flex-row justify-center items-center w-full h-full">
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center gap-4 p-16 w-128">
+          <img src={logo} alt="logo" width="128" height="128" />
+          <Typography variant="title">Restaurant App</Typography>
+          <TextInput
+            label="Username"
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          <TextInput
+            label="Password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+
+          {error && (
+            <Typography variant="body2" color="error">
+              {error}
+            </Typography>
+          )}
+          <Button variant="primary">{loading ? "O" : "Login"}</Button>
+        </div>
+      </form>
+    </div>
   );
 };
 
