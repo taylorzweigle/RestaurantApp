@@ -22,7 +22,7 @@ const SelectInput = forwardRef(({ label, value, options, error, ...props }, ref)
         {...props}
         className={`bg-slate-50 border border-slate-600 hover:border-teal-600 ${
           selected === label ? "text-slate-400" : "text-slate-950"
-        } text-md w-full rounded-md px-6 h-12 appearance-none`}
+        } text-md w-full rounded-md px-6 h-12 appearance-none cursor-pointer`}
         onChange={(e) => setSelected(e.target.value)}
       >
         <option value="" hidden>

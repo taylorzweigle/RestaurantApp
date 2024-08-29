@@ -11,7 +11,7 @@ const Button = ({ children, variant, loading, onClick }) => {
   switch (variant) {
     case "default":
       variantClass =
-        "bg-slate-200 dark:bg-slate-700 sm:hover:bg-slate-300 sm:dark:hover:bg-slate-600 active:bg-slate-300 active:dark:bg-slate-600";
+        "bg-slate-200 dark:bg-slate-500 sm:hover:bg-slate-300 sm:dark:hover:bg-slate-600 active:bg-slate-300 active:dark:bg-slate-600";
       break;
     case "primary":
       variantClass =
@@ -35,10 +35,7 @@ const Button = ({ children, variant, loading, onClick }) => {
       <div className="flex flex-row gap-1 justify-center items-center">
         {loading && <DataUsageIcon className="text-slate-700 dark:text-white animate-spin" />}
         {!loading && children ? (
-          <Typography
-            variant="body2"
-            color={variant === "primary" || variant === "error" ? "base" : "primary"}
-          >
+          <Typography variant="body2" color={variant === "text" ? "primary" : "base"}>
             {children}
           </Typography>
         ) : null}

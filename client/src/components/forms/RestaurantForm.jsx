@@ -11,10 +11,14 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
 import { getRestaurants, createRestaurant, updateRestaurant } from "../../api/restaurants";
-import { CITIES, COST, RATING, TYPES } from "../../api/attributes";
+import { COST, RATING, TYPES } from "../../api/attributes";
 
+import Button from "../../core/button/Button";
+import MultiSelectInput from "../../core/multiSelectInput/MultiSelectInput";
 import SelectInput from "../../core/selectInput/SelectInput";
 import TextInput from "../../core/textInput/TextInput";
+
+import MultiSelectModal from "../modals/MultiSelectModal";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const {
@@ -26,7 +30,6 @@ const RestaurantForm = ({ id, data, edit }) => {
     defaultValues: data
       ? {
           restaurant: data.restaurant,
-          locations: data.locations[0].city,
           type: data.type,
           rating: data.rating,
           cost: data.cost,
@@ -40,7 +43,26 @@ const RestaurantForm = ({ id, data, edit }) => {
   const { user } = useAuthContext();
   const { dispatchRestaurants } = useRestaurantsContext();
 
+  const [locations, setLocations] = useState([]);
+  const [locationsModalOpen, setLocationsModalOpen] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
+
+  const handleOnLocationsSave = (cities) => {
+    let oldLocations = data ? data.locations : [];
+    let newLocations = [];
+
+    for (let i = 0; i < cities.length; i++) {
+      newLocations.push({ city: cities[i], state: "TX" });
+    }
+
+    setLocations([...oldLocations, ...newLocations]);
+
+    setLocationsModalOpen(false);
+  };
+
+  const handleOnLocationCancel = () => {
+    setLocationsModalOpen(false);
+  };
 
   const handleOnSubmit = async (data) => {
     if (!user) {
@@ -49,7 +71,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
     const newRestaurant = {
       restaurant: data.restaurant,
-      locations: [{ city: data.locations, state: "TX" }],
+      locations: locations,
       type: data.type,
       rating: data.rating,
       cost: data.cost,
@@ -102,6 +124,13 @@ const RestaurantForm = ({ id, data, edit }) => {
 
   return (
     <>
+      <MultiSelectModal
+        open={locationsModalOpen}
+        data={data && data.locations}
+        loading={false}
+        onSaveClick={(cities) => handleOnLocationsSave(cities)}
+        onCancelClick={handleOnLocationCancel}
+      />
       <form>
         <div className="flex flex-col gap-4">
           <TextInput
@@ -110,13 +139,7 @@ const RestaurantForm = ({ id, data, edit }) => {
             error={errors.restaurant && errors.restaurant.message}
             {...register("restaurant", { required: "Restaurant is required" })}
           />
-          <SelectInput
-            label="Location"
-            options={CITIES}
-            value={data && data.locations[0]}
-            error={errors.locations && errors.locations.message}
-            {...register("locations", { required: "Location is required" })}
-          />
+          <MultiSelectInput count={locations.length} onClick={() => setLocationsModalOpen(true)} />
           <SelectInput
             label="Type"
             options={TYPES}
@@ -146,12 +169,12 @@ const RestaurantForm = ({ id, data, edit }) => {
           />
         </div>
       </form>
-      <button className="bg-slate-600 text-white p-4 rounded-md" onClick={handleOnCancel}>
+      <Button variant="default" onClick={handleOnCancel}>
         {isCanceling ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Cancel"}
-      </button>
-      <button className="bg-sky-600 text-white p-4 rounded-md" onClick={handleSubmit(handleOnSubmit)}>
+      </Button>
+      <Button variant="primary" onClick={handleSubmit(handleOnSubmit)}>
         {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
-      </button>
+      </Button>
     </>
   );
 };
