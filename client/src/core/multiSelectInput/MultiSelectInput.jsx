@@ -1,53 +1,80 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
 
-import MultiSelectModal from "../../components/modals/MultiSelectModal";
+import Checkbox from "../checkbox/Checkbox";
+import Modal from "../modal/Modal";
 
-const MultiSelectInput = ({ value, onChange }) => {
-  const [count, setCount] = useState(0);
-
+const MultiSelectInput = ({ values, defaultValues, onChange }) => {
   const [open, setOpen] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
+  const [tempValues, setTempValues] = useState([]);
+  const [selectedValues, setSelectedValues] = useState();
+
   useEffect(() => {
-    if (value) {
-      setCount(value.length);
+    defaultValues && setTempValues([...defaultValues]);
+  }, [defaultValues]);
+
+  useEffect(() => {
+    defaultValues && setSelectedValues([...defaultValues]);
+  }, [defaultValues]);
+
+  const handleOnChange = (value, checked) => {
+    if (checked) {
+      setSelectedValues([...selectedValues, value]);
+    } else if (!checked) {
+      setSelectedValues([...selectedValues.filter((v) => v !== value)]);
     }
-  }, [value]);
-
-  const handleOnLocationSave = (cities) => {
-    let newLocations = [];
-
-    for (let i = 0; i < cities.length; i++) {
-      newLocations.push({ city: cities[i], state: "TX" });
-    }
-
-    setCount(value.length + newLocations.length);
-    onChange([...value, ...newLocations]);
-
-    setOpen(false);
   };
 
-  const handleOnLocationCancel = (cities) => {
-    setCount(cities.length);
-    onChange([...cities]);
+  const handleOnSaveClick = () => {
+    setLoading(true);
+
+    setTempValues([...selectedValues]);
+
+    onChange([...selectedValues]);
+
+    setOpen(false);
+
+    setLoading(false);
+  };
+
+  const handleOnCancelClick = () => {
+    setSelectedValues([...tempValues]);
 
     setOpen(false);
   };
 
   return (
     <>
-      <MultiSelectModal
+      <Modal
+        title="Locations"
+        action="Save"
         open={open}
-        data={value}
-        loading={false}
-        onSaveClick={(cities) => handleOnLocationSave(cities)}
-        onCancelClick={(cities) => handleOnLocationCancel(cities)}
-      />
+        loading={loading}
+        onAction={handleOnSaveClick}
+        onCancel={handleOnCancelClick}
+      >
+        <div className="flex flex-col gap-2">
+          {values &&
+            values.map((value) => (
+              <Checkbox
+                key={value}
+                value={value}
+                defaultChecked={selectedValues ? selectedValues.includes(value) : false}
+                onChange={(value, checked) => handleOnChange(value, checked)}
+              />
+            ))}
+        </div>
+      </Modal>
       <div
         className="flex items-center bg-slate-50 border hover:border-2 active:border-2 focus:border-2 border-slate-600 hover:border-teal-600 active:border-teal-600 focus:border-teal-600 text-slate-950 text-md w-full rounded-md px-6 h-12 cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        {`${count > 0 ? count : "0"} Location${!count || count > 1 ? "s" : ""}`}
+        {`${tempValues.length > 0 ? tempValues.length : "0"} Location${
+          !tempValues.length || tempValues.length > 1 ? "s" : ""
+        }`}
       </div>
     </>
   );

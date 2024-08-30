@@ -1,5 +1,5 @@
 //Taylor Zweigle, 2024
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 
@@ -16,7 +16,7 @@ import {
   updateRestaurant,
   deleteRestaurant,
 } from "../../api/restaurants";
-import { COST, RATING, TYPES } from "../../api/attributes";
+import { CITIES, COST, RATING, TYPES } from "../../api/attributes";
 
 import Button from "../../core/button/Button";
 import MultiSelectInput from "../../core/multiSelectInput/MultiSelectInput";
@@ -55,6 +55,12 @@ const RestaurantForm = ({ id, data, edit }) => {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (data) {
+      setLocations([...data.locations.map((location) => location.city)]);
+    }
+  }, [data]);
+
   const handleOnSubmit = async (data) => {
     if (!user) {
       return;
@@ -62,7 +68,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
     const newRestaurant = {
       restaurant: data.restaurant,
-      locations: locations,
+      locations: locations.map((location) => ({ city: location, state: "TX" })),
       type: data.type,
       rating: data.rating,
       cost: data.cost,
@@ -144,8 +150,9 @@ const RestaurantForm = ({ id, data, edit }) => {
             {...register("restaurant", { required: "Restaurant is required" })}
           />
           <MultiSelectInput
-            value={data ? data.locations : []}
-            onChange={(locations) => setLocations(locations)}
+            values={CITIES}
+            defaultValues={locations}
+            onChange={(locations) => setLocations([...locations])}
           />
           <SelectInput
             label="Type"
@@ -179,14 +186,14 @@ const RestaurantForm = ({ id, data, edit }) => {
       <Button variant="default" onClick={handleOnCancel}>
         {isCanceling ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Cancel"}
       </Button>
+      <Button variant="primary" onClick={handleSubmit(handleOnSubmit)}>
+        {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
+      </Button>
       {data && (
         <Button variant="error" onClick={() => setDeleteModalOpen(true)}>
           Delete
         </Button>
       )}
-      <Button variant="primary" onClick={handleSubmit(handleOnSubmit)}>
-        {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
-      </Button>
     </>
   );
 };
