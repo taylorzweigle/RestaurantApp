@@ -7,18 +7,22 @@ import Checkbox from "../../core/checkbox/Checkbox";
 import Modal from "../../core/modal/Modal";
 
 const MultiSelectModal = ({ open, data, loading, onSaveClick, onCancelClick }) => {
-  const [selecedCities, setSelectedCities] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]);
 
   const handleOnClick = (selected, city) => {
     if (selected) {
-      setSelectedCities([...selecedCities, city]);
-    } else {
-      setSelectedCities(selecedCities.filter((selectedCity) => selectedCity !== city));
+      setSelectedCities([...selectedCities, city]);
+    } else if (!selected) {
+      setSelectedCities([...selectedCities.filter((c) => c !== city)]);
     }
   };
 
+  const handleOnCancelClick = () => {
+    onCancelClick(data);
+  };
+
   const handleOnSaveClick = () => {
-    onSaveClick(selecedCities);
+    onSaveClick(selectedCities);
   };
 
   return (
@@ -28,14 +32,14 @@ const MultiSelectModal = ({ open, data, loading, onSaveClick, onCancelClick }) =
       open={open}
       loading={loading}
       onAction={handleOnSaveClick}
-      onCancel={onCancelClick}
+      onCancel={handleOnCancelClick}
     >
       <div className="flex flex-col gap-2">
         {CITIES.map((city) => (
           <Checkbox
             key={city}
             value={city}
-            defaultSelected={data ? data.map((city) => city.city).includes(city) : false}
+            defaultSelected={data.map((city) => city.city).includes(city)}
             onClick={(selected) => handleOnClick(selected, city)}
           />
         ))}
