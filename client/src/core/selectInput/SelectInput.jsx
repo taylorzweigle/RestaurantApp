@@ -20,8 +20,8 @@ const SelectInput = forwardRef(({ label, value, options, error, ...props }, ref)
         ref={ref}
         defaultValue={label}
         {...props}
-        className={`bg-slate-50 border border-slate-600 hover:border-teal-600 ${
-          selected === label ? "text-slate-400" : "text-slate-950"
+        className={`bg-gray-50 dark:bg-gray-950 border sm:hover:border-2 active:border-2 focus:border-2 border-gray-400 dark:border-gray-700 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 focus:border-teal-500 dark:focus:border-teal-500 ${
+          selected === label ? "text-gray-400 dark:gray-800" : "text-gray-800 dark:text-gray-200"
         } text-md w-full rounded-md px-6 h-12 appearance-none cursor-pointer`}
         onChange={(e) => setSelected(e.target.value)}
       >
@@ -29,7 +29,11 @@ const SelectInput = forwardRef(({ label, value, options, error, ...props }, ref)
           {label}
         </option>
         {options.map((option) => (
-          <option key={option} value={option} className="bg-white text-slate-950">
+          <option
+            key={option}
+            value={option}
+            className="bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-200"
+          >
             {option}
           </option>
         ))}

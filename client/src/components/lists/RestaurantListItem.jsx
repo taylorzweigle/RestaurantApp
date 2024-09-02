@@ -19,14 +19,14 @@ const RestaurantListItem = ({ restaurant }) => {
     }
 
     for (let i = count; i < 5; i++) {
-      stars.push(<StarBorderIcon key={i} fontSize="xsmall" className="text-slate-400" />);
+      stars.push(<StarBorderIcon key={i} fontSize="xsmall" className="text-gray-400" />);
     }
 
     return stars;
   };
 
   return (
-    <div className="flex flex-row justify-between items-start bg-white border-b border-slate-400 pt-3 pr-4 pb-3 pl-4">
+    <div className="flex flex-row justify-between items-start bg-white dark:bg-gray-950 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
       <div className="flex flex-col gap-0">
         <div className="flex flex-row items-center gap-2">
           <Typography variant="body1" bold>
@@ -48,7 +48,7 @@ const RestaurantListItem = ({ restaurant }) => {
         </div>
       </div>
       <Link to={`/restaurant/${restaurant._id}`}>
-        <IconButton color="fade" size="small">
+        <IconButton color="fade" size="default">
           <EditIcon />
         </IconButton>
       </Link>

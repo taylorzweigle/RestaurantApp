@@ -10,23 +10,24 @@ const IconButton = ({ children, color, size, loading, onClick }) => {
   switch (color) {
     case "default":
       colorClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-100 active:bg-slate-100 text-slate-800";
+        "bg-transparent dark:bg-transparent sm:hover:bg-gray-100 sm:dark:hover:bg-gray-800 active:bg-gray-100 dark:active:bg-gray-800 text-gray-800 dark:text-gray-200";
       break;
     case "primary":
       colorClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-100 active:bg-slate-100 text-teal-600";
+        "bg-transparent dark:bg-transparent sm:hover:bg-gray-100 active:bg-gray-100 text-teal-600";
       break;
     case "error":
       colorClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-100 active:bg-slate-100 text-rose-600";
+        "bg-transparent dark:bg-transparent sm:hover:bg-gray-100 active:bg-gray-100 text-rose-600";
       break;
     case "fade":
       colorClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-100 active:bg-slate-100 text-slate-600";
+        "bg-transparent dark:bg-transparent sm:hover:bg-gray-100 sm:dark:hover:bg-gray-800 active:bg-gray-100 dark:active:bg-gray-800 text-gray-600 dark:text-gray-400";
+
       break;
     default:
       colorClass =
-        "bg-transparent dark:bg-transparent sm:hover:bg-slate-100 active:bg-slate-100 text-slate-800";
+        "bg-transparent dark:bg-transparent sm:hover:bg-gray-100 sm:dark:hover:bg-gray-800 active:bg-gray-100 dark:active:bg-gray-800 text-gray-800 dark:text-gray-200";
   }
 
   switch (size) {

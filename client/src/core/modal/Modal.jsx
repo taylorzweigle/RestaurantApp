@@ -32,9 +32,9 @@ const Modal = ({ children, open, loading, title, errorModal, action, onAction, o
         <div
           className={`${
             open ? "flex justify-center items-center" : "hidden"
-          } fixed left-0 top-0 w-full h-full overflow-auto bg-slate-950/75 dark:bg-slate-500/75 drop-shadow-md`}
+          } fixed left-0 top-0 w-full h-full overflow-auto bg-gray-950/75 dark:bg-gray-500/75 drop-shadow-md`}
         >
-          <div className="bg-white m-4 h-fit w-full sm:max-w-128">
+          <div className="bg-white dark:bg-gray-950 m-4 h-fit w-full sm:max-w-128">
             <div className="flex flex-row justify-between items-center p-4">
               <Typography variant="heading" color="primary">
                 {title}

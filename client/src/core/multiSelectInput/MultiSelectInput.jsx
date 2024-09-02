@@ -56,7 +56,7 @@ const MultiSelectInput = ({ values, defaultValues, onChange }) => {
         onAction={handleOnSaveClick}
         onCancel={handleOnCancelClick}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {values &&
             values.map((value) => (
               <Checkbox
@@ -69,7 +69,7 @@ const MultiSelectInput = ({ values, defaultValues, onChange }) => {
         </div>
       </Modal>
       <div
-        className="flex items-center bg-slate-50 border hover:border-2 active:border-2 focus:border-2 border-slate-600 hover:border-teal-600 active:border-teal-600 focus:border-teal-600 text-slate-950 text-md w-full rounded-md px-6 h-12 cursor-pointer"
+        className="flex items-center bg-gray-50 dark:bg-gray-950 border sm:hover:border-2 active:border-2 focus:border-2 border-gray-400 dark:border-gray-700 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 focus:border-teal-500 dark:focus:border-teal-500 text-gray-800 dark:text-gray-200 text-md w-full rounded-md px-6 h-12 cursor-pointer"
         onClick={() => setOpen(true)}
       >
         {`${tempValues.length > 0 ? tempValues.length : "0"} Location${

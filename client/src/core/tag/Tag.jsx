@@ -8,13 +8,13 @@ const Tag = ({ children, color }) => {
 
   switch (color) {
     case "default":
-      colorClass = "bg-slate-200";
+      colorClass = "bg-gray-200 dark:bg-gray-700";
       break;
     case "primary":
-      colorClass = "bg-teal-600";
+      colorClass = "bg-teal-600 dark:bg-teal-600";
       break;
     default:
-      colorClass = "bg-slate-200";
+      colorClass = "bg-gray-200 dark:bg-gray-700";
   }
 
   return (
