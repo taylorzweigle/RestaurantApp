@@ -11,7 +11,7 @@ const Tab = ({ value, selected, onClick }) => {
       } cursor-pointer`}
       onClick={onClick}
     >
-      <Typography variant="body1" color={selected ? "base" : "primary"} bold={selected}>
+      <Typography variant="body1" color="primary" bold={selected}>
         {value}
       </Typography>
     </div>

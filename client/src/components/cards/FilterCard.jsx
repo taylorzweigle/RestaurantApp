@@ -13,13 +13,13 @@ const FilterCard = ({ variant, type, value, displayValue, count }) => {
 
   switch (variant) {
     case "portrait":
-      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-24";
+      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-28";
       break;
     case "landscape":
       variantClass = "flex flex-row justify-between items-center h-12 w-full pl-4 pr-4";
       break;
     default:
-      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-24";
+      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-28";
       break;
   }
 
