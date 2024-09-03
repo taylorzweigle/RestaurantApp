@@ -28,6 +28,7 @@ export const TYPES = [
   "Breakfast",
   "Burger",
   "Cajun",
+  "Coffee",
   "Food Court",
   "Indian",
   "Italian",

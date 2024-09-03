@@ -11,7 +11,7 @@ const Button = ({ children, variant, loading, onClick }) => {
   switch (variant) {
     case "default":
       variantClass =
-        "bg-gray-500 dark:bg-gray-500 sm:hover:bg-gray-400 sm:dark:hover:bg-gray-400 active:bg-gray-400 active:dark:bg-gray-400";
+        "bg-gray-500 dark:bg-gray-700 sm:hover:bg-gray-400 sm:dark:hover:bg-gray-600 active:bg-gray-400 active:dark:bg-gray-600";
       break;
     case "primary":
       variantClass =
@@ -27,7 +27,7 @@ const Button = ({ children, variant, loading, onClick }) => {
       break;
     default:
       variantClass =
-        "bg-gray-500 dark:bg-gray-500 sm:hover:bg-gray-400 sm:dark:hover:bg-gray-400 active:bg-gray-400 active:dark:bg-gray-400";
+        "bg-gray-500 dark:bg-gray-700 sm:hover:bg-gray-400 sm:dark:hover:bg-gray-600 active:bg-gray-400 active:dark:bg-gray-600";
   }
 
   return (

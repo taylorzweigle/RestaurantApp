@@ -4,22 +4,40 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 
+import * as Actions from "../actions/actions";
+
+import { getRestaurants } from "../api/restaurants";
+
+import { useAuthContext } from "../hooks/useAuthContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
-
 import TextInput from "../core/textInput/TextInput";
 
 import PageHeader from "../components/headers/PageHeader";
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 
 const RestaurantsPage = () => {
-  const { restaurants } = useRestaurantsContext();
+  const { user } = useAuthContext();
+
+  const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   const [searchParams] = useSearchParams();
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      const restaurants = await getRestaurants(user.token);
+
+      dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
+    };
+
+    if (user) {
+      fetchRestaurants();
+    }
+  }, [dispatchRestaurants, user]);
 
   useEffect(() => {
     if (restaurants) {
@@ -91,7 +109,7 @@ const RestaurantsPage = () => {
           <AddIcon />
         </FloatingActionButton>
       </Link>
-      <div className="pt-20">
+      <div className="pt-28">
         <div className="flex flex-col justify-start items-end gap-4 p-4 pt-8">
           <TextInput
             type="text"
