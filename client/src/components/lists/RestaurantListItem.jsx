@@ -29,12 +29,15 @@ const RestaurantListItem = ({ restaurant }) => {
     <div className="flex flex-row justify-between items-start bg-white dark:bg-gray-950 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
       <div className="flex flex-col gap-0">
         <div className="flex flex-row items-center gap-2">
-          <Typography variant="body1" bold>
+          <Typography variant="body1" color="primary" bold>
             {restaurant.restaurant}
           </Typography>
         </div>
         <div className="flex flex-col gap-1">
-          <Typography variant="body2">{`${restaurant.type} | ${restaurant.cost}`}</Typography>
+          <Typography
+            variant="body2"
+            color="secondary"
+          >{`${restaurant.type} | ${restaurant.cost}`}</Typography>
           <div className="flex flex-row flex-wrap items-center gap-2">
             {restaurant.locations.map((location) => (
               <Tag color="default" key={location.city}>{`${location.city}, ${location.state}`}</Tag>
@@ -48,7 +51,7 @@ const RestaurantListItem = ({ restaurant }) => {
         </div>
       </div>
       <Link to={`/restaurant/${restaurant._id}`}>
-        <IconButton color="fade" size="default">
+        <IconButton color="default" size="default">
           <EditIcon />
         </IconButton>
       </Link>

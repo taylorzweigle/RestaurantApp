@@ -9,7 +9,6 @@ import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
 
-import Button from "../core/button/Button";
 import TextInput from "../core/textInput/TextInput";
 
 import PageHeader from "../components/headers/PageHeader";
@@ -55,13 +54,14 @@ const RestaurantsPage = () => {
       </Link>
       <div className="pt-20">
         <div className="flex flex-col justify-start items-end gap-4 p-4 pt-8">
-          <TextInput type="text" label="Search" value={searchQuery} onChange={handleSearch} />
-          {searchQuery !== "" && (
-            <Button variant="text" onClick={handleClear}>
-              <CloseIcon />
-              Clear
-            </Button>
-          )}
+          <TextInput
+            type="text"
+            label="Search"
+            value={searchQuery}
+            suffix={searchQuery !== "" ? <CloseIcon /> : null}
+            onChange={handleSearch}
+            onSuffixClick={handleClear}
+          />
         </div>
         <div className="flex flex-col gap-0">
           {filteredRestaurants.map((restaurant) => (

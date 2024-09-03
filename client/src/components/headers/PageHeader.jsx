@@ -71,7 +71,7 @@ const PageHeader = ({ title }) => {
         onLogoutClick={onLogout}
         onCancelClick={() => setLogoutModalOpen(false)}
       />
-      <div className="flex flex-row items-center gap-2 bg-white dark:bg-gray-800 border-b border-gray-400 dark:border-gray-700 p-4">
+      <div className="flex flex-row items-center gap-2 bg-white dark:bg-gray-900 border-b border-gray-400 dark:border-gray-700 p-4">
         <div>
           <IconButton onClick={() => setMenuOpen(!menuOpen)}>
             <MenuIcon />

@@ -30,10 +30,10 @@ const Typography = ({ children, variant, color, customColor, bold, truncate, wra
 
   switch (color) {
     case "primary":
-      colorClass = "text-gray-800 dark:text-gray-200";
+      colorClass = "text-gray-800 dark:text-gray-300";
       break;
     case "secondary":
-      colorClass = "text-gray-500 dark:text-gray-200";
+      colorClass = "text-gray-600 dark:text-gray-400";
       break;
     case "link":
       colorClass = "text-teal-600 dark:text-teal-600";
@@ -48,7 +48,7 @@ const Typography = ({ children, variant, color, customColor, bold, truncate, wra
       colorClass = customColor;
       break;
     default:
-      colorClass = "text-gray-800 dark:text-gray-200";
+      colorClass = "text-gray-800 dark:text-gray-300";
   }
 
   return (

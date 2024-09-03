@@ -5,7 +5,6 @@ import { createPortal } from "react-dom";
 import CloseIcon from "@mui/icons-material/Close";
 
 import Button from "../button/Button";
-import Divider from "../divider/Divider";
 import IconButton from "../iconButton/IconButton";
 import Typography from "../typography/Typography";
 
@@ -34,7 +33,7 @@ const Modal = ({ children, open, loading, title, errorModal, action, onAction, o
             open ? "flex justify-center items-center" : "hidden"
           } fixed left-0 top-0 w-full h-full overflow-auto bg-gray-950/75 dark:bg-gray-500/75 drop-shadow-md`}
         >
-          <div className="bg-white dark:bg-gray-950 m-4 h-fit w-full sm:max-w-128">
+          <div className="bg-white dark:bg-gray-950 m-4 h-fit w-full sm:max-w-96">
             <div className="flex flex-row justify-between items-center p-4">
               <Typography variant="heading" color="primary">
                 {title}
@@ -43,9 +42,7 @@ const Modal = ({ children, open, loading, title, errorModal, action, onAction, o
                 <CloseIcon />
               </IconButton>
             </div>
-            <Divider />
             <div className="p-4">{children}</div>
-            <Divider />
             <div className="flex flex-row justify-end gap-4 p-4">
               <Button variant="text" onClick={handleCancel}>
                 Cancel

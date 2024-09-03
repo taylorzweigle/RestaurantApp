@@ -20,7 +20,7 @@ const SelectInput = forwardRef(({ label, value, options, error, ...props }, ref)
         ref={ref}
         defaultValue={label}
         {...props}
-        className={`bg-gray-50 dark:bg-gray-950 border sm:hover:border-2 active:border-2 focus:border-2 border-gray-400 dark:border-gray-700 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 focus:border-teal-500 dark:focus:border-teal-500 ${
+        className={`bg-gray-50 dark:bg-gray-950 border-2 border-gray-400 dark:border-gray-700 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 focus:outline-none focus-visible:border-teal-500 dark:focus-visible:border-teal-500 ${
           selected === label ? "text-gray-400 dark:gray-800" : "text-gray-800 dark:text-gray-200"
         } text-md w-full rounded-md px-6 h-12 appearance-none cursor-pointer`}
         onChange={(e) => setSelected(e.target.value)}
