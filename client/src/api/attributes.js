@@ -12,14 +12,18 @@ export const CITIES = [
   "Flower Mound",
   "Fort Worth",
   "Frisco",
+  "Garland",
   "Grand Prairie",
   "Grapevine",
   "Irving",
   "Lewisville",
   "McKinney",
   "Plano",
+  "Prosper",
+  "Rockwall",
   "Southlake",
   "The Colony",
+  "Weatherford",
 ];
 
 export const TYPES = [

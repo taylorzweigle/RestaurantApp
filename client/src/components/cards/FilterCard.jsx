@@ -32,7 +32,7 @@ const FilterCard = ({ variant, type, value, displayValue, count }) => {
 
   return (
     <div
-      className={`${variantClass} bg-gray-100 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 rounded-md cursor-pointer`}
+      className={`${variantClass} bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 rounded-md cursor-pointer`}
       onClick={handleOnClick}
     >
       <Typography variant="caption" color="primary">

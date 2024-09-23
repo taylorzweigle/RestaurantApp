@@ -51,6 +51,7 @@ const MultiSelectInput = ({ values, defaultValues, onChange }) => {
       <Modal
         title="Locations"
         action="Save"
+        size="full"
         open={open}
         loading={loading}
         onAction={handleOnSaveClick}

@@ -10,6 +10,7 @@ const DeleteModal = ({ open, loading, onDeleteClick, onCancelClick }) => {
       title="Delete"
       errorModal
       action="Delete"
+      size="default"
       open={open}
       loading={loading}
       onAction={onDeleteClick}

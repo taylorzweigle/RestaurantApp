@@ -8,7 +8,20 @@ import Button from "../button/Button";
 import IconButton from "../iconButton/IconButton";
 import Typography from "../typography/Typography";
 
-const Modal = ({ children, open, loading, title, errorModal, action, onAction, onCancel }) => {
+const Modal = ({ children, open, loading, title, size, errorModal, action, onAction, onCancel }) => {
+  let sizeClass = "";
+
+  switch (size) {
+    case "default":
+      sizeClass = "h-fit";
+      break;
+    case "full":
+      sizeClass = "h-[calc(100vh-2rem)]";
+      break;
+    default:
+      sizeClass = "h-fit";
+  }
+
   useEffect(() => {
     open && document.body.classList.add("overflow-hidden");
   }, [open]);
@@ -31,9 +44,9 @@ const Modal = ({ children, open, loading, title, errorModal, action, onAction, o
         <div
           className={`${
             open ? "flex justify-center items-center" : "hidden"
-          } fixed left-0 top-0 w-full h-full overflow-auto bg-gray-950/75 dark:bg-gray-500/75 drop-shadow-md`}
+          } fixed left-0 top-0 w-screen h-screen p-4 bg-gray-950/75 dark:bg-gray-500/75 drop-shadow-md`}
         >
-          <div className="bg-white dark:bg-gray-950 m-4 h-fit w-full sm:max-w-96">
+          <div className={`flex flex-col bg-white dark:bg-gray-950 ${sizeClass} w-full sm:max-w-96`}>
             <div className="flex flex-row justify-between items-center p-4">
               <Typography variant="heading" color="primary">
                 {title}
@@ -42,7 +55,9 @@ const Modal = ({ children, open, loading, title, errorModal, action, onAction, o
                 <CloseIcon />
               </IconButton>
             </div>
-            <div className="p-4">{children}</div>
+            <div className="flex-grow overflow-y-auto">
+              <div className="p-4">{children}</div>
+            </div>
             <div className="flex flex-row justify-end gap-4 p-4">
               <Button variant="text" onClick={handleCancel}>
                 Cancel

@@ -9,6 +9,7 @@ const LogoutModal = ({ open, loading, onLogoutClick, onCancelClick }) => {
     <Modal
       title="Logout"
       action="Logout"
+      size="default"
       open={open}
       loading={loading}
       onAction={onLogoutClick}

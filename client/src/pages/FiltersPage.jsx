@@ -103,6 +103,7 @@ const FiltersPage = () => {
                 {RATING.map((rating) => (
                   <FilterCard
                     key={rating}
+                    variant="landscape"
                     type="Rating"
                     value={rating}
                     displayValue={Array.apply(null, Array(parseInt(rating)))
@@ -123,6 +124,7 @@ const FiltersPage = () => {
                 {COST.map((cost) => (
                   <FilterCard
                     key={cost}
+                    variant="landscape"
                     type="Cost"
                     value={cost}
                     displayValue={Array.apply(null, Array(cost.length))
