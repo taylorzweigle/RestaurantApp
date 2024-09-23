@@ -16,7 +16,7 @@ const Modal = ({ children, open, loading, title, size, errorModal, action, onAct
       sizeClass = "h-fit";
       break;
     case "full":
-      sizeClass = "h-[calc(100vh-2rem)]";
+      sizeClass = "h-[calc(100vh-12rem)]";
       break;
     default:
       sizeClass = "h-fit";
