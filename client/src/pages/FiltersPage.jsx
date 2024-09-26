@@ -49,9 +49,9 @@ const FiltersPage = () => {
         </div>
         <Divider />
       </div>
-      <div className="w-full p-4">
+      <div className="flex flex-col gap-4 p-4">
         {restaurants && (
-          <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Restaurants
