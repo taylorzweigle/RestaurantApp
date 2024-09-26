@@ -2,11 +2,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import EditIcon from "@mui/icons-material/Edit";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-import IconButton from "../../core/iconButton/IconButton";
 import Tag from "../../core/tag/Tag";
 import Typography from "../../core/typography/Typography";
 
@@ -26,36 +24,33 @@ const RestaurantListItem = ({ restaurant }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-start bg-white dark:bg-gray-950 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
-      <div className="flex flex-col gap-0">
-        <div className="flex flex-row items-center gap-2">
-          <Typography variant="body1" color="primary" bold>
-            {restaurant.restaurant}
-          </Typography>
-        </div>
-        <div className="flex flex-col gap-1">
-          <Typography
-            variant="body2"
-            color="secondary"
-          >{`${restaurant.type} | ${restaurant.cost}`}</Typography>
-          <div className="flex flex-row flex-wrap items-center gap-2">
-            {restaurant.locations.map((location) => (
-              <Tag color="default" key={location.city}>{`${location.city}, ${location.state}`}</Tag>
-            ))}
+    <Link to={`/restaurant/${restaurant._id}`}>
+      <div className="flex flex-row justify-between items-start bg-white dark:bg-gray-950 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
+        <div className="flex flex-col gap-0">
+          <div className="flex flex-row items-center gap-2">
+            <Typography variant="body1" color="primary" bold>
+              {restaurant.restaurant}
+            </Typography>
           </div>
-          {restaurant.rating ? (
-            <div className="flex flex-row gap-0 pt-1">{renderStars(restaurant.rating)}</div>
-          ) : (
-            <Tag color="primary">Todo</Tag>
-          )}
+          <div className="flex flex-col gap-1">
+            <Typography
+              variant="body2"
+              color="secondary"
+            >{`${restaurant.type} | ${restaurant.cost}`}</Typography>
+            <div className="flex flex-row flex-wrap items-center gap-2">
+              {restaurant.locations.map((location) => (
+                <Tag color="default" key={location.city}>{`${location.city}, ${location.state}`}</Tag>
+              ))}
+            </div>
+            {restaurant.rating ? (
+              <div className="flex flex-row gap-0 pt-1">{renderStars(restaurant.rating)}</div>
+            ) : (
+              <Tag color="primary">Todo</Tag>
+            )}
+          </div>
         </div>
       </div>
-      <Link to={`/restaurant/${restaurant._id}`}>
-        <IconButton color="default" size="default">
-          <EditIcon />
-        </IconButton>
-      </Link>
-    </div>
+    </Link>
   );
 };
 

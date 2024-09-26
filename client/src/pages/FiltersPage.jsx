@@ -1,23 +1,26 @@
 //Taylor Zweigle, 2024
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import AddIcon from "@mui/icons-material/Add";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import CloseIcon from "@mui/icons-material/Close";
 import StarIcon from "@mui/icons-material/Star";
 
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { CITIES, COST, RATING, TYPES } from "../api/attributes";
 
-import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
+import Button from "../core/button/Button";
+import Divider from "../core/divider/Divider";
 import Typography from "../core/typography/Typography";
 
 import FilterCard from "../components/cards/FilterCard";
-import PageHeader from "../components/headers/PageHeader";
+import IconButton from "../core/iconButton/IconButton";
 
 const FiltersPage = () => {
   const { restaurants } = useRestaurantsContext();
+
+  const navigate = useNavigate();
 
   const getCityCount = (city) => {
     let count = 0;
@@ -34,14 +37,22 @@ const FiltersPage = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col">
-        <div className="bg-white shadow-md">
-          <PageHeader />
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-0 bg-gray-100 dark:bg-gray-800 border-b border-gray-400 dark:border-gray-700">
+        <div className="flex flex-row justify-between items-center pl-4 pr-4 pt-2 pb-2">
+          <Typography variant="heading" color="default">
+            Filters
+          </Typography>
+          <IconButton color="default" size="default" onClick={() => navigate("/")}>
+            <CloseIcon />
+          </IconButton>
         </div>
+        <Divider />
+      </div>
+      <div className="w-full p-4">
         {restaurants && (
-          <div>
-            <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Restaurants
               </Typography>
@@ -63,7 +74,7 @@ const FiltersPage = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Cities
               </Typography>
@@ -79,7 +90,7 @@ const FiltersPage = () => {
                 ))}
               </div>
             </div>
-            <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Type
               </Typography>
@@ -95,7 +106,7 @@ const FiltersPage = () => {
                 ))}
               </div>
             </div>
-            <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Rating
               </Typography>
@@ -116,7 +127,7 @@ const FiltersPage = () => {
                 ))}
               </div>
             </div>
-            <div className="flex flex-col gap-4 p-4">
+            <div className="flex flex-col gap-4">
               <Typography variant="subtitle" color="primary">
                 Cost
               </Typography>
@@ -143,13 +154,11 @@ const FiltersPage = () => {
             </div>
           </div>
         )}
+        <Button variant="default" onClick={() => navigate("/")}>
+          Reset
+        </Button>
       </div>
-      <Link to="/restaurant">
-        <FloatingActionButton>
-          <AddIcon />
-        </FloatingActionButton>
-      </Link>
-    </>
+    </div>
   );
 };
 

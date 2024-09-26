@@ -1,6 +1,6 @@
 //Taylor Zweigle, 2024
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate } from "react-router";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -12,7 +12,6 @@ import { useThemeContext } from "../../hooks/useThemeContext";
 import IconButton from "../../core/iconButton/IconButton";
 import Menu from "../../core/menu/Menu";
 import MenuItem from "../../core/menu/MenuItem";
-import Tab from "../../core/tab/Tab";
 
 import LogoutModal from "../modals/LogoutModal";
 
@@ -74,18 +73,6 @@ const PageHeader = () => {
               <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
             </Menu>
           </div>
-        </div>
-        <div className="flex flex-row w-full">
-          <Tab
-            value="Restaurants"
-            selected={useLocation().pathname.slice(1) === "restaurants"}
-            onClick={() => navigate("/restaurants")}
-          />
-          <Tab
-            value="Filters"
-            selected={useLocation().pathname.slice(1) === "filters"}
-            onClick={() => navigate("/filters")}
-          />
         </div>
       </div>
     </>

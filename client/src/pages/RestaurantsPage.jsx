@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
+import SortIcon from "@mui/icons-material/Sort";
+import TuneIcon from "@mui/icons-material/Tune";
 
 import * as Actions from "../actions/actions";
 
@@ -16,6 +18,7 @@ import TextInput from "../core/textInput/TextInput";
 
 import PageHeader from "../components/headers/PageHeader";
 import RestaurantListItem from "../components/lists/RestaurantListItem";
+import IconButton from "../core/iconButton/IconButton";
 
 const RestaurantsPage = () => {
   const { user } = useAuthContext();
@@ -26,6 +29,7 @@ const RestaurantsPage = () => {
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -94,6 +98,8 @@ const RestaurantsPage = () => {
   };
 
   const handleClear = () => {
+    setSearching(false);
+
     setSearchQuery("");
 
     setFilteredRestaurants(restaurants);
@@ -109,16 +115,30 @@ const RestaurantsPage = () => {
           <AddIcon />
         </FloatingActionButton>
       </Link>
-      <div className="pt-28">
-        <div className="flex flex-col justify-start items-end gap-4 p-4 pt-8">
+      <div className="pt-14">
+        <div className="flex flex-row justify-start gap-4 p-4 pt-8">
           <TextInput
             type="text"
             label="Search"
             value={searchQuery}
             clearable
+            onClick={() => setSearching(true)}
+            onBlur={() => setSearching(false)}
             onChange={handleSearch}
             onClear={handleClear}
           />
+          {!searching && (
+            <>
+              <IconButton color="default" size="default">
+                <SortIcon />
+              </IconButton>
+              <Link to="/filters">
+                <IconButton color="default" size="default">
+                  <TuneIcon />
+                </IconButton>
+              </Link>
+            </>
+          )}
         </div>
         <div className="flex flex-col gap-0">
           {filteredRestaurants.map((restaurant) => (
