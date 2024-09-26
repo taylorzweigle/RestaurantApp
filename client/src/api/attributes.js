@@ -20,6 +20,7 @@ export const CITIES = [
   "McKinney",
   "Plano",
   "Prosper",
+  "Richardson",
   "Rockwall",
   "Southlake",
   "The Colony",

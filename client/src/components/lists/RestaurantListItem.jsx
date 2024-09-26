@@ -25,7 +25,7 @@ const RestaurantListItem = ({ restaurant }) => {
 
   return (
     <Link to={`/restaurant/${restaurant._id}`}>
-      <div className="flex flex-row justify-between items-start bg-white dark:bg-gray-950 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
+      <div className="flex flex-row justify-between items-start bg-white active:bg-gray-200 dark:bg-gray-950 dark:active:bg-gray-900 border-b border-gray-400 dark:border-gray-700 pt-3 pr-4 pb-3 pl-4">
         <div className="flex flex-col gap-0">
           <div className="flex flex-row items-center gap-2">
             <Typography variant="body1" color="primary" bold>

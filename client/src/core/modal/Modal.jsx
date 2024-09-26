@@ -9,16 +9,20 @@ import IconButton from "../iconButton/IconButton";
 import Typography from "../typography/Typography";
 
 const Modal = ({ children, open, loading, title, size, errorModal, action, onAction, onCancel }) => {
+  let positionClass = "";
   let sizeClass = "";
 
   switch (size) {
     case "default":
+      positionClass = "items-center";
       sizeClass = "h-fit";
       break;
     case "full":
-      sizeClass = "h-[calc(100vh-12rem)]";
+      positionClass = "items-start";
+      sizeClass = "h-[calc(100vh-8rem)]";
       break;
     default:
+      positionClass = "items-center";
       sizeClass = "h-fit";
   }
 
@@ -43,7 +47,7 @@ const Modal = ({ children, open, loading, title, size, errorModal, action, onAct
       {createPortal(
         <div
           className={`${
-            open ? "flex justify-center items-center" : "hidden"
+            open ? `flex justify-center ${positionClass}` : "hidden"
           } fixed left-0 top-0 w-screen h-screen p-4 bg-gray-950/75 dark:bg-gray-500/75 drop-shadow-md`}
         >
           <div className={`flex flex-col bg-white dark:bg-gray-950 ${sizeClass} w-full sm:max-w-96`}>
