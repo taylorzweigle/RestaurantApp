@@ -19,7 +19,7 @@ const Modal = ({ children, open, loading, title, size, errorModal, action, onAct
       break;
     case "full":
       positionClass = "items-start";
-      sizeClass = "h-[calc(100vh-8rem)]";
+      sizeClass = "h-[calc(100vh-7rem)]";
       break;
     default:
       positionClass = "items-center";
