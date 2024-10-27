@@ -4,10 +4,7 @@ import { useNavigate } from "react-router";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import * as Actions from "../../actions/actions";
-
 import { useLogout } from "../../hooks/useLogout";
-import { useThemeContext } from "../../hooks/useThemeContext";
 
 import IconButton from "../../core/iconButton/IconButton";
 import Menu from "../../core/menu/Menu";
@@ -17,7 +14,6 @@ import LogoutModal from "../modals/LogoutModal";
 
 const PageHeader = () => {
   const { logout } = useLogout();
-  const { theme, dispatchTheme } = useThemeContext();
   const navigate = useNavigate();
 
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -27,17 +23,6 @@ const PageHeader = () => {
   const handleSettingsClick = () => {
     setMenuOpen(false);
     navigate("/settings");
-  };
-
-  const handleToggleThemeClick = () => {
-    dispatchTheme({
-      type: Actions.SET_THEME,
-      payload: theme === "dark" ? "light" : "dark",
-    });
-
-    setMenuOpen(false);
-
-    document.documentElement.classList.toggle("dark");
   };
 
   const handleLogoutClick = () => {
@@ -67,9 +52,6 @@ const PageHeader = () => {
             </IconButton>
             <Menu open={menuOpen} direction="left">
               <MenuItem onClick={handleSettingsClick}>Settings</MenuItem>
-              <MenuItem onClick={handleToggleThemeClick}>
-                {`Set ${theme === "light" ? "Dark" : "Light"} Mode`}
-              </MenuItem>
               <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
             </Menu>
           </div>

@@ -9,7 +9,6 @@ import App from "./App";
 
 import { AuthContextProvider } from "./context/AuthContext";
 import { RestaurantsContextProvider } from "./context/RestaurantsContext";
-import { ThemeContextProvider } from "./context/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -17,11 +16,9 @@ root.render(
   <React.StrictMode>
     <AuthContextProvider>
       <RestaurantsContextProvider>
-        <ThemeContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </ThemeContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </RestaurantsContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
