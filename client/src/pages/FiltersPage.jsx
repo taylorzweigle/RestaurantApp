@@ -81,11 +81,11 @@ const FiltersPage = () => {
               <div className="flex flex-row flex-wrap gap-2">
                 {CITIES.map((city) => (
                   <FilterCard
-                    key={city}
+                    key={city.value}
                     type="Locations"
-                    value={city}
-                    displayValue={city}
-                    count={getCityCount(city)}
+                    value={city.value}
+                    displayValue={city.value}
+                    count={getCityCount(city.value)}
                   />
                 ))}
               </div>
@@ -97,11 +97,11 @@ const FiltersPage = () => {
               <div className="flex flex-row flex-wrap gap-2">
                 {TYPES.map((type) => (
                   <FilterCard
-                    key={type}
+                    key={type.value}
                     type="Type"
-                    value={type}
-                    displayValue={type}
-                    count={restaurants.filter((restaurant) => restaurant.type === type).length}
+                    value={type.value}
+                    displayValue={type.value}
+                    count={restaurants.filter((restaurant) => restaurant.type === type.value).length}
                   />
                 ))}
               </div>
@@ -113,16 +113,16 @@ const FiltersPage = () => {
               <div className="flex flex-row flex-wrap gap-2">
                 {RATING.map((rating) => (
                   <FilterCard
-                    key={rating}
+                    key={rating.value}
                     variant="landscape"
                     type="Rating"
-                    value={rating}
-                    displayValue={Array.apply(null, Array(parseInt(rating)))
+                    value={rating.value}
+                    displayValue={Array.apply(null, Array(parseInt(rating.value)))
                       .map((x, i) => i + 1)
                       .map((rating) => (
                         <StarIcon key={rating} fontSize="xsmall" className="text-amber-500" />
                       ))}
-                    count={restaurants.filter((restaurant) => restaurant.rating === rating).length}
+                    count={restaurants.filter((restaurant) => restaurant.rating === rating.value).length}
                   />
                 ))}
               </div>
@@ -134,11 +134,11 @@ const FiltersPage = () => {
               <div className="flex flex-row flex-wrap gap-2">
                 {COST.map((cost) => (
                   <FilterCard
-                    key={cost}
+                    key={cost.value}
                     variant="landscape"
                     type="Cost"
-                    value={cost}
-                    displayValue={Array.apply(null, Array(cost.length))
+                    value={cost.value}
+                    displayValue={Array.apply(null, Array(cost.value.length))
                       .map((x, i) => i + 1)
                       .map((cost) => (
                         <AttachMoneyIcon
@@ -147,7 +147,7 @@ const FiltersPage = () => {
                           className="text-teal-600 -ml-1 -mr-1"
                         />
                       ))}
-                    count={restaurants.filter((restaurant) => restaurant.cost === cost).length}
+                    count={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}
                   />
                 ))}
               </div>
