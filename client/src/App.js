@@ -1,6 +1,7 @@
 //Taylor Zweigle, 2024
 import React from "react";
 import { Route, Routes, Navigate } from "react-router";
+
 import { useAuthContext } from "./hooks/useAuthContext";
 
 import ScrollToTop from "./utility/ScrollToTop";

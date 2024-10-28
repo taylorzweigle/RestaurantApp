@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { Button, Form, Input, Select, Typography } from "antd";
+import { Button, Form, Input, Select, Spin, Typography } from "antd";
+
+import { LoadingOutlined } from "@ant-design/icons";
 
 import DeleteModal from "../../components/modals/DeleteModal";
-
-import DataUsageIcon from "@mui/icons-material/DataUsage";
 
 import * as Actions from "../../actions/actions";
 
@@ -221,10 +221,10 @@ const RestaurantForm = ({ id, data, edit }) => {
         </Form.Item>
       </Form>
       <Button color="default" variant="filled" onClick={handleOnCancel}>
-        {isCanceling ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Cancel"}
+        {isCanceling ? <Spin indicator={<LoadingOutlined spin />} /> : "Cancel"}
       </Button>
       <Button color="primary" variant="solid" onClick={handleOnSubmit}>
-        {isSubmitting ? <DataUsageIcon fontSize="lg" className="animate-spin" /> : "Save"}
+        {isSubmitting ? <Spin indicator={<LoadingOutlined spin style={{ color: "white" }} />} /> : "Save"}
       </Button>
       {data && (
         <Button color="danger" variant="solid" onClick={() => setDeleteModalOpen(true)}>

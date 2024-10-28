@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
+import { Input } from "antd";
+
 import AddIcon from "@mui/icons-material/Add";
-import SortIcon from "@mui/icons-material/Sort";
-import TuneIcon from "@mui/icons-material/Tune";
 
 import * as Actions from "../actions/actions";
 
@@ -14,11 +14,9 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import FloatingActionButton from "../core/floatingActionButton/FloatingActionButton";
-import TextInput from "../core/textInput/TextInput";
 
 import PageHeader from "../components/headers/PageHeader";
 import RestaurantListItem from "../components/lists/RestaurantListItem";
-import IconButton from "../core/iconButton/IconButton";
 
 const RestaurantsPage = () => {
   const { user } = useAuthContext();
@@ -29,7 +27,6 @@ const RestaurantsPage = () => {
 
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -97,17 +94,9 @@ const RestaurantsPage = () => {
     setFilteredRestaurants(filtered);
   };
 
-  const handleClear = () => {
-    setSearching(false);
-
-    setSearchQuery("");
-
-    setFilteredRestaurants(restaurants);
-  };
-
   return (
     <>
-      <div className="fixed flex flex-col justify-between w-full bg-white shadow-md">
+      <div className="fixed flex flex-col justify-between w-full bg-white shadow-md z-50">
         <PageHeader title="Restaurants" />
       </div>
       <Link to="/restaurant">
@@ -117,28 +106,14 @@ const RestaurantsPage = () => {
       </Link>
       <div className="pt-14">
         <div className="flex flex-row justify-start gap-4 p-4 pt-8">
-          <TextInput
-            type="text"
-            label="Search"
+          <Input
+            variant="filled"
+            size="large"
+            placeholder="Search"
             value={searchQuery}
-            clearable
-            onClick={() => setSearching(true)}
-            onBlur={() => setSearching(false)}
             onChange={handleSearch}
-            onClear={handleClear}
+            allowClear
           />
-          {!searching && (
-            <>
-              <IconButton color="default" size="default">
-                <SortIcon />
-              </IconButton>
-              <Link to="/filters">
-                <IconButton color="default" size="default">
-                  <TuneIcon />
-                </IconButton>
-              </Link>
-            </>
-          )}
         </div>
         <div className="flex flex-col gap-0">
           {filteredRestaurants.map((restaurant) => (
