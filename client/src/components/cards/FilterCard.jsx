@@ -2,8 +2,6 @@
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import Typography from "../../core/typography/Typography";
-
 const FilterCard = ({ variant, type, value, displayValue, count }) => {
   const naviagte = useNavigate();
 
@@ -35,12 +33,10 @@ const FilterCard = ({ variant, type, value, displayValue, count }) => {
       className={`${variantClass} bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 rounded-md cursor-pointer`}
       onClick={handleOnClick}
     >
-      <Typography variant="caption" color="primary">
+      <p>
         <span className="flex flex-row gap-0">{displayValue}</span>
-      </Typography>
-      <Typography variant="subheading" color="primary">
-        {count}
-      </Typography>
+      </p>
+      <p>{count}</p>
     </div>
   );
 };

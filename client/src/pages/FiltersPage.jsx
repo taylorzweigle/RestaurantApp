@@ -10,12 +10,7 @@ import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { CITIES, COST, RATING, TYPES } from "../api/attributes";
 
-import Button from "../core/button/Button";
-import Divider from "../core/divider/Divider";
-import Typography from "../core/typography/Typography";
-
 import FilterCard from "../components/cards/FilterCard";
-import IconButton from "../core/iconButton/IconButton";
 
 const FiltersPage = () => {
   const { restaurants } = useRestaurantsContext();
@@ -40,22 +35,17 @@ const FiltersPage = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-0 bg-gray-100 dark:bg-gray-800 border-b border-gray-400 dark:border-gray-700">
         <div className="flex flex-row justify-between items-center pl-4 pr-4 pt-2 pb-2">
-          <Typography variant="heading" color="default">
-            Filters
-          </Typography>
-          <IconButton color="default" size="default" onClick={() => navigate("/")}>
+          <p>Filters</p>
+          <button onClick={() => navigate("/")}>
             <CloseIcon />
-          </IconButton>
+          </button>
         </div>
-        <Divider />
       </div>
       <div className="flex flex-col gap-4 p-4">
         {restaurants && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
-              <Typography variant="subtitle" color="primary">
-                Restaurants
-              </Typography>
+              <p>Restaurants</p>
               <div className="flex flex-row flex-wrap gap-2">
                 <FilterCard variant="landscape" value="All" displayValue="All" count={restaurants.length} />
                 <FilterCard
@@ -75,9 +65,7 @@ const FiltersPage = () => {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Typography variant="subtitle" color="primary">
-                Cities
-              </Typography>
+              <p>Cities</p>
               <div className="flex flex-row flex-wrap gap-2">
                 {CITIES.map((city) => (
                   <FilterCard
@@ -91,9 +79,7 @@ const FiltersPage = () => {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Typography variant="subtitle" color="primary">
-                Type
-              </Typography>
+              <p>Type</p>
               <div className="flex flex-row flex-wrap gap-2">
                 {TYPES.map((type) => (
                   <FilterCard
@@ -107,9 +93,7 @@ const FiltersPage = () => {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Typography variant="subtitle" color="primary">
-                Rating
-              </Typography>
+              <p>Rating</p>
               <div className="flex flex-row flex-wrap gap-2">
                 {RATING.map((rating) => (
                   <FilterCard
@@ -128,9 +112,7 @@ const FiltersPage = () => {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Typography variant="subtitle" color="primary">
-                Cost
-              </Typography>
+              <p>Cost</p>
               <div className="flex flex-row flex-wrap gap-2">
                 {COST.map((cost) => (
                   <FilterCard
@@ -154,9 +136,7 @@ const FiltersPage = () => {
             </div>
           </div>
         )}
-        <Button variant="default" onClick={() => navigate("/")}>
-          Reset
-        </Button>
+        <button onClick={() => navigate("/")}>Reset</button>
       </div>
     </div>
   );

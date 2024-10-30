@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 import { Button, Dropdown, Flex, FloatButton, Input, Skeleton, Typography } from "antd";
 
-import { ArrowDownOutlined, MoreOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
+import {
+  CaretDownOutlined,
+  ControlOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 
 import * as Actions from "../actions/actions";
 
@@ -19,7 +25,7 @@ import LogoutModal from "../components/modals/LogoutModal";
 
 const RestaurantsPage = () => {
   const { user } = useAuthContext();
-  const logout = useLogout();
+  const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   const [loading, setLoading] = useState(false);
@@ -67,12 +73,38 @@ const RestaurantsPage = () => {
     return skeleton;
   };
 
-  const items = [
-    {
-      key: "1",
-      label: <div onClick={() => setLogoutOpen(true)}>Logout</div>,
-    },
-  ];
+  const renderTitle = () => {
+    const items = [
+      {
+        key: "1",
+        label: <div>Dallas - Fort Worth</div>,
+      },
+    ];
+
+    return (
+      <Flex className="pl-1">
+        <Typography.Title level={4}>Dallas - Fort Worth</Typography.Title>
+        <Dropdown menu={{ items }} trigger={["click"]}>
+          <Button color="default" variant="text" shape="circle" icon={<CaretDownOutlined />} />
+        </Dropdown>
+      </Flex>
+    );
+  };
+
+  const renderMenu = () => {
+    const items = [
+      {
+        key: "1",
+        label: <div onClick={() => setLogoutOpen(true)}>Logout</div>,
+      },
+    ];
+
+    return (
+      <Dropdown menu={{ items }} trigger={["click"]}>
+        <Button color="default" variant="text" shape="circle" icon={<MoreOutlined />} />
+      </Dropdown>
+    );
+  };
 
   return (
     <>
@@ -84,18 +116,26 @@ const RestaurantsPage = () => {
       <div className="min-h-screen bg-gray-100 p-4">
         <Flex vertical gap="middle">
           <Flex justify="space-between">
-            <Typography.Title level={4}>Dallas - Fort Worth</Typography.Title>
-            <Dropdown menu={{ items }} trigger={["click"]}>
-              <Button color="default" variant="text" shape="circle" icon={<MoreOutlined />} />
-            </Dropdown>
+            {renderTitle()}
+            {renderMenu()}
           </Flex>
           <FloatButton icon={<PlusOutlined />} type="primary" onClick={() => navigate("/restaurant")} />
-          <Input size="large" placeholder="Search" value={searchQuery} onChange={handleSearch} allowClear />
-          <Flex justify="flex-end">
-            <Button type="text" icon={<ArrowDownOutlined />}>
-              Sort
-            </Button>
-            <Button type="text" icon={<SwapOutlined />}>
+          <Input
+            size="large"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            value={searchQuery}
+            onChange={handleSearch}
+            allowClear
+          />
+          <Flex justify="space-between" align="center" className="pl-2">
+            <Flex vertical>
+              <Typography.Text strong>{`${filteredRestaurants.length} Restaurants`}</Typography.Text>
+              <Typography.Text type="secondary">{`${
+                filteredRestaurants.filter((r) => !r.visited).length
+              } Todo`}</Typography.Text>
+            </Flex>
+            <Button type="text" icon={<ControlOutlined />}>
               Filter
             </Button>
           </Flex>
