@@ -81,12 +81,12 @@ const RestaurantsPage = () => {
         onLogoutClick={() => logout()}
         onCancelClick={() => setLogoutOpen(false)}
       />
-      <div className="bg-gray-100 p-4">
+      <div className="min-h-screen bg-gray-100 p-4">
         <Flex vertical gap="middle">
           <Flex justify="space-between">
             <Typography.Title level={4}>Dallas - Fort Worth</Typography.Title>
             <Dropdown menu={{ items }} trigger={["click"]}>
-              <MoreOutlined />
+              <Button color="default" variant="text" shape="circle" icon={<MoreOutlined />} />
             </Dropdown>
           </Flex>
           <FloatButton icon={<PlusOutlined />} type="primary" onClick={() => navigate("/restaurant")} />
