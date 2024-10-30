@@ -61,8 +61,9 @@ const EditRestaurantPage = () => {
       <Flex justify="space-between">
         <Button
           color="default"
-          variant="text"
+          variant="filled"
           shape="circle"
+          size="large"
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate(-1)}
         />

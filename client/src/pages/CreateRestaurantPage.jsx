@@ -13,11 +13,12 @@ const CreateRestaurantPage = () => {
 
   return (
     <Flex vertical gap="middle" className="p-4">
-      <Flex justify="space-between">
+      <Flex justify="space-between" align="center">
         <Button
           color="default"
-          variant="text"
+          variant="filled"
           shape="circle"
+          size="large"
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate(-1)}
         />

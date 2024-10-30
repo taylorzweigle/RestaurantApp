@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { Button, Form, Input, Select, Spin, Typography } from "antd";
+import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd";
 
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -20,7 +20,7 @@ import {
   deleteRestaurant,
 } from "../../api/restaurants";
 
-import { CITIES, COST, RATING, TYPES, VISITED } from "../../api/attributes";
+import { CITIES, COST, TYPES, VISITED } from "../../api/attributes";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const RestaurantForm = ({ id, data, edit }) => {
   const [locations, setLocations] = useState(null);
   const [type, setType] = useState("");
   const [cost, setCost] = useState("");
-  const [visited, setVisited] = useState("");
+  const [visited, setVisited] = useState("No");
   const [rating, setRating] = useState("");
 
   const [restaurantError, setRestaurantError] = useState("");
@@ -128,7 +128,7 @@ const RestaurantForm = ({ id, data, edit }) => {
     setLocations(null);
     setType("");
     setCost("");
-    setVisited("");
+    setVisited("No");
     setRating("");
   };
 
@@ -166,60 +166,81 @@ const RestaurantForm = ({ id, data, edit }) => {
         onCancelClick={() => setDeleteModalOpen(false)}
       />
       <Form>
-        <Form.Item
-          label="Restaurant"
-          required
-          style={{ marginBottom: "0px" }}
-          validateStatus={restaurantError ? "error" : null}
-        >
-          <Input value={restaurant} size="large" onChange={(e) => setRestaurant(e.target.value)} />
-        </Form.Item>
-        {restaurantError && <Typography.Text type="danger">{restaurantError}</Typography.Text>}
-        <Form.Item
-          label="Location"
-          required
-          style={{ marginBottom: "0px" }}
-          validateStatus={locationsError ? "error" : null}
-        >
-          <Select
-            options={CITIES}
-            mode="multiple"
-            size="large"
-            value={locations}
-            onChange={(value) => setLocations(value)}
-          />
-        </Form.Item>
-        {locationsError && <Typography.Text type="danger">{locationsError}</Typography.Text>}
-        <Form.Item
-          label="Type"
-          required
-          style={{ marginBottom: "0px" }}
-          validateStatus={typeError ? "error" : null}
-        >
-          <Select options={TYPES} value={type} size="large" onChange={(value) => setType(value)} />
-        </Form.Item>
-        {typeError && <Typography.Text type="danger">{typeError}</Typography.Text>}
-        <Form.Item
-          label="Cost"
-          required
-          style={{ marginBottom: "0px" }}
-          validateStatus={costError ? "error" : null}
-        >
-          <Select options={COST} value={cost} size="large" onChange={(value) => setCost(value)} />
-        </Form.Item>
-        {costError && <Typography.Text type="danger">{costError}</Typography.Text>}
-        <Form.Item
-          label="Visited"
-          required
-          style={{ marginBottom: "0px" }}
-          validateStatus={visitedError ? "error" : null}
-        >
-          <Select options={VISITED} value={visited} size="large" onChange={(value) => setVisited(value)} />
-        </Form.Item>
-        {visitedError && <Typography.Text type="danger">{visitedError}</Typography.Text>}
-        <Form.Item label="Rating" style={{ marginBottom: "0px" }}>
-          <Select options={RATING} value={rating} size="large" onChange={(value) => setRating(value)} />
-        </Form.Item>
+        <Flex vertical gap="middle">
+          <Flex vertical>
+            <Form.Item
+              label="Restaurant"
+              required
+              style={{ marginBottom: "0px" }}
+              validateStatus={restaurantError ? "error" : null}
+            >
+              <Input value={restaurant} size="large" onChange={(e) => setRestaurant(e.target.value)} />
+            </Form.Item>
+            {restaurantError && <Typography.Text type="danger">{restaurantError}</Typography.Text>}
+          </Flex>
+          <Flex vertical>
+            <Form.Item
+              label="Location"
+              required
+              style={{ marginBottom: "0px" }}
+              validateStatus={locationsError ? "error" : null}
+            >
+              <Select
+                options={CITIES}
+                mode="multiple"
+                size="large"
+                value={locations}
+                onChange={(value) => setLocations(value)}
+              />
+            </Form.Item>
+            {locationsError && <Typography.Text type="danger">{locationsError}</Typography.Text>}
+          </Flex>
+          <Flex vertical>
+            <Form.Item
+              label="Type"
+              required
+              style={{ marginBottom: "0px" }}
+              validateStatus={typeError ? "error" : null}
+            >
+              <Select options={TYPES} value={type} size="large" onChange={(value) => setType(value)} />
+            </Form.Item>
+            {typeError && <Typography.Text type="danger">{typeError}</Typography.Text>}
+          </Flex>
+          <Flex vertical>
+            <Form.Item
+              label="Cost"
+              required
+              style={{ marginBottom: "0px" }}
+              validateStatus={costError ? "error" : null}
+            >
+              <Select options={COST} value={cost} size="large" onChange={(value) => setCost(value)} />
+            </Form.Item>
+            {costError && <Typography.Text type="danger">{costError}</Typography.Text>}
+          </Flex>
+          <Flex vertical>
+            <Form.Item
+              label="Visited"
+              required
+              style={{ marginBottom: "0px" }}
+              validateStatus={visitedError ? "error" : null}
+            >
+              <Select
+                options={VISITED}
+                value={visited}
+                size="large"
+                onChange={(value) => setVisited(value)}
+              />
+            </Form.Item>
+            {visitedError && <Typography.Text type="danger">{visitedError}</Typography.Text>}
+          </Flex>
+          <Flex vertical>
+            {visited === "Yes" && (
+              <Form.Item label="Rating" style={{ marginBottom: "0px" }}>
+                <Rate value={parseInt(rating)} onChange={(value) => setRating(value.toString())} />
+              </Form.Item>
+            )}
+          </Flex>
+        </Flex>
       </Form>
       <Button color="default" variant="filled" size="large" onClick={handleOnCancel}>
         {isCanceling ? <Spin indicator={<LoadingOutlined spin />} /> : "Cancel"}

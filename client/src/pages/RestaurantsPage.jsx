@@ -139,7 +139,7 @@ const RestaurantsPage = () => {
               Filter
             </Button>
           </Flex>
-          <Flex vertical gap="middle">
+          <Flex vertical gap="small">
             {loading
               ? renderSkeleton(7)
               : filteredRestaurants.map((restaurant) => (

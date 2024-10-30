@@ -28,7 +28,11 @@ const RestaurantListItem = ({ restaurant }) => {
               )}
             </span>
             <span>
-              <Tag color="green">{restaurant.cost}</Tag>
+              <Tag color="green">
+                <Typography.Text type="success" strong>
+                  {restaurant.cost}
+                </Typography.Text>
+              </Tag>
             </span>
           </Flex>
         </Flex>
