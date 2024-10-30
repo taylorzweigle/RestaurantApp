@@ -1,18 +1,31 @@
 //Taylor Zweigle, 2024
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import Typography from "../core/typography/Typography";
+import { Button, Flex, Typography } from "antd";
+
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 import RestaurantForm from "../components/forms/RestaurantForm";
 
 const CreateRestaurantPage = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <Typography variant="heading" color="primary">
-        Add Restaurant
-      </Typography>
+    <Flex vertical gap="middle" className="p-4">
+      <Flex justify="space-between">
+        <Button
+          color="default"
+          variant="text"
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
+        />
+        <Typography.Title level={4}>Add Restaurant</Typography.Title>
+        <span className="w-8">&nbsp;</span>
+      </Flex>
       <RestaurantForm />
-    </div>
+    </Flex>
   );
 };
 

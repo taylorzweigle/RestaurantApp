@@ -172,7 +172,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           style={{ marginBottom: "0px" }}
           validateStatus={restaurantError ? "error" : null}
         >
-          <Input value={restaurant} onChange={(e) => setRestaurant(e.target.value)} />
+          <Input value={restaurant} size="large" onChange={(e) => setRestaurant(e.target.value)} />
         </Form.Item>
         {restaurantError && <Typography.Text type="danger">{restaurantError}</Typography.Text>}
         <Form.Item
@@ -184,6 +184,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           <Select
             options={CITIES}
             mode="multiple"
+            size="large"
             value={locations}
             onChange={(value) => setLocations(value)}
           />
@@ -195,7 +196,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           style={{ marginBottom: "0px" }}
           validateStatus={typeError ? "error" : null}
         >
-          <Select options={TYPES} value={type} onChange={(value) => setType(value)} />
+          <Select options={TYPES} value={type} size="large" onChange={(value) => setType(value)} />
         </Form.Item>
         {typeError && <Typography.Text type="danger">{typeError}</Typography.Text>}
         <Form.Item
@@ -204,7 +205,7 @@ const RestaurantForm = ({ id, data, edit }) => {
           style={{ marginBottom: "0px" }}
           validateStatus={costError ? "error" : null}
         >
-          <Select options={COST} value={cost} onChange={(value) => setCost(value)} />
+          <Select options={COST} value={cost} size="large" onChange={(value) => setCost(value)} />
         </Form.Item>
         {costError && <Typography.Text type="danger">{costError}</Typography.Text>}
         <Form.Item
@@ -213,21 +214,21 @@ const RestaurantForm = ({ id, data, edit }) => {
           style={{ marginBottom: "0px" }}
           validateStatus={visitedError ? "error" : null}
         >
-          <Select options={VISITED} value={visited} onChange={(value) => setVisited(value)} />
+          <Select options={VISITED} value={visited} size="large" onChange={(value) => setVisited(value)} />
         </Form.Item>
         {visitedError && <Typography.Text type="danger">{visitedError}</Typography.Text>}
         <Form.Item label="Rating" style={{ marginBottom: "0px" }}>
-          <Select options={RATING} value={rating} onChange={(value) => setRating(value)} />
+          <Select options={RATING} value={rating} size="large" onChange={(value) => setRating(value)} />
         </Form.Item>
       </Form>
-      <Button color="default" variant="filled" onClick={handleOnCancel}>
+      <Button color="default" variant="filled" size="large" onClick={handleOnCancel}>
         {isCanceling ? <Spin indicator={<LoadingOutlined spin />} /> : "Cancel"}
       </Button>
-      <Button color="primary" variant="solid" onClick={handleOnSubmit}>
+      <Button color="primary" variant="solid" size="large" onClick={handleOnSubmit}>
         {isSubmitting ? <Spin indicator={<LoadingOutlined spin style={{ color: "white" }} />} /> : "Save"}
       </Button>
       {data && (
-        <Button color="danger" variant="solid" onClick={() => setDeleteModalOpen(true)}>
+        <Button color="danger" variant="solid" size="large" onClick={() => setDeleteModalOpen(true)}>
           Delete
         </Button>
       )}

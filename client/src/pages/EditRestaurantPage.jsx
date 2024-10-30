@@ -1,17 +1,20 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { Button, Flex, Skeleton, Typography } from "antd";
+
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 
 import { getRestaurant } from "../api/restaurants";
 
-import Typography from "../core/typography/Typography";
-
 import RestaurantForm from "../components/forms/RestaurantForm";
 
 const EditRestaurantPage = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   const { user } = useAuthContext();
 
@@ -38,13 +41,36 @@ const EditRestaurantPage = () => {
     }
   }, [params.id, user]);
 
+  const renderSkeleton = (count) => {
+    const skeleton = [];
+
+    for (let i = 0; i < count; i++) {
+      skeleton.push(
+        <Flex key={i} vertical gap="small">
+          <Skeleton.Input loading={true} active={true} size="small" style={{ width: "50%" }} />
+          <Skeleton.Input loading={true} active={true} size="large" style={{ width: "100%" }} />
+        </Flex>
+      );
+    }
+
+    return skeleton;
+  };
+
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <Typography variant="heading" color="primary">
-        Edit Restaurant
-      </Typography>
-      {data && <RestaurantForm id={params.id} data={data} edit />}
-    </div>
+    <Flex vertical gap="middle" className="p-4">
+      <Flex justify="space-between">
+        <Button
+          color="default"
+          variant="text"
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
+        />
+        <Typography.Title level={4}>Edit Restaurant</Typography.Title>
+        <span className="w-8">&nbsp;</span>
+      </Flex>
+      {data ? <RestaurantForm id={params.id} data={data} edit /> : renderSkeleton(6)}
+    </Flex>
   );
 };
 
