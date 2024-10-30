@@ -120,7 +120,19 @@ const RestaurantsPage = () => {
     const items = [
       {
         key: "1",
-        label: <div>Dallas - Fort Worth</div>,
+        label: <div onClick={() => {}}>Dallas - Fort Worth</div>,
+      },
+      {
+        key: "2",
+        label: <div onClick={() => {}}>Florence</div>,
+      },
+      {
+        key: "3",
+        label: <div onClick={() => {}}>London</div>,
+      },
+      {
+        key: "4",
+        label: <div onClick={() => {}}>Rome</div>,
       },
     ];
 
@@ -138,6 +150,10 @@ const RestaurantsPage = () => {
     const items = [
       {
         key: "1",
+        label: <div onClick={() => navigate("/settings")}>Settings</div>,
+      },
+      {
+        key: "2",
         label: <div onClick={() => setLogoutOpen(true)}>Logout</div>,
       },
     ];
@@ -156,7 +172,13 @@ const RestaurantsPage = () => {
         onLogoutClick={() => logout()}
         onCancelClick={() => setLogoutOpen(false)}
       />
-      <FloatButton icon={<PlusOutlined />} type="primary" onClick={() => navigate("/restaurant")} />
+      <FloatButton
+        icon={<PlusOutlined />}
+        type="primary"
+        style={{ width: "56px", height: "56px" }}
+        onClick={() => navigate("/restaurant")}
+      />
+      <FloatButton.BackTop style={{ width: "56px", height: "56px", insetInlineEnd: 94 }} />
       <div className="min-h-screen bg-gray-100 p-3">
         <Flex vertical gap="small">
           <Flex justify="space-between">

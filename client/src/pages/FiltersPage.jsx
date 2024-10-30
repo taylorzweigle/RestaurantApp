@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Flex, Typography } from "antd";
+import { Button, Divider, Flex, Typography } from "antd";
 
 import { ArrowLeftOutlined, UndoOutlined } from "@ant-design/icons";
 
@@ -16,9 +16,9 @@ import { CITIES, COST, RATING, TYPES } from "../api/attributes";
 import FilterCard from "../components/cards/FilterCard";
 
 const FiltersPage = () => {
-  const { restaurants } = useRestaurantsContext();
-
   const navigate = useNavigate();
+
+  const { restaurants } = useRestaurantsContext();
 
   const getCityCount = (city) => {
     let count = 0;
@@ -35,11 +35,11 @@ const FiltersPage = () => {
   };
 
   return (
-    <Flex vertical gap="middle" className="p-3">
+    <Flex vertical gap="middle" className="bg-gray-100 p-3">
       <Flex justify="space-between" align="center">
         <Button
           color="default"
-          variant="filled"
+          variant="text"
           shape="circle"
           size="large"
           icon={<ArrowLeftOutlined />}
@@ -48,7 +48,7 @@ const FiltersPage = () => {
         <Typography.Title level={4}>Filters</Typography.Title>
         <Button
           color="default"
-          variant="filled"
+          variant="text"
           shape="circle"
           size="large"
           icon={<UndoOutlined />}
@@ -57,8 +57,10 @@ const FiltersPage = () => {
       </Flex>
       {restaurants && (
         <Flex vertical gap="middle">
-          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-            <Typography.Text strong>Restaurants</Typography.Text>
+          <Flex vertical gap="none">
+            <Divider>
+              <Typography.Text strong>Restaurants</Typography.Text>
+            </Divider>
             <Flex wrap gap="small">
               <FilterCard attribute="All" query="All" label="All" value={restaurants.length} />
               <FilterCard
@@ -75,8 +77,10 @@ const FiltersPage = () => {
               />
             </Flex>
           </Flex>
-          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-            <Typography.Text strong>Cities</Typography.Text>
+          <Flex vertical gap="none">
+            <Divider>
+              <Typography.Text strong>Cities</Typography.Text>
+            </Divider>
             <Flex wrap gap="small">
               {CITIES.map((city) => (
                 <FilterCard
@@ -89,8 +93,10 @@ const FiltersPage = () => {
               ))}
             </Flex>
           </Flex>
-          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-            <Typography.Text strong>Type</Typography.Text>
+          <Flex vertical gap="none">
+            <Divider>
+              <Typography.Text strong>Type</Typography.Text>
+            </Divider>
             <Flex wrap gap="small">
               {TYPES.map((type) => (
                 <FilterCard
@@ -103,8 +109,10 @@ const FiltersPage = () => {
               ))}
             </Flex>
           </Flex>
-          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-            <Typography.Text strong>Rating</Typography.Text>
+          <Flex vertical gap="none">
+            <Divider>
+              <Typography.Text strong>Rating</Typography.Text>
+            </Divider>
             <Flex wrap gap="small">
               {RATING.map((rating) => (
                 <FilterCard
@@ -121,8 +129,10 @@ const FiltersPage = () => {
               ))}
             </Flex>
           </Flex>
-          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-            <Typography.Text strong>Cost</Typography.Text>
+          <Flex vertical gap="none">
+            <Divider>
+              <Typography.Text strong>Cost</Typography.Text>
+            </Divider>
             <Flex wrap gap="small">
               {COST.map((cost) => (
                 <FilterCard
@@ -132,7 +142,7 @@ const FiltersPage = () => {
                   label={Array.apply(null, Array(cost.value.length))
                     .map((x, i) => i + 1)
                     .map((cost) => (
-                      <AttachMoneyIcon key={cost} fontSize="xsmall" className="text-teal-600 -ml-1 -mr-1" />
+                      <AttachMoneyIcon key={cost} fontSize="xsmall" className="text-teal-600 -ml-1" />
                     ))}
                   value={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}
                 />

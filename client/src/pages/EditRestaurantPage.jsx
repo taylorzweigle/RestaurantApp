@@ -57,11 +57,11 @@ const EditRestaurantPage = () => {
   };
 
   return (
-    <Flex vertical gap="middle" className="p-3">
+    <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
       <Flex justify="space-between">
         <Button
           color="default"
-          variant="filled"
+          variant="text"
           shape="circle"
           size="large"
           icon={<ArrowLeftOutlined />}

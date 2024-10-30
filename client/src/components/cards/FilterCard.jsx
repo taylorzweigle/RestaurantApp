@@ -17,7 +17,7 @@ const FilterCard = ({ attribute, query, label, value }) => {
   };
 
   return (
-    <Button color="default" onClick={handleOnClick}>
+    <Button onClick={handleOnClick}>
       <Typography.Text strong>{label}</Typography.Text>
       <Typography.Text type="secondary">{value}</Typography.Text>
     </Button>
