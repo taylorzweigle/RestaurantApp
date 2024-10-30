@@ -2,42 +2,25 @@
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const FilterCard = ({ variant, type, value, displayValue, count }) => {
+import { Button, Typography } from "antd";
+
+const FilterCard = ({ attribute, query, label, value }) => {
   const naviagte = useNavigate();
 
   const [searchParams] = useSearchParams({ attribute: "", query: "" });
 
-  let variantClass = "";
-
-  switch (variant) {
-    case "portrait":
-      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-28";
-      break;
-    case "landscape":
-      variantClass = "flex flex-row justify-between items-center h-12 w-full pl-4 pr-4";
-      break;
-    default:
-      variantClass = "flex flex-col gap-0 justify-center items-center h-16 min-w-28";
-      break;
-  }
-
   const handleOnClick = () => {
-    searchParams.set("attribute", type);
-    searchParams.set("query", value);
+    searchParams.set("attribute", attribute);
+    searchParams.set("query", query);
 
-    naviagte(`/restaurants?attribute=${type}&query=${value}`);
+    attribute === "All" ? naviagte("/") : naviagte(`/restaurants?attribute=${attribute}&query=${query}`);
   };
 
   return (
-    <div
-      className={`${variantClass} bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 sm:hover:border-teal-500 sm:dark:hover:border-teal-500 active:border-teal-500 dark:active:border-teal-500 rounded-md cursor-pointer`}
-      onClick={handleOnClick}
-    >
-      <p>
-        <span className="flex flex-row gap-0">{displayValue}</span>
-      </p>
-      <p>{count}</p>
-    </div>
+    <Button color="default" onClick={handleOnClick}>
+      <Typography.Text strong>{label}</Typography.Text>
+      <Typography.Text type="secondary">{value}</Typography.Text>
+    </Button>
   );
 };
 

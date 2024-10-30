@@ -2,8 +2,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Button, Flex, Typography } from "antd";
+
+import { ArrowLeftOutlined, UndoOutlined } from "@ant-design/icons";
+
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import CloseIcon from "@mui/icons-material/Close";
 import StarIcon from "@mui/icons-material/Star";
 
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
@@ -32,113 +35,113 @@ const FiltersPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-0 bg-gray-100 dark:bg-gray-800 border-b border-gray-400 dark:border-gray-700">
-        <div className="flex flex-row justify-between items-center pl-4 pr-4 pt-2 pb-2">
-          <p>Filters</p>
-          <button onClick={() => navigate("/")}>
-            <CloseIcon />
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4 p-4">
-        {restaurants && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-4">
-              <p>Restaurants</p>
-              <div className="flex flex-row flex-wrap gap-2">
-                <FilterCard variant="landscape" value="All" displayValue="All" count={restaurants.length} />
+    <Flex vertical gap="middle" className="p-3">
+      <Flex justify="space-between" align="center">
+        <Button
+          color="default"
+          variant="filled"
+          shape="circle"
+          size="large"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
+        />
+        <Typography.Title level={4}>Filters</Typography.Title>
+        <Button
+          color="default"
+          variant="filled"
+          shape="circle"
+          size="large"
+          icon={<UndoOutlined />}
+          onClick={() => navigate("/")}
+        />
+      </Flex>
+      {restaurants && (
+        <Flex vertical gap="middle">
+          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
+            <Typography.Text strong>Restaurants</Typography.Text>
+            <Flex wrap gap="small">
+              <FilterCard attribute="All" query="All" label="All" value={restaurants.length} />
+              <FilterCard
+                attribute="Visited"
+                query="Visited"
+                label="Visited"
+                value={restaurants.filter((restaurant) => restaurant.visited).length}
+              />
+              <FilterCard
+                attribute="To Visit"
+                query="To Visit"
+                label="To Visit"
+                value={restaurants.filter((restaurant) => !restaurant.visited).length}
+              />
+            </Flex>
+          </Flex>
+          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
+            <Typography.Text strong>Cities</Typography.Text>
+            <Flex wrap gap="small">
+              {CITIES.map((city) => (
                 <FilterCard
-                  variant="landscape"
-                  type="Visited"
-                  value="Visited"
-                  displayValue="Visited"
-                  count={restaurants.filter((restaurant) => restaurant.visited).length}
+                  key={city.value}
+                  attribute="Locations"
+                  query={city.value}
+                  label={city.value}
+                  value={getCityCount(city.value)}
                 />
+              ))}
+            </Flex>
+          </Flex>
+          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
+            <Typography.Text strong>Type</Typography.Text>
+            <Flex wrap gap="small">
+              {TYPES.map((type) => (
                 <FilterCard
-                  variant="landscape"
-                  type="To Visit"
-                  value="To Visit"
-                  displayValue="To Visit"
-                  count={restaurants.filter((restaurant) => !restaurant.visited).length}
+                  key={type.value}
+                  attribute="Type"
+                  query={type.value}
+                  label={type.value}
+                  value={restaurants.filter((restaurant) => restaurant.type === type.value).length}
                 />
-              </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p>Cities</p>
-              <div className="flex flex-row flex-wrap gap-2">
-                {CITIES.map((city) => (
-                  <FilterCard
-                    key={city.value}
-                    type="Locations"
-                    value={city.value}
-                    displayValue={city.value}
-                    count={getCityCount(city.value)}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p>Type</p>
-              <div className="flex flex-row flex-wrap gap-2">
-                {TYPES.map((type) => (
-                  <FilterCard
-                    key={type.value}
-                    type="Type"
-                    value={type.value}
-                    displayValue={type.value}
-                    count={restaurants.filter((restaurant) => restaurant.type === type.value).length}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p>Rating</p>
-              <div className="flex flex-row flex-wrap gap-2">
-                {RATING.map((rating) => (
-                  <FilterCard
-                    key={rating.value}
-                    variant="landscape"
-                    type="Rating"
-                    value={rating.value}
-                    displayValue={Array.apply(null, Array(parseInt(rating.value)))
-                      .map((x, i) => i + 1)
-                      .map((rating) => (
-                        <StarIcon key={rating} fontSize="xsmall" className="text-amber-500" />
-                      ))}
-                    count={restaurants.filter((restaurant) => restaurant.rating === rating.value).length}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p>Cost</p>
-              <div className="flex flex-row flex-wrap gap-2">
-                {COST.map((cost) => (
-                  <FilterCard
-                    key={cost.value}
-                    variant="landscape"
-                    type="Cost"
-                    value={cost.value}
-                    displayValue={Array.apply(null, Array(cost.value.length))
-                      .map((x, i) => i + 1)
-                      .map((cost) => (
-                        <AttachMoneyIcon
-                          key={cost}
-                          fontSize="small"
-                          className="text-teal-600 -ml-1 -mr-1"
-                        />
-                      ))}
-                    count={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        <button onClick={() => navigate("/")}>Reset</button>
-      </div>
-    </div>
+              ))}
+            </Flex>
+          </Flex>
+          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
+            <Typography.Text strong>Rating</Typography.Text>
+            <Flex wrap gap="small">
+              {RATING.map((rating) => (
+                <FilterCard
+                  key={rating.value}
+                  attribute="Rating"
+                  query={rating.value}
+                  label={Array.apply(null, Array(parseInt(rating.value)))
+                    .map((x, i) => i + 1)
+                    .map((rating) => (
+                      <StarIcon key={rating} fontSize="xsmall" className="text-amber-500" />
+                    ))}
+                  value={restaurants.filter((restaurant) => restaurant.rating === rating.value).length}
+                />
+              ))}
+            </Flex>
+          </Flex>
+          <Flex vertical gap="middle" className="bg-gray-100 border border-gray-200 rounded-lg p-3">
+            <Typography.Text strong>Cost</Typography.Text>
+            <Flex wrap gap="small">
+              {COST.map((cost) => (
+                <FilterCard
+                  key={cost.value}
+                  attribute="Cost"
+                  query={cost.value}
+                  label={Array.apply(null, Array(cost.value.length))
+                    .map((x, i) => i + 1)
+                    .map((cost) => (
+                      <AttachMoneyIcon key={cost} fontSize="xsmall" className="text-teal-600 -ml-1 -mr-1" />
+                    ))}
+                  value={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}
+                />
+              ))}
+            </Flex>
+          </Flex>
+        </Flex>
+      )}
+    </Flex>
   );
 };
 

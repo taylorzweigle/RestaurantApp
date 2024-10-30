@@ -1,15 +1,15 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { Button, Dropdown, Flex, FloatButton, Input, Skeleton, Typography } from "antd";
+import { Button, Dropdown, Flex, FloatButton, Input, Skeleton, Tag, Typography } from "antd";
 
 import {
   CaretDownOutlined,
-  ControlOutlined,
   MoreOutlined,
   PlusOutlined,
   SearchOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 
 import * as Actions from "../actions/actions";
@@ -24,6 +24,9 @@ import RestaurantListItem from "../components/lists/RestaurantListItem";
 import LogoutModal from "../components/modals/LogoutModal";
 
 const RestaurantsPage = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   const { user } = useAuthContext();
   const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
@@ -33,8 +36,6 @@ const RestaurantsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const fetchRestaurants = async () => {
       setLoading(true);
@@ -43,8 +44,6 @@ const RestaurantsPage = () => {
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
 
-      setFilteredRestaurants(restaurants.json);
-
       setLoading(false);
     };
 
@@ -52,6 +51,50 @@ const RestaurantsPage = () => {
       fetchRestaurants();
     }
   }, [dispatchRestaurants, user]);
+
+  useEffect(() => {
+    if (restaurants) {
+      switch (searchParams.get("attribute")) {
+        case "Visited":
+          setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.visited === true));
+          break;
+        case "To Visit":
+          setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.visited === false));
+          break;
+        case "Locations":
+          let filtered = [];
+
+          for (let i = 0; i < restaurants.length; i++) {
+            for (let j = 0; j < restaurants[i].locations.length; j++) {
+              if (restaurants[i].locations[j].city === searchParams.get("query")) {
+                filtered.push(restaurants[i]);
+              }
+            }
+          }
+
+          setFilteredRestaurants(filtered);
+          break;
+        case "Type":
+          setFilteredRestaurants(
+            restaurants.filter((restaurant) => restaurant.type === searchParams.get("query"))
+          );
+          break;
+        case "Rating":
+          setFilteredRestaurants(
+            restaurants.filter((restaurant) => restaurant.rating === searchParams.get("query"))
+          );
+          break;
+        case "Cost":
+          setFilteredRestaurants(
+            restaurants.filter((restaurant) => restaurant.cost === searchParams.get("query"))
+          );
+          break;
+        default:
+          setFilteredRestaurants(restaurants);
+          break;
+      }
+    }
+  }, [restaurants, searchParams]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -83,7 +126,7 @@ const RestaurantsPage = () => {
 
     return (
       <Flex className="pl-1">
-        <Typography.Title level={4}>Dallas - Fort Worth</Typography.Title>
+        <Typography.Title level={3}>Dallas - Fort Worth</Typography.Title>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <Button color="default" variant="text" shape="circle" icon={<CaretDownOutlined />} />
         </Dropdown>
@@ -101,7 +144,7 @@ const RestaurantsPage = () => {
 
     return (
       <Dropdown menu={{ items }} trigger={["click"]}>
-        <Button color="default" variant="text" shape="circle" icon={<MoreOutlined />} />
+        <Button color="default" variant="text" size="large" shape="circle" icon={<MoreOutlined />} />
       </Dropdown>
     );
   };
@@ -113,13 +156,13 @@ const RestaurantsPage = () => {
         onLogoutClick={() => logout()}
         onCancelClick={() => setLogoutOpen(false)}
       />
-      <div className="min-h-screen bg-gray-100 p-4">
-        <Flex vertical gap="middle">
+      <FloatButton icon={<PlusOutlined />} type="primary" onClick={() => navigate("/restaurant")} />
+      <div className="min-h-screen bg-gray-100 p-3">
+        <Flex vertical gap="small">
           <Flex justify="space-between">
             {renderTitle()}
             {renderMenu()}
           </Flex>
-          <FloatButton icon={<PlusOutlined />} type="primary" onClick={() => navigate("/restaurant")} />
           <Input
             size="large"
             placeholder="Search"
@@ -128,15 +171,23 @@ const RestaurantsPage = () => {
             onChange={handleSearch}
             allowClear
           />
-          <Flex justify="space-between" align="center" className="pl-2">
+          <Flex justify="space-between" align="center" className="p-1">
             <Flex vertical>
               <Typography.Text strong>{`${filteredRestaurants.length} Restaurants`}</Typography.Text>
-              <Typography.Text type="secondary">{`${
-                filteredRestaurants.filter((r) => !r.visited).length
-              } Todo`}</Typography.Text>
+              <Typography.Text type="secondary">
+                {`${filteredRestaurants.filter((r) => !r.visited).length} Todo`}
+              </Typography.Text>
             </Flex>
-            <Button type="text" icon={<ControlOutlined />}>
-              Filter
+            <Button type="text" size="large" onClick={() => navigate("/filters")}>
+              <Flex gap="small" align="center">
+                <span>Filter:</span>
+                <Tag
+                  style={{ marginInlineEnd: "0px" }}
+                  icon={searchParams.get("attribute") === "Rating" && <StarFilled />}
+                >
+                  {searchParams.get("query") !== null ? searchParams.get("query") : "All"}
+                </Tag>
+              </Flex>
             </Button>
           </Flex>
           <Flex vertical gap="small">

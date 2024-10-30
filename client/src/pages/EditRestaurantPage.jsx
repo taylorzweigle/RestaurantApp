@@ -57,7 +57,7 @@ const EditRestaurantPage = () => {
   };
 
   return (
-    <Flex vertical gap="middle" className="p-4">
+    <Flex vertical gap="middle" className="p-3">
       <Flex justify="space-between">
         <Button
           color="default"
