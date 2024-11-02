@@ -150,7 +150,7 @@ const RestaurantsPage = () => {
     const items = [
       {
         key: "1",
-        label: <div onClick={() => navigate("/settings")}>Settings</div>,
+        label: <div onClick={() => navigate("/locations")}>Locations</div>,
       },
       {
         key: "2",

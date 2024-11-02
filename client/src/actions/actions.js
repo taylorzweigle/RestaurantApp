@@ -3,8 +3,9 @@ export const GET_RESTAURANTS = "GET_RESTAURANTS";
 export const CREATE_RESTAURANT = "CREATE_RESTAURANT";
 export const DELETE_RESTAURANT = "DELETE_RESTAURANT";
 
-export const GET_THEME = "GET_THEME";
-export const SET_THEME = "SET_THEME";
+export const GET_LOCATIONS = "GET_LOCATIONS";
+export const CREATE_LOCATION = "CREATE_LOCATION";
+export const DELETE_LOCATION = "DELETE_LOCATION";
 
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";

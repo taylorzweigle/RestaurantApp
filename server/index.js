@@ -5,6 +5,7 @@ const cors = require("cors");
 
 require("dotenv").config();
 
+const locationRoutes = require("./routes/locations");
 const restaurantRoutes = require("./routes/restaurants");
 const userRoutes = require("./routes/users");
 
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use("/api/locations", locationRoutes);
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/users", userRoutes);
 
