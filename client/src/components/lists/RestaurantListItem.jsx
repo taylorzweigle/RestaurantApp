@@ -15,8 +15,8 @@ const RestaurantListItem = ({ restaurant }) => {
         className="bg-white border active:border-blue-500 sm:hover:border-blue-500 p-3 rounded-xl drop-shadow"
       >
         <Flex justify="space-between" align="flex-start">
-          <Flex vertical className="pt-2">
-            <Typography.Title level={5} style={{ lineHeight: 0 }}>
+          <Flex vertical>
+            <Typography.Title level={5} style={{ marginBottom: "0px", lineHeight: "normal" }}>
               {restaurant.restaurant}
             </Typography.Title>
             <Typography.Text type="secondary">{restaurant.type}</Typography.Text>
@@ -40,10 +40,22 @@ const RestaurantListItem = ({ restaurant }) => {
             </span>
           </Flex>
         </Flex>
-        <Flex wrap="flex-wrap">
-          {restaurant.locations.map((location) => (
-            <Tag key={location.city}>{location.city}</Tag>
-          ))}
+        <Flex wrap gap="small">
+          {restaurant.locations
+            .sort(function (a, b) {
+              if (a.city < b.city) {
+                return -1;
+              }
+              if (a.city > b.city) {
+                return 1;
+              }
+              return 0;
+            })
+            .map((location) => (
+              <Tag key={location.city} style={{ marginInlineEnd: "0px" }}>
+                {location.city}
+              </Tag>
+            ))}
         </Flex>
       </Flex>
     </Link>

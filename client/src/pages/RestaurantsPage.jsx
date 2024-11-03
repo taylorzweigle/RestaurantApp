@@ -80,17 +80,28 @@ const RestaurantsPage = () => {
     if (restaurants) {
       switch (searchParams.get("attribute")) {
         case "Visited":
-          setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.visited === true));
+          setFilteredRestaurants(
+            restaurants.filter(
+              (restaurant) => restaurant.visited === true && restaurant.locationCategory === category
+            )
+          );
           break;
         case "To Visit":
-          setFilteredRestaurants(restaurants.filter((restaurant) => restaurant.visited === false));
+          setFilteredRestaurants(
+            restaurants.filter(
+              (restaurant) => restaurant.visited === false && restaurant.locationCategory === category
+            )
+          );
           break;
         case "Locations":
           let filtered = [];
 
           for (let i = 0; i < restaurants.length; i++) {
             for (let j = 0; j < restaurants[i].locations.length; j++) {
-              if (restaurants[i].locations[j].city === searchParams.get("query")) {
+              if (
+                restaurants[i].locations[j].city === searchParams.get("query") &&
+                restaurants[i].locationCategory === category
+              ) {
                 filtered.push(restaurants[i]);
               }
             }
@@ -100,25 +111,36 @@ const RestaurantsPage = () => {
           break;
         case "Type":
           setFilteredRestaurants(
-            restaurants.filter((restaurant) => restaurant.type === searchParams.get("query"))
+            restaurants.filter(
+              (restaurant) =>
+                restaurant.type === searchParams.get("query") && restaurant.locationCategory === category
+            )
           );
           break;
         case "Rating":
           setFilteredRestaurants(
-            restaurants.filter((restaurant) => restaurant.rating === searchParams.get("query"))
+            restaurants.filter(
+              (restaurant) =>
+                restaurant.rating === searchParams.get("query") && restaurant.locationCategory === category
+            )
           );
           break;
         case "Cost":
           setFilteredRestaurants(
-            restaurants.filter((restaurant) => restaurant.cost === searchParams.get("query"))
+            restaurants.filter(
+              (restaurant) =>
+                restaurant.cost === searchParams.get("query") && restaurant.locationCategory === category
+            )
           );
           break;
         default:
-          setFilteredRestaurants(restaurants);
+          setFilteredRestaurants(
+            restaurants.filter((restaurant) => restaurant.locationCategory === category)
+          );
           break;
       }
     }
-  }, [restaurants, searchParams]);
+  }, [restaurants, category, searchParams]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);

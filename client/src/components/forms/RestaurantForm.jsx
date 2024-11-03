@@ -11,6 +11,7 @@ import DeleteModal from "../../components/modals/DeleteModal";
 import * as Actions from "../../actions/actions";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useLocationCategoryContext } from "../../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
 import {
@@ -26,6 +27,7 @@ const RestaurantForm = ({ id, data, edit }) => {
   const navigate = useNavigate();
 
   const { user } = useAuthContext();
+  const { category } = useLocationCategoryContext();
   const { dispatchRestaurants } = useRestaurantsContext();
 
   const [restaurant, setRestaurant] = useState("");
@@ -37,6 +39,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
   const [restaurantError, setRestaurantError] = useState("");
   const [locationsError, setLocationsError] = useState("");
+  const [locationCategoryError, setLocationCategoryError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [costError, setCostError] = useState("");
   const [visitedError, setVisitedError] = useState("");
@@ -75,6 +78,7 @@ const RestaurantForm = ({ id, data, edit }) => {
     const newRestaurant = {
       restaurant: restaurant,
       locations: locations && locations.map((location) => ({ city: location, state: "TX" })),
+      locationCategory: category,
       type: type,
       rating: rating,
       cost: cost,
@@ -92,6 +96,9 @@ const RestaurantForm = ({ id, data, edit }) => {
       }
       if (json.error.includes("locations")) {
         setLocationsError("Location is required");
+      }
+      if (json.error.includes("locationCategory")) {
+        setLocationCategoryError("Location Category is required");
       }
       if (json.error.includes("type")) {
         setTypeError("Type is required");
@@ -135,6 +142,7 @@ const RestaurantForm = ({ id, data, edit }) => {
   const clearErrors = () => {
     setRestaurantError("");
     setLocationsError("");
+    setLocationCategoryError("");
     setTypeError("");
     setCostError("");
     setVisitedError("");
@@ -240,6 +248,9 @@ const RestaurantForm = ({ id, data, edit }) => {
               </Form.Item>
             )}
           </Flex>
+          {locationCategoryError && (
+            <Typography.Text type="danger">{locationCategoryError}</Typography.Text>
+          )}
         </Flex>
       </Form>
       <Button color="default" variant="filled" size="large" onClick={handleOnCancel}>

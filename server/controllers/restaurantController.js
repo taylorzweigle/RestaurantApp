@@ -28,7 +28,7 @@ const getRestaurant = async (req, res) => {
 };
 
 const createRestaurant = async (req, res) => {
-  const { restaurant, locations, type, rating, cost, visited } = req.body;
+  const { restaurant, locations, locationCategory, type, rating, cost, visited } = req.body;
 
   try {
     const creationUser = req.user._id;
