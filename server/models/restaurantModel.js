@@ -12,6 +12,10 @@ const restaurantSchema = new Schema({
     type: Array,
     required: true,
   },
+  locationCategory: {
+    type: String,
+    required: true,
+  },
   type: {
     type: String,
     required: true,

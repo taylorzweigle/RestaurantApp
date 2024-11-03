@@ -18,10 +18,13 @@ import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
+import { useLocationsContext } from "../hooks/useLocationsContext";
+import { useLocationCategoryContext } from "../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 import LogoutModal from "../components/modals/LogoutModal";
+import { getLocations } from "../api/locations";
 
 const RestaurantsPage = () => {
   const navigate = useNavigate();
@@ -29,9 +32,12 @@ const RestaurantsPage = () => {
 
   const { user } = useAuthContext();
   const { logout } = useLogout();
+  const { dispatchLocations } = useLocationsContext();
+  const { category, dispatchCategory } = useLocationCategoryContext();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   const [loading, setLoading] = useState(false);
+  const [locationCategories, setLocationCategories] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -51,6 +57,24 @@ const RestaurantsPage = () => {
       fetchRestaurants();
     }
   }, [dispatchRestaurants, user]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      const locations = await getLocations(user.token);
+
+      dispatchLocations({ type: Actions.GET_LOCATIONS, payload: locations.json });
+
+      if (locations) {
+        const categories = locations.json.map((location) => location.category);
+
+        setLocationCategories([...new Set(categories)].sort());
+      }
+    };
+
+    if (user) {
+      fetchLocations();
+    }
+  }, [dispatchLocations, user]);
 
   useEffect(() => {
     if (restaurants) {
@@ -117,28 +141,24 @@ const RestaurantsPage = () => {
   };
 
   const renderTitle = () => {
-    const items = [
-      {
-        key: "1",
-        label: <div onClick={() => {}}>Dallas - Fort Worth</div>,
-      },
-      {
-        key: "2",
-        label: <div onClick={() => {}}>Florence</div>,
-      },
-      {
-        key: "3",
-        label: <div onClick={() => {}}>London</div>,
-      },
-      {
-        key: "4",
-        label: <div onClick={() => {}}>Rome</div>,
-      },
-    ];
+    const items =
+      locationCategories &&
+      locationCategories.map((location) => {
+        return {
+          key: location,
+          label: (
+            <div
+              onClick={() => dispatchCategory({ type: Actions.SET_LOCATION_CATEGORY, payload: location })}
+            >
+              {location}
+            </div>
+          ),
+        };
+      });
 
     return (
       <Flex className="pl-1">
-        <Typography.Title level={3}>Dallas - Fort Worth</Typography.Title>
+        <Typography.Title level={3}>{category}</Typography.Title>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <Button color="default" variant="text" shape="circle" icon={<CaretDownOutlined />} />
         </Dropdown>

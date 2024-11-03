@@ -37,6 +37,7 @@ const createRestaurant = async (req, res) => {
     const newRestaurant = await Restaurant.create({
       restaurant,
       locations,
+      locationCategory,
       type,
       rating,
       cost,
