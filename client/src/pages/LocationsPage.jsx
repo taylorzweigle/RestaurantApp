@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import { Button, Flex, Form, Input, Spin, Typography } from "antd";
 
+import LocationListItem from "../components/lists/LocationListItem";
+
 import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import * as Actions from "../actions/actions";
@@ -101,11 +103,11 @@ const LocationsPage = () => {
   };
 
   return (
-    <Flex vertical gap="middle" className="p-3">
+    <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
       <Flex justify="space-between" align="center">
         <Button
           color="default"
-          variant="filled"
+          type="text"
           shape="circle"
           size="large"
           icon={<ArrowLeftOutlined />}
@@ -154,13 +156,10 @@ const LocationsPage = () => {
       <Button color="primary" variant="solid" size="large" onClick={handleOnSubmit}>
         {isSubmitting ? <Spin indicator={<LoadingOutlined spin style={{ color: "white" }} />} /> : "Save"}
       </Button>
-      {locations &&
-        locations.map((location) => (
-          <Flex vertical key={location.city}>
-            <Typography.Text>{`${location.city}, ${location.state}`}</Typography.Text>
-            <Typography.Text type="secondary">{location.category}</Typography.Text>
-          </Flex>
-        ))}
+      <Flex vertical gap="small">
+        {locations &&
+          locations.map((location) => <LocationListItem key={location.city} location={location} />)}
+      </Flex>
     </Flex>
   );
 };

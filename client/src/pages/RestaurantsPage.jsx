@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { Button, Dropdown, Flex, FloatButton, Input, Skeleton, Tag, Typography } from "antd";
+import { Button, Dropdown, Empty, Flex, FloatButton, Input, Skeleton, Tag, Typography } from "antd";
 
 import {
   CaretDownOutlined,
@@ -36,7 +36,7 @@ const RestaurantsPage = () => {
   const { category, dispatchCategory } = useLocationCategoryContext();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [locationCategories, setLocationCategories] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,13 +50,17 @@ const RestaurantsPage = () => {
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
 
+      setFilteredRestaurants(
+        restaurants.json.filter((restaurant) => restaurant.locationCategory === category)
+      );
+
       setLoading(false);
     };
 
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatchRestaurants, user]);
+  }, [dispatchRestaurants, category, user]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -145,8 +149,10 @@ const RestaurantsPage = () => {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
 
-    const filtered = restaurants.filter((restaurant) =>
-      restaurant.restaurant.toLowerCase().includes(e.target.value.toLowerCase())
+    const filtered = restaurants.filter(
+      (restaurant) =>
+        restaurant.restaurant.toLowerCase().includes(e.target.value.toLowerCase()) &&
+        restaurant.locationCategory === category
     );
 
     setFilteredRestaurants(filtered);
@@ -217,7 +223,7 @@ const RestaurantsPage = () => {
       <FloatButton
         icon={<PlusOutlined />}
         type="primary"
-        style={{ width: "56px", height: "56px" }}
+        style={{ width: "64px", height: "64px" }}
         onClick={() => navigate("/restaurant")}
       />
       <FloatButton.BackTop style={{ width: "56px", height: "56px", insetInlineEnd: 94 }} />
@@ -255,11 +261,15 @@ const RestaurantsPage = () => {
             </Button>
           </Flex>
           <Flex vertical gap="small">
-            {loading
-              ? renderSkeleton(7)
-              : filteredRestaurants.map((restaurant) => (
-                  <RestaurantListItem key={restaurant._id} restaurant={restaurant} />
-                ))}
+            {loading ? (
+              renderSkeleton(7)
+            ) : filteredRestaurants.length > 0 ? (
+              filteredRestaurants.map((restaurant) => (
+                <RestaurantListItem key={restaurant._id} restaurant={restaurant} />
+              ))
+            ) : (
+              <Empty />
+            )}
           </Flex>
         </Flex>
       </div>
