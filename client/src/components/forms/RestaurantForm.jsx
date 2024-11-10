@@ -35,7 +35,7 @@ const RestaurantForm = ({ id, data, edit }) => {
   const [type, setType] = useState("");
   const [cost, setCost] = useState("");
   const [visited, setVisited] = useState("No");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState({ husband: "", wife: "" });
 
   const [restaurantError, setRestaurantError] = useState("");
   const [locationsError, setLocationsError] = useState("");
@@ -136,7 +136,7 @@ const RestaurantForm = ({ id, data, edit }) => {
     setType("");
     setCost("");
     setVisited("No");
-    setRating("");
+    setRating({ husband: "", wife: "" });
   };
 
   const clearErrors = () => {
@@ -243,9 +243,20 @@ const RestaurantForm = ({ id, data, edit }) => {
           </Flex>
           <Flex vertical>
             {visited === "Yes" && (
-              <Form.Item label="Rating" style={{ marginBottom: "0px" }}>
-                <Rate value={parseInt(rating)} onChange={(value) => setRating(value.toString())} />
-              </Form.Item>
+              <Flex>
+                <Form.Item label="Husband Rating" style={{ marginBottom: "0px" }}>
+                  <Rate
+                    value={parseInt(rating.husband)}
+                    onChange={(value) => setRating({ ...rating, husband: value.toString() })}
+                  />
+                </Form.Item>
+                <Form.Item label="Wife Rating" style={{ marginBottom: "0px" }}>
+                  <Rate
+                    value={parseInt(rating.wife)}
+                    onChange={(value) => setRating({ ...rating, wife: value.toString() })}
+                  />
+                </Form.Item>
+              </Flex>
             )}
           </Flex>
           {locationCategoryError && (

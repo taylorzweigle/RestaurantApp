@@ -8,6 +8,7 @@ import { ArrowLeftOutlined, UndoOutlined } from "@ant-design/icons";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StarIcon from "@mui/icons-material/Star";
+import StarHalf from "@mui/icons-material/StarHalf";
 
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
@@ -32,6 +33,20 @@ const FiltersPage = () => {
     }
 
     return count;
+  };
+
+  const renderStars = (rating) => {
+    let stars = [];
+
+    for (let i = 0; i < parseInt(rating); i++) {
+      stars.push(<StarIcon key={i} fontSize="xsmall" className="text-amber-500" />);
+    }
+
+    if (parseFloat(rating) % 1 !== 0) {
+      stars.push(<StarHalf key={rating} fontSize="xsmall" className="text-amber-500" />);
+    }
+
+    return stars;
   };
 
   return (
@@ -119,12 +134,16 @@ const FiltersPage = () => {
                   key={rating.value}
                   attribute="Rating"
                   query={rating.value}
-                  label={Array.apply(null, Array(parseInt(rating.value)))
-                    .map((x, i) => i + 1)
-                    .map((rating) => (
-                      <StarIcon key={rating} fontSize="xsmall" className="text-amber-500" />
-                    ))}
-                  value={restaurants.filter((restaurant) => restaurant.rating === rating.value).length}
+                  label={renderStars(rating.value)}
+                  value={
+                    restaurants.filter(
+                      (restaurant) =>
+                        (
+                          (parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) /
+                          2
+                        ).toString() === rating.value
+                    ).length
+                  }
                 />
               ))}
             </Flex>

@@ -21,7 +21,7 @@ const restaurantSchema = new Schema({
     required: true,
   },
   rating: {
-    type: String,
+    type: Object,
     required: false,
   },
   cost: {

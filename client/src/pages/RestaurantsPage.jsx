@@ -125,7 +125,10 @@ const RestaurantsPage = () => {
           setFilteredRestaurants(
             restaurants.filter(
               (restaurant) =>
-                restaurant.rating === searchParams.get("query") && restaurant.locationCategory === category
+                (
+                  (parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) /
+                  2
+                ).toString() === searchParams.get("query") && restaurant.locationCategory === category
             )
           );
           break;

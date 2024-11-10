@@ -25,7 +25,9 @@ const RestaurantListItem = ({ restaurant }) => {
             <span>
               {restaurant.rating ? (
                 <Tag color="gold" icon={<StarFilled />}>
-                  <Typography.Text type="warning">{restaurant.rating}</Typography.Text>
+                  <Typography.Text type="warning">
+                    {(parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) / 2}
+                  </Typography.Text>
                 </Tag>
               ) : (
                 <Tag color="blue">Todo</Tag>
