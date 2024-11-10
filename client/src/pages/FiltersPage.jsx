@@ -10,15 +10,19 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalf from "@mui/icons-material/StarHalf";
 
+import { useLocationsContext } from "../hooks/useLocationsContext";
+import { useLocationCategoryContext } from "../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
-import { CITIES, COST, RATING, TYPES } from "../api/attributes";
+import { COST, RATING, TYPES } from "../api/attributes";
 
 import FilterCard from "../components/cards/FilterCard";
 
 const FiltersPage = () => {
   const navigate = useNavigate();
 
+  const { locations } = useLocationsContext();
+  const { category } = useLocationCategoryContext();
   const { restaurants } = useRestaurantsContext();
 
   const getCityCount = (city) => {
@@ -97,15 +101,32 @@ const FiltersPage = () => {
               <Typography.Text strong>Cities</Typography.Text>
             </Divider>
             <Flex wrap gap="small">
-              {CITIES.map((city) => (
-                <FilterCard
-                  key={city.value}
-                  attribute="Locations"
-                  query={city.value}
-                  label={city.value}
-                  value={getCityCount(city.value)}
-                />
-              ))}
+              {locations
+                .sort(function (a, b) {
+                  if (a.city < b.city) {
+                    return -1;
+                  }
+                  if (a.city > b.city) {
+                    return 1;
+                  }
+                  return 0;
+                })
+                .filter((location) => location.category === category)
+                .map((location) => {
+                  return {
+                    value: location.city,
+                    label: location.city,
+                  };
+                })
+                .map((city) => (
+                  <FilterCard
+                    key={city.value}
+                    attribute="Locations"
+                    query={city.value}
+                    label={city.value}
+                    value={getCityCount(city.value)}
+                  />
+                ))}
             </Flex>
           </Flex>
           <Flex vertical gap="none">

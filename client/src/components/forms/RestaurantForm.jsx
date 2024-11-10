@@ -11,6 +11,7 @@ import DeleteModal from "../../components/modals/DeleteModal";
 import * as Actions from "../../actions/actions";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useLocationsContext } from "../../hooks/useLocationsContext";
 import { useLocationCategoryContext } from "../../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
@@ -21,24 +22,25 @@ import {
   deleteRestaurant,
 } from "../../api/restaurants";
 
-import { CITIES, COST, TYPES, VISITED } from "../../api/attributes";
+import { COST, TYPES, VISITED } from "../../api/attributes";
 
 const RestaurantForm = ({ id, data, edit }) => {
   const navigate = useNavigate();
 
   const { user } = useAuthContext();
+  const { locations } = useLocationsContext();
   const { category } = useLocationCategoryContext();
   const { dispatchRestaurants } = useRestaurantsContext();
 
   const [restaurant, setRestaurant] = useState("");
-  const [locations, setLocations] = useState(null);
+  const [selectedLocations, setSelectedLocations] = useState(null);
   const [type, setType] = useState("");
   const [cost, setCost] = useState("");
   const [visited, setVisited] = useState("No");
   const [rating, setRating] = useState({ husband: "", wife: "" });
 
   const [restaurantError, setRestaurantError] = useState("");
-  const [locationsError, setLocationsError] = useState("");
+  const [selectedLocationsError, setSelectedLocationsError] = useState("");
   const [locationCategoryError, setLocationCategoryError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [costError, setCostError] = useState("");
@@ -52,13 +54,21 @@ const RestaurantForm = ({ id, data, edit }) => {
   useEffect(() => {
     if (data) {
       setRestaurant(data.restaurant);
-      setLocations(data.locations.map((location) => location.city));
+      setSelectedLocations(data.locations.map((location) => location.city));
       setType(data.type);
       setRating(data.rating);
       setCost(data.cost);
       setVisited(data.visited);
     }
   }, [data]);
+
+  const handleOnVisited = (value) => {
+    setVisited(value);
+
+    if (value === "No") {
+      setRating({ husband: "", wife: "" });
+    }
+  };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +87,8 @@ const RestaurantForm = ({ id, data, edit }) => {
 
     const newRestaurant = {
       restaurant: restaurant,
-      locations: locations && locations.map((location) => ({ city: location, state: "TX" })),
+      locations:
+        selectedLocations && selectedLocations.map((location) => ({ city: location, state: "TX" })),
       locationCategory: category,
       type: type,
       rating: rating,
@@ -95,7 +106,7 @@ const RestaurantForm = ({ id, data, edit }) => {
         setRestaurantError("Restaurant is required");
       }
       if (json.error.includes("locations")) {
-        setLocationsError("Location is required");
+        setSelectedLocationsError("Location is required");
       }
       if (json.error.includes("locationCategory")) {
         setLocationCategoryError("Location Category is required");
@@ -132,7 +143,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
   const clearForm = () => {
     setRestaurant("");
-    setLocations(null);
+    setSelectedLocations(null);
     setType("");
     setCost("");
     setVisited("No");
@@ -141,7 +152,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
   const clearErrors = () => {
     setRestaurantError("");
-    setLocationsError("");
+    setSelectedLocationsError("");
     setLocationCategoryError("");
     setTypeError("");
     setCostError("");
@@ -191,17 +202,35 @@ const RestaurantForm = ({ id, data, edit }) => {
               label="Location"
               required
               style={{ marginBottom: "0px" }}
-              validateStatus={locationsError ? "error" : null}
+              validateStatus={selectedLocationsError ? "error" : null}
             >
               <Select
-                options={CITIES}
+                options={locations
+                  .sort(function (a, b) {
+                    if (a.city < b.city) {
+                      return -1;
+                    }
+                    if (a.city > b.city) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .filter((location) => location.category === category)
+                  .map((location) => {
+                    return {
+                      value: location.city,
+                      label: location.city,
+                    };
+                  })}
                 mode="multiple"
                 size="large"
-                value={locations}
-                onChange={(value) => setLocations(value)}
+                value={selectedLocations}
+                onChange={(value) => setSelectedLocations(value)}
               />
             </Form.Item>
-            {locationsError && <Typography.Text type="danger">{locationsError}</Typography.Text>}
+            {selectedLocationsError && (
+              <Typography.Text type="danger">{selectedLocationsError}</Typography.Text>
+            )}
           </Flex>
           <Flex vertical>
             <Form.Item
@@ -236,7 +265,7 @@ const RestaurantForm = ({ id, data, edit }) => {
                 options={VISITED}
                 value={visited}
                 size="large"
-                onChange={(value) => setVisited(value)}
+                onChange={(value) => handleOnVisited(value)}
               />
             </Form.Item>
             {visitedError && <Typography.Text type="danger">{visitedError}</Typography.Text>}

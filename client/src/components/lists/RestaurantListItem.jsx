@@ -23,7 +23,7 @@ const RestaurantListItem = ({ restaurant }) => {
           </Flex>
           <Flex>
             <span>
-              {restaurant.rating ? (
+              {restaurant.visited ? (
                 <Tag color="gold" icon={<StarFilled />}>
                   <Typography.Text type="warning">
                     {(parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) / 2}
