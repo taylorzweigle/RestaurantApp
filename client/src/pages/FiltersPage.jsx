@@ -11,7 +11,6 @@ import StarIcon from "@mui/icons-material/Star";
 import StarHalf from "@mui/icons-material/StarHalf";
 
 import { useLocationsContext } from "../hooks/useLocationsContext";
-import { useLocationCategoryContext } from "../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import { COST, RATING, TYPES } from "../api/attributes";
@@ -22,7 +21,6 @@ const FiltersPage = () => {
   const navigate = useNavigate();
 
   const { locations } = useLocationsContext();
-  const { category } = useLocationCategoryContext();
   const { restaurants } = useRestaurantsContext();
 
   const getCityCount = (city) => {
@@ -71,7 +69,7 @@ const FiltersPage = () => {
           shape="circle"
           size="large"
           icon={<UndoOutlined />}
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
         />
       </Flex>
       {restaurants && (
@@ -111,7 +109,7 @@ const FiltersPage = () => {
                   }
                   return 0;
                 })
-                .filter((location) => location.category === category)
+                .filter((location) => location.category === null)
                 .map((location) => {
                   return {
                     value: location.city,

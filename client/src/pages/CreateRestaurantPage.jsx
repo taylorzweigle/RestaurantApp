@@ -1,6 +1,6 @@
 //Taylor Zweigle, 2024
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Flex, Typography } from "antd";
 
@@ -10,6 +10,7 @@ import RestaurantForm from "../components/forms/RestaurantForm";
 
 const CreateRestaurantPage = () => {
   const navigate = useNavigate();
+  const params = useParams();
 
   return (
     <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
@@ -25,7 +26,7 @@ const CreateRestaurantPage = () => {
         <Typography.Title level={4}>Add Restaurant</Typography.Title>
         <span className="w-8">&nbsp;</span>
       </Flex>
-      <RestaurantForm />
+      <RestaurantForm category={params.category} />
     </Flex>
   );
 };

@@ -19,13 +19,25 @@ const App = () => {
   return (
     <ScrollToTop>
       <Routes>
-        <Route path="/restaurant/:id" element={user ? <EditRestaurantPage /> : <Navigate to="/login" />} />
-        <Route path="/restaurant" element={user ? <CreateRestaurantPage /> : <Navigate to="/login" />} />
+        <Route
+          path="/restaurants/:category/:id"
+          element={user ? <EditRestaurantPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/restaurants/:category/create"
+          element={user ? <CreateRestaurantPage /> : <Navigate to="/login" />}
+        />
         <Route path="/locations" element={user ? <LocationsPage /> : <Navigate to="/login" />} />
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/filters" element={user ? <FiltersPage /> : <Navigate to="/login" />} />
-        <Route path="/restaurants" element={user ? <RestaurantsPage /> : <Navigate to="/login" />} />
-        <Route path="/" element={user ? <Navigate to="/restaurants" /> : <Navigate to="/login" />} />
+        <Route
+          path="/restaurants/:category"
+          element={user ? <RestaurantsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/"
+          element={user ? <Navigate to="/restaurants/Dallas - Fort Worth" /> : <Navigate to="/login" />}
+        />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </ScrollToTop>

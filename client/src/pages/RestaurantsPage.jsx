@@ -1,6 +1,6 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { Button, Dropdown, Empty, Flex, FloatButton, Input, Skeleton, Tag, Typography } from "antd";
 
@@ -14,45 +14,38 @@ import {
 
 import * as Actions from "../actions/actions";
 
+import { getLocations } from "../api/locations";
 import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 import { useLocationsContext } from "../hooks/useLocationsContext";
-import { useLocationCategoryContext } from "../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 import LogoutModal from "../components/modals/LogoutModal";
-import { getLocations } from "../api/locations";
 
 const RestaurantsPage = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const [searchParams] = useSearchParams();
 
   const { user } = useAuthContext();
   const { logout } = useLogout();
   const { dispatchLocations } = useLocationsContext();
-  const { category, dispatchCategory } = useLocationCategoryContext();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [locationCategories, setLocationCategories] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [logoutOpen, setLogoutOpen] = useState(false);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       setLoading(true);
 
-      const restaurants = await getRestaurants(user.token);
+      const restaurants = await getRestaurants(user.token, params.category);
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
-
-      setFilteredRestaurants(
-        restaurants.json.filter((restaurant) => restaurant.locationCategory === category)
-      );
 
       setLoading(false);
     };
@@ -60,7 +53,7 @@ const RestaurantsPage = () => {
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatchRestaurants, category, user]);
+  }, [dispatchRestaurants, user, params]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -80,87 +73,6 @@ const RestaurantsPage = () => {
     }
   }, [dispatchLocations, user]);
 
-  useEffect(() => {
-    if (restaurants) {
-      switch (searchParams.get("attribute")) {
-        case "Visited":
-          setFilteredRestaurants(
-            restaurants.filter(
-              (restaurant) => restaurant.visited === true && restaurant.locationCategory === category
-            )
-          );
-          break;
-        case "To Visit":
-          setFilteredRestaurants(
-            restaurants.filter(
-              (restaurant) => restaurant.visited === false && restaurant.locationCategory === category
-            )
-          );
-          break;
-        case "Locations":
-          let filtered = [];
-
-          for (let i = 0; i < restaurants.length; i++) {
-            for (let j = 0; j < restaurants[i].locations.length; j++) {
-              if (
-                restaurants[i].locations[j].city === searchParams.get("query") &&
-                restaurants[i].locationCategory === category
-              ) {
-                filtered.push(restaurants[i]);
-              }
-            }
-          }
-
-          setFilteredRestaurants(filtered);
-          break;
-        case "Type":
-          setFilteredRestaurants(
-            restaurants.filter(
-              (restaurant) =>
-                restaurant.type === searchParams.get("query") && restaurant.locationCategory === category
-            )
-          );
-          break;
-        case "Rating":
-          setFilteredRestaurants(
-            restaurants.filter(
-              (restaurant) =>
-                (
-                  (parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) /
-                  2
-                ).toString() === searchParams.get("query") && restaurant.locationCategory === category
-            )
-          );
-          break;
-        case "Cost":
-          setFilteredRestaurants(
-            restaurants.filter(
-              (restaurant) =>
-                restaurant.cost === searchParams.get("query") && restaurant.locationCategory === category
-            )
-          );
-          break;
-        default:
-          setFilteredRestaurants(
-            restaurants.filter((restaurant) => restaurant.locationCategory === category)
-          );
-          break;
-      }
-    }
-  }, [restaurants, category, searchParams]);
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-
-    const filtered = restaurants.filter(
-      (restaurant) =>
-        restaurant.restaurant.toLowerCase().includes(e.target.value.toLowerCase()) &&
-        restaurant.locationCategory === category
-    );
-
-    setFilteredRestaurants(filtered);
-  };
-
   const renderSkeleton = (count) => {
     const skeleton = [];
 
@@ -177,19 +89,13 @@ const RestaurantsPage = () => {
       locationCategories.map((location) => {
         return {
           key: location,
-          label: (
-            <div
-              onClick={() => dispatchCategory({ type: Actions.SET_LOCATION_CATEGORY, payload: location })}
-            >
-              {location}
-            </div>
-          ),
+          label: <div onClick={() => navigate(`/restaurants/${location}`)}>{location}</div>,
         };
       });
 
     return (
       <Flex className="pl-1">
-        <Typography.Title level={3}>{category}</Typography.Title>
+        <Typography.Title level={3}>{params.category}</Typography.Title>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <Button color="default" variant="text" shape="circle" icon={<CaretDownOutlined />} />
         </Dropdown>
@@ -227,7 +133,7 @@ const RestaurantsPage = () => {
         icon={<PlusOutlined />}
         type="primary"
         style={{ width: "64px", height: "64px" }}
-        onClick={() => navigate("/restaurant")}
+        onClick={() => navigate(`/restaurants/${params.category}/create`)}
       />
       <FloatButton.BackTop style={{ width: "56px", height: "56px", insetInlineEnd: 94 }} />
       <div className="min-h-screen bg-gray-100 p-3">
@@ -240,15 +146,17 @@ const RestaurantsPage = () => {
             size="large"
             placeholder="Search"
             prefix={<SearchOutlined />}
-            value={searchQuery}
-            onChange={handleSearch}
+            value={null}
+            onChange={() => {}}
             allowClear
           />
           <Flex justify="space-between" align="center" className="p-1">
             <Flex vertical>
-              <Typography.Text strong>{`${filteredRestaurants.length} Restaurants`}</Typography.Text>
+              <Typography.Text strong>
+                {loading ? <Skeleton.Button /> : `${restaurants && restaurants.length} Restaurants`}
+              </Typography.Text>
               <Typography.Text type="secondary">
-                {`${filteredRestaurants.filter((r) => !r.visited).length} Todo`}
+                {!loading && `${restaurants && restaurants.filter((r) => !r.visited).length} Todo`}
               </Typography.Text>
             </Flex>
             <Button type="text" size="large" onClick={() => navigate("/filters")}>
@@ -266,9 +174,13 @@ const RestaurantsPage = () => {
           <Flex vertical gap="small">
             {loading ? (
               renderSkeleton(7)
-            ) : filteredRestaurants.length > 0 ? (
-              filteredRestaurants.map((restaurant) => (
-                <RestaurantListItem key={restaurant._id} restaurant={restaurant} />
+            ) : restaurants && restaurants.length > 0 ? (
+              restaurants.map((restaurant) => (
+                <RestaurantListItem
+                  key={restaurant._id}
+                  category={params.category}
+                  restaurant={restaurant}
+                />
               ))
             ) : (
               <Empty />

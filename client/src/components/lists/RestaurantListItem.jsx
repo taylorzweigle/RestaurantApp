@@ -6,9 +6,9 @@ import { Flex, Tag, Typography } from "antd";
 
 import { StarFilled } from "@ant-design/icons";
 
-const RestaurantListItem = ({ restaurant }) => {
+const RestaurantListItem = ({ category, restaurant }) => {
   return (
-    <Link to={`/restaurant/${restaurant._id}`}>
+    <Link to={`/restaurants/${category}/${restaurant._id}`}>
       <Flex
         vertical
         gap="small"

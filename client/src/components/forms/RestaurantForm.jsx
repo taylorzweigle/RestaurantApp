@@ -1,6 +1,6 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd";
 
@@ -12,7 +12,6 @@ import * as Actions from "../../actions/actions";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLocationsContext } from "../../hooks/useLocationsContext";
-import { useLocationCategoryContext } from "../../hooks/useLocationCategoryContext";
 import { useRestaurantsContext } from "../../hooks/useRestaurantsContext";
 
 import {
@@ -24,12 +23,12 @@ import {
 
 import { COST, TYPES, VISITED } from "../../api/attributes";
 
-const RestaurantForm = ({ id, data, edit }) => {
+const RestaurantForm = ({ id, category, data, edit }) => {
   const navigate = useNavigate();
+  const params = useParams();
 
   const { user } = useAuthContext();
   const { locations } = useLocationsContext();
-  const { category } = useLocationCategoryContext();
   const { dispatchRestaurants } = useRestaurantsContext();
 
   const [restaurant, setRestaurant] = useState("");
@@ -50,6 +49,10 @@ const RestaurantForm = ({ id, data, edit }) => {
   const [isCanceling, setIsCanceling] = useState(false);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    clearForm();
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -98,8 +101,8 @@ const RestaurantForm = ({ id, data, edit }) => {
     };
 
     const json = edit
-      ? await updateRestaurant(id, newRestaurant, user.token)
-      : await createRestaurant(newRestaurant, user.token);
+      ? await updateRestaurant(id, newRestaurant, user.token, params.category)
+      : await createRestaurant(newRestaurant, user.token, params.category);
 
     if (json.error) {
       if (json.error.includes("restaurant")) {
@@ -126,7 +129,7 @@ const RestaurantForm = ({ id, data, edit }) => {
 
     if (json.json) {
       if (edit) {
-        const restaurants = await getRestaurants(user.token);
+        const restaurants = await getRestaurants(user.token, params.category);
 
         if (restaurants.json) {
           dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
@@ -136,8 +139,6 @@ const RestaurantForm = ({ id, data, edit }) => {
       }
 
       navigate(-1);
-
-      clearForm();
     }
   };
 
@@ -160,7 +161,7 @@ const RestaurantForm = ({ id, data, edit }) => {
   };
 
   const handleOnDelete = async () => {
-    const json = await deleteRestaurant(id, user.token);
+    const json = await deleteRestaurant(id, user.token, params.category);
 
     if (json.json) {
       dispatchRestaurants({ type: Actions.DELETE_RESTAURANT, payload: json.json });
@@ -198,6 +199,11 @@ const RestaurantForm = ({ id, data, edit }) => {
             {restaurantError && <Typography.Text type="danger">{restaurantError}</Typography.Text>}
           </Flex>
           <Flex vertical>
+            <Form.Item label="Category" required style={{ marginBottom: "0px" }}>
+              <Select options={[]} value={category} size="large" disabled />
+            </Form.Item>
+          </Flex>
+          <Flex vertical>
             <Form.Item
               label="Location"
               required
@@ -215,7 +221,7 @@ const RestaurantForm = ({ id, data, edit }) => {
                     }
                     return 0;
                   })
-                  .filter((location) => location.category === category)
+                  .filter((location) => location.category === params.category)
                   .map((location) => {
                     return {
                       value: location.city,

@@ -4,8 +4,8 @@ const API_URL =
     ? "https://restaurant-app-server-ten.vercel.app"
     : "http://localhost:5000";
 
-export const getRestaurants = async (token) => {
-  const res = await fetch(`${API_URL}/api/restaurants`, {
+export const getRestaurants = async (token, category) => {
+  const res = await fetch(`${API_URL}/api/restaurants/${category}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -19,8 +19,8 @@ export const getRestaurants = async (token) => {
   }
 };
 
-export const getRestaurant = async (id, token) => {
-  const res = await fetch(`${API_URL}/api/restaurants/${id}`, {
+export const getRestaurant = async (id, token, category) => {
+  const res = await fetch(`${API_URL}/api/restaurants/${category}/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -34,8 +34,8 @@ export const getRestaurant = async (id, token) => {
   }
 };
 
-export const createRestaurant = async (body, token) => {
-  const res = await fetch(`${API_URL}/api/restaurants`, {
+export const createRestaurant = async (body, token, category) => {
+  const res = await fetch(`${API_URL}/api/restaurants/${category}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,8 +54,8 @@ export const createRestaurant = async (body, token) => {
   }
 };
 
-export const updateRestaurant = async (id, body, token) => {
-  const res = await fetch(`${API_URL}/api/restaurants/${id}`, {
+export const updateRestaurant = async (id, body, token, category) => {
+  const res = await fetch(`${API_URL}/api/restaurants/${category}/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -74,8 +74,8 @@ export const updateRestaurant = async (id, body, token) => {
   }
 };
 
-export const deleteRestaurant = async (id, token) => {
-  const res = await fetch(`${API_URL}/api/restaurants/${id}`, {
+export const deleteRestaurant = async (id, token, category) => {
+  const res = await fetch(`${API_URL}/api/restaurants/${category}/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

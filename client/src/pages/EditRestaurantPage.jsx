@@ -22,7 +22,7 @@ const EditRestaurantPage = () => {
 
   useEffect(() => {
     const fetchRestaurant = async () => {
-      const json = await getRestaurant(params.id, user.token);
+      const json = await getRestaurant(params.id, user.token, params.category);
 
       if (json.json) {
         setData({
@@ -39,7 +39,7 @@ const EditRestaurantPage = () => {
     if (params.id && user) {
       fetchRestaurant();
     }
-  }, [params.id, user]);
+  }, [params, user]);
 
   const renderSkeleton = (count) => {
     const skeleton = [];
@@ -70,7 +70,11 @@ const EditRestaurantPage = () => {
         <Typography.Title level={4}>Edit Restaurant</Typography.Title>
         <span className="w-8">&nbsp;</span>
       </Flex>
-      {data ? <RestaurantForm id={params.id} data={data} edit /> : renderSkeleton(6)}
+      {data ? (
+        <RestaurantForm id={params.id} category={params.category} data={data} edit />
+      ) : (
+        renderSkeleton(7)
+      )}
     </Flex>
   );
 };

@@ -15,14 +15,14 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.get("/", getRestaurants);
+router.get("/:category", getRestaurants);
 
-router.get("/:id", getRestaurant);
+router.get("/:category/:id", getRestaurant);
 
-router.post("/", createRestaurant);
+router.post("/:category", createRestaurant);
 
-router.patch("/:id", updateRestaurant);
+router.patch("/:category/:id", updateRestaurant);
 
-router.delete("/:id", deleteRestaurant);
+router.delete("/:category/:id", deleteRestaurant);
 
 module.exports = router;
