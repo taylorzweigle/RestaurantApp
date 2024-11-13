@@ -2,15 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Flex, Form, Input, Spin, Typography } from "antd";
+import { Button, Flex, FloatButton, Input, Typography } from "antd";
+
+import { ArrowLeftOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 import LocationListItem from "../components/lists/LocationListItem";
-
-import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
+import NewLocationModal from "../components/modals/NewLocationModal";
 
 import * as Actions from "../actions/actions";
 
-import { getLocations, createLocation } from "../api/locations";
+import { getLocations } from "../api/locations";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLocationsContext } from "../hooks/useLocationsContext";
@@ -21,15 +22,8 @@ const LocationsPage = () => {
   const { user } = useAuthContext();
   const { locations, dispatchLocations } = useLocationsContext();
 
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [category, setCategory] = useState("");
-
-  const [cityError, setCityError] = useState("");
-  const [stateError, setStateError] = useState("");
-  const [categoryError, setCategoryError] = useState("");
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -43,124 +37,62 @@ const LocationsPage = () => {
     }
   }, [dispatchLocations, user]);
 
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
-
-    setIsSubmitting(true);
-
-    if (!user) {
-      return;
-    }
-
-    if (isSubmitting) {
-      return;
-    }
-
-    clearErrors();
-
-    const location = {
-      city,
-      state,
-      category,
-      creationTime: new Date(),
-    };
-
-    const json = await createLocation(location, user.token);
-
-    if (json.error) {
-      if (json.error.includes("city")) {
-        setCityError("City is required");
-      }
-      if (json.error.includes("state")) {
-        setStateError("State is required");
-      }
-      if (json.error.includes("category")) {
-        setCategoryError("Category is required");
-      }
-
-      setIsSubmitting(false);
-    }
-
-    if (json.json) {
-      dispatchLocations({ type: Actions.CREATE_LOCATION, payload: json.json });
-
-      clearForm();
-
-      setIsSubmitting(false);
-    }
-  };
-
-  const clearForm = () => {
-    setCity("");
-    setState("");
-    setCategory("");
-  };
-
-  const clearErrors = () => {
-    setCityError("");
-    setStateError("");
-    setCategoryError("");
-  };
-
   return (
-    <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
-      <Flex justify="space-between" align="center">
-        <Button
-          color="default"
-          type="text"
-          shape="circle"
-          size="large"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate(-1)}
-        />
-        <Typography.Title level={4}>Locations</Typography.Title>
-        <span className="w-8">&nbsp;</span>
-      </Flex>
-      <Form>
-        <Flex vertical gap="middle">
-          <Flex vertical>
-            <Form.Item
-              label="City"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={cityError ? "error" : null}
-            >
-              <Input value={city} size="large" onChange={(e) => setCity(e.target.value)} />
-            </Form.Item>
-            {cityError && <Typography.Text type="danger">{cityError}</Typography.Text>}
-          </Flex>
-          <Flex vertical>
-            <Form.Item
-              label="State/Country"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={stateError ? "error" : null}
-            >
-              <Input value={state} size="large" onChange={(e) => setState(e.target.value)} />
-            </Form.Item>
-            {stateError && <Typography.Text type="danger">{stateError}</Typography.Text>}
-          </Flex>
-          <Flex vertical>
-            <Form.Item
-              label="Category"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={categoryError ? "error" : null}
-            >
-              <Input value={category} size="large" onChange={(e) => setCategory(e.target.value)} />
-            </Form.Item>
-            {categoryError && <Typography.Text type="danger">{categoryError}</Typography.Text>}
-          </Flex>
+    <>
+      <NewLocationModal
+        open={locationModalOpen}
+        onSaveClick={() => setLocationModalOpen(false)}
+        onCancelClick={() => setLocationModalOpen(false)}
+      />
+      <FloatButton
+        icon={<PlusOutlined />}
+        type="primary"
+        style={{ width: "64px", height: "64px" }}
+        onClick={() => setLocationModalOpen(true)}
+      />
+      <FloatButton.BackTop style={{ width: "64px", height: "64px", insetInlineEnd: 94 }} />
+      <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
+        <Flex justify="space-between" align="center">
+          <Button
+            color="default"
+            type="text"
+            shape="circle"
+            size="large"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => navigate(-1)}
+          />
+          <Typography.Title level={4}>Locations</Typography.Title>
+          <span className="w-8">&nbsp;</span>
         </Flex>
-      </Form>
-      <Button color="primary" variant="solid" size="large" onClick={handleOnSubmit}>
-        {isSubmitting ? <Spin indicator={<LoadingOutlined spin style={{ color: "white" }} />} /> : "Save"}
-      </Button>
-      <Flex vertical gap="small">
-        {locations &&
-          locations.map((location) => <LocationListItem key={location.city} location={location} />)}
+        <Flex vertical gap="small">
+          <Input
+            size="large"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            allowClear
+          />
+          {locations &&
+            locations
+              .sort(function (a, b) {
+                if (a.city < b.city) {
+                  return -1;
+                }
+                if (a.city > b.city) {
+                  return 1;
+                }
+                return 0;
+              })
+              .filter(
+                (location) =>
+                  location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  location.state.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map((location) => <LocationListItem key={location.city} location={location} />)}
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 

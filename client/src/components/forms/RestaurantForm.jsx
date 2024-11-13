@@ -6,7 +6,7 @@ import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd"
 
 import { LoadingOutlined } from "@ant-design/icons";
 
-import DeleteModal from "../../components/modals/DeleteModal";
+import DeleteRestaurantModal from "../../components/modals/DeleteRestaurantModal";
 
 import * as Actions from "../../actions/actions";
 
@@ -180,7 +180,7 @@ const RestaurantForm = ({ id, category, data, edit }) => {
 
   return (
     <>
-      <DeleteModal
+      <DeleteRestaurantModal
         open={deleteModalOpen}
         onDeleteClick={handleOnDelete}
         onCancelClick={() => setDeleteModalOpen(false)}

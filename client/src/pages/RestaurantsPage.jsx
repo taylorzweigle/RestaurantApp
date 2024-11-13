@@ -38,6 +38,7 @@ const RestaurantsPage = () => {
   const [loading, setLoading] = useState(false);
   const [locationCategories, setLocationCategories] = useState([]);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -135,7 +136,7 @@ const RestaurantsPage = () => {
         style={{ width: "64px", height: "64px" }}
         onClick={() => navigate(`/restaurants/${params.category}/create`)}
       />
-      <FloatButton.BackTop style={{ width: "56px", height: "56px", insetInlineEnd: 94 }} />
+      <FloatButton.BackTop style={{ width: "64px", height: "64px", insetInlineEnd: 94 }} />
       <div className="min-h-screen bg-gray-100 p-3">
         <Flex vertical gap="small">
           <Flex justify="space-between">
@@ -146,8 +147,8 @@ const RestaurantsPage = () => {
             size="large"
             placeholder="Search"
             prefix={<SearchOutlined />}
-            value={null}
-            onChange={() => {}}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             allowClear
           />
           <Flex justify="space-between" align="center" className="p-1">
@@ -175,13 +176,17 @@ const RestaurantsPage = () => {
             {loading ? (
               renderSkeleton(7)
             ) : restaurants && restaurants.length > 0 ? (
-              restaurants.map((restaurant) => (
-                <RestaurantListItem
-                  key={restaurant._id}
-                  category={params.category}
-                  restaurant={restaurant}
-                />
-              ))
+              restaurants
+                .filter((restaurant) =>
+                  restaurant.restaurant.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((restaurant) => (
+                  <RestaurantListItem
+                    key={restaurant._id}
+                    category={params.category}
+                    restaurant={restaurant}
+                  />
+                ))
             ) : (
               <Empty />
             )}
