@@ -1,117 +1,44 @@
 //Taylor Zweigle, 2024
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Flex, Form, Input, Modal, Typography } from "antd";
+import { Form, Modal } from "antd";
 
-import * as Actions from "../../actions/actions";
-
-import { createLocation } from "../../api/locations";
+import LocationForm from "../forms/LocationForm";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLocationsContext } from "../../hooks/useLocationsContext";
 
 const NewLocationModal = ({ open, onSaveClick, onCancelClick }) => {
   const { user } = useAuthContext();
-  const { dispatchLocations } = useLocationsContext();
+  const { locations } = useLocationsContext();
 
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [category, setCategory] = useState("");
+  const [form] = Form.useForm();
 
-  const [cityError, setCityError] = useState("");
-  const [stateError, setStateError] = useState("");
-  const [categoryError, setCategoryError] = useState("");
+  const [locationCategories, setLocationCategories] = useState([]);
 
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchLocationCategories = () => {
+      if (locations) {
+        const categories = locations.map((location) => location.category);
 
-    if (!user) {
-      return;
-    }
-
-    clearErrors();
-
-    const location = {
-      city,
-      state,
-      category,
-      creationTime: new Date(),
+        setLocationCategories([...new Set(categories)].sort());
+      }
     };
 
-    const json = await createLocation(location, user.token);
-
-    if (json.error) {
-      if (json.error.includes("city")) {
-        setCityError("City is required");
-      }
-      if (json.error.includes("state")) {
-        setStateError("State is required");
-      }
-      if (json.error.includes("category")) {
-        setCategoryError("Category is required");
-      }
+    if (user) {
+      fetchLocationCategories();
     }
+  }, [locations, user]);
 
-    if (json.json) {
-      dispatchLocations({ type: Actions.CREATE_LOCATION, payload: json.json });
-
-      clearForm();
-    }
+  const handleOnSubmit = () => {
+    form.submit();
 
     onSaveClick();
   };
 
-  const clearForm = () => {
-    setCity("");
-    setState("");
-    setCategory("");
-  };
-
-  const clearErrors = () => {
-    setCityError("");
-    setStateError("");
-    setCategoryError("");
-  };
-
   return (
     <Modal title="New Location" open={open} onOk={handleOnSubmit} onCancel={onCancelClick}>
-      <Form>
-        <Flex vertical gap="middle">
-          <Flex vertical>
-            <Form.Item
-              label="City"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={cityError ? "error" : null}
-            >
-              <Input value={city} size="large" onChange={(e) => setCity(e.target.value)} />
-            </Form.Item>
-            {cityError && <Typography.Text type="danger">{cityError}</Typography.Text>}
-          </Flex>
-          <Flex vertical>
-            <Form.Item
-              label="State/Country"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={stateError ? "error" : null}
-            >
-              <Input value={state} size="large" onChange={(e) => setState(e.target.value)} />
-            </Form.Item>
-            {stateError && <Typography.Text type="danger">{stateError}</Typography.Text>}
-          </Flex>
-          <Flex vertical>
-            <Form.Item
-              label="Category"
-              required
-              style={{ marginBottom: "0px" }}
-              validateStatus={categoryError ? "error" : null}
-            >
-              <Input value={category} size="large" onChange={(e) => setCategory(e.target.value)} />
-            </Form.Item>
-            {categoryError && <Typography.Text type="danger">{categoryError}</Typography.Text>}
-          </Flex>
-        </Flex>
-      </Form>
+      <LocationForm form={form} categories={locationCategories} onSubmit={handleOnSubmit} />
     </Modal>
   );
 };
