@@ -73,6 +73,14 @@ const LocationsPage = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             allowClear
           />
+          <Flex vertical className="p-1">
+            <Typography.Text strong>{`${locations && locations.length} Locations`}</Typography.Text>
+            <Typography.Text type="secondary">
+              {`${
+                locations && [...new Set(locations.map((location) => location.category))].length
+              } Categories`}
+            </Typography.Text>
+          </Flex>
           {locations &&
             locations
               .sort(function (a, b) {

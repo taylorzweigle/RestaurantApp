@@ -10,7 +10,7 @@ import { createLocation } from "../../api/locations";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLocationsContext } from "../../hooks/useLocationsContext";
 
-const LocationForm = ({ form, categories, onSubmit }) => {
+const LocationForm = ({ form, categories }) => {
   const { user } = useAuthContext();
   const { dispatchLocations } = useLocationsContext();
 
@@ -104,14 +104,17 @@ const LocationForm = ({ form, categories, onSubmit }) => {
             <AutoComplete
               value={category}
               size="large"
+              allowClear
               options={
                 categories
-                  ? categories.map((category) => {
-                      return {
-                        label: category,
-                        value: category,
-                      };
-                    })
+                  ? categories
+                      .filter((cat) => cat.includes(category))
+                      .map((cat) => {
+                        return {
+                          label: cat,
+                          value: cat,
+                        };
+                      })
                   : []
               }
               onChange={(data) => setCategory(data)}
