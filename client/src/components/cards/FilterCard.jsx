@@ -1,11 +1,12 @@
 //Taylor Zweigle, 2024
 import React from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { Button, Typography } from "antd";
 
 const FilterCard = ({ attribute, query, label, value }) => {
   const naviagte = useNavigate();
+  const params = useParams();
 
   const [searchParams] = useSearchParams({ attribute: "", query: "" });
 
@@ -13,7 +14,9 @@ const FilterCard = ({ attribute, query, label, value }) => {
     searchParams.set("attribute", attribute);
     searchParams.set("query", query);
 
-    attribute === "All" ? naviagte("/") : naviagte(`/restaurants?attribute=${attribute}&query=${query}`);
+    attribute === "All"
+      ? naviagte("/")
+      : naviagte(`/restaurants/${params.category}?attribute=${attribute}&query=${query}`);
   };
 
   return (

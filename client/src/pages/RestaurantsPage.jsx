@@ -44,7 +44,7 @@ const RestaurantsPage = () => {
     const fetchRestaurants = async () => {
       setLoading(true);
 
-      const restaurants = await getRestaurants(user.token, params.category);
+      const restaurants = await getRestaurants(user.token, params.category, searchParams);
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
 
@@ -54,7 +54,7 @@ const RestaurantsPage = () => {
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatchRestaurants, user, params]);
+  }, [dispatchRestaurants, user, params, searchParams]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -160,7 +160,7 @@ const RestaurantsPage = () => {
                 {!loading && `${restaurants && restaurants.filter((r) => !r.visited).length} Todo`}
               </Typography.Text>
             </Flex>
-            <Button type="text" size="large" onClick={() => navigate("/filters")}>
+            <Button type="text" size="large" onClick={() => navigate(`/filters/${params.category}`)}>
               <Flex gap="small" align="center">
                 <span>Filter:</span>
                 <Tag

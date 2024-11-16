@@ -5,13 +5,49 @@ const Restaurant = require("../models/restaurantModel");
 
 const getRestaurants = async (req, res) => {
   const creationUser = req.user._id;
-  const { category } = req.params;
+  const { category, query } = req.params;
 
-  const restaurants = await Restaurant.find({ creationUser, locationCategory: category }).sort({
-    creationTime: -1,
-  });
+  let searchParams = null;
 
-  res.status(200).json(restaurants);
+  let filteredRestaurants = [];
+
+  switch (query.split("=")[0]) {
+    case "Visited":
+      searchParams = { visited: true };
+      break;
+    case "To Visit":
+      searchParams = { visited: false };
+    case "Locations":
+      searchParams = { locations: { $all: [{ city: query.split("=")[1], state: "TX" }] } };
+      break;
+    case "Type":
+      searchParams = { type: query.split("=")[1] };
+      break;
+    case "Cost":
+      searchParams = { cost: query.split("=")[1] };
+      break;
+    default:
+      searchParams = null;
+  }
+
+  const restaurants = await Restaurant.find({
+    creationUser,
+    locationCategory: category,
+    ...searchParams,
+  }).sort({ creationTime: -1 });
+
+  if (query.split("=")[0] === "Rating") {
+    console.log("Rating");
+
+    filteredRestaurants = restaurants.filter(
+      (restaurant) =>
+        restaurant.visited &&
+        ((parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) / 2).toString() ===
+          query.split("=")[1]
+    );
+  }
+
+  res.status(200).json(filteredRestaurants.length > 0 ? filteredRestaurants : restaurants);
 };
 
 const getRestaurant = async (req, res) => {

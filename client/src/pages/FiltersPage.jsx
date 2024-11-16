@@ -1,6 +1,6 @@
 //Taylor Zweigle, 2024
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Divider, Flex, Typography } from "antd";
 
@@ -19,6 +19,7 @@ import FilterCard from "../components/cards/FilterCard";
 
 const FiltersPage = () => {
   const navigate = useNavigate();
+  const params = useParams();
 
   const { locations } = useLocationsContext();
   const { restaurants } = useRestaurantsContext();
@@ -69,7 +70,7 @@ const FiltersPage = () => {
           shape="circle"
           size="large"
           icon={<UndoOutlined />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(`/restaurants/${params.category}`)}
         />
       </Flex>
       {restaurants && (
@@ -99,32 +100,33 @@ const FiltersPage = () => {
               <Typography.Text strong>Cities</Typography.Text>
             </Divider>
             <Flex wrap gap="small">
-              {locations
-                .sort(function (a, b) {
-                  if (a.city < b.city) {
-                    return -1;
-                  }
-                  if (a.city > b.city) {
-                    return 1;
-                  }
-                  return 0;
-                })
-                .filter((location) => location.category === null)
-                .map((location) => {
-                  return {
-                    value: location.city,
-                    label: location.city,
-                  };
-                })
-                .map((city) => (
-                  <FilterCard
-                    key={city.value}
-                    attribute="Locations"
-                    query={city.value}
-                    label={city.value}
-                    value={getCityCount(city.value)}
-                  />
-                ))}
+              {locations &&
+                locations
+                  .sort(function (a, b) {
+                    if (a.city < b.city) {
+                      return -1;
+                    }
+                    if (a.city > b.city) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .filter((location) => location.category === params.category)
+                  .map((location) => {
+                    return {
+                      value: location.city,
+                      label: location.city,
+                    };
+                  })
+                  .map((city) => (
+                    <FilterCard
+                      key={city.value}
+                      attribute="Locations"
+                      query={city.value}
+                      label={city.value}
+                      value={getCityCount(city.value)}
+                    />
+                  ))}
             </Flex>
           </Flex>
           <Flex vertical gap="none">

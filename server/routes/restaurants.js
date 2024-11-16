@@ -16,6 +16,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get("/:category", getRestaurants);
+router.get("/:category/:query", getRestaurants);
 
 router.get("/:category/:id", getRestaurant);
 

@@ -4,10 +4,13 @@ const API_URL =
     ? "https://restaurant-app-server-ten.vercel.app"
     : "http://localhost:5000";
 
-export const getRestaurants = async (token, category) => {
-  const res = await fetch(`${API_URL}/api/restaurants/${category}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const getRestaurants = async (token, category, searchParams) => {
+  const res = await fetch(
+    `${API_URL}/api/restaurants/${category}/${searchParams.get("attribute")}=${searchParams.get("query")}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
 
   const json = await res.json();
 
