@@ -29,7 +29,7 @@ const App = () => {
         />
         <Route path="/locations" element={user ? <LocationsPage /> : <Navigate to="/login" />} />
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path="/filters/:category" element={user ? <FiltersPage /> : <Navigate to="/login" />} />
+        <Route path="/:category/filters" element={user ? <FiltersPage /> : <Navigate to="/login" />} />
         <Route
           path="/restaurants/:category"
           element={user ? <RestaurantsPage /> : <Navigate to="/login" />}

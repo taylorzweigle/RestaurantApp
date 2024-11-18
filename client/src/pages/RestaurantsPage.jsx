@@ -44,7 +44,7 @@ const RestaurantsPage = () => {
     const fetchRestaurants = async () => {
       setLoading(true);
 
-      const restaurants = await getRestaurants(user.token, params.category, searchParams);
+      const restaurants = await getRestaurants(user.token, params.category);
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
 
@@ -54,7 +54,7 @@ const RestaurantsPage = () => {
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatchRestaurants, user, params, searchParams]);
+  }, [dispatchRestaurants, user, params]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -73,6 +73,41 @@ const RestaurantsPage = () => {
       fetchLocations();
     }
   }, [dispatchLocations, user]);
+
+  const filterRestaurants = () => {
+    if (restaurants) {
+      switch (searchParams.get("attribute")) {
+        case "Visited":
+          return restaurants.filter((restaurant) => restaurant.visited === true);
+        case "To Visit":
+          return restaurants.filter((restaurant) => restaurant.visited === false);
+        case "Locations":
+          let filtered = [];
+
+          for (let i = 0; i < restaurants.length; i++) {
+            for (let j = 0; j < restaurants[i].locations.length; j++) {
+              if (restaurants[i].locations[j].city === searchParams.get("query")) {
+                filtered.push(restaurants[i]);
+              }
+            }
+          }
+
+          return filtered;
+        case "Type":
+          return restaurants.filter((restaurant) => restaurant.type === searchParams.get("query"));
+        case "Rating":
+          return restaurants.filter(
+            (restaurant) =>
+              ((parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) / 2).toString() ===
+              searchParams.get("query")
+          );
+        case "Cost":
+          return restaurants.filter((restaurant) => restaurant.cost === searchParams.get("query"));
+        default:
+          return restaurants;
+      }
+    }
+  };
 
   const renderSkeleton = (count) => {
     const skeleton = [];
@@ -154,13 +189,18 @@ const RestaurantsPage = () => {
           <Flex justify="space-between" align="center" className="p-1">
             <Flex vertical>
               <Typography.Text strong>
-                {loading ? <Skeleton.Button /> : `${restaurants && restaurants.length} Restaurants`}
+                {loading ? (
+                  <Skeleton.Button />
+                ) : (
+                  `${restaurants && filterRestaurants(restaurants).length} Restaurants`
+                )}
               </Typography.Text>
               <Typography.Text type="secondary">
-                {!loading && `${restaurants && restaurants.filter((r) => !r.visited).length} Todo`}
+                {!loading &&
+                  `${restaurants && filterRestaurants(restaurants).filter((r) => !r.visited).length} Todo`}
               </Typography.Text>
             </Flex>
-            <Button type="text" size="large" onClick={() => navigate(`/filters/${params.category}`)}>
+            <Button type="text" size="large" onClick={() => navigate(`/${params.category}/filters`)}>
               <Flex gap="small" align="center">
                 <span>Filter:</span>
                 <Tag
@@ -176,7 +216,7 @@ const RestaurantsPage = () => {
             {loading ? (
               renderSkeleton(7)
             ) : restaurants && restaurants.length > 0 ? (
-              restaurants
+              filterRestaurants(restaurants)
                 .filter((restaurant) =>
                   restaurant.restaurant.toLowerCase().includes(searchQuery.toLowerCase())
                 )

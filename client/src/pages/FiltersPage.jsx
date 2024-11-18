@@ -100,33 +100,32 @@ const FiltersPage = () => {
               <Typography.Text strong>Cities</Typography.Text>
             </Divider>
             <Flex wrap gap="small">
-              {locations &&
-                locations
-                  .sort(function (a, b) {
-                    if (a.city < b.city) {
-                      return -1;
-                    }
-                    if (a.city > b.city) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .filter((location) => location.category === params.category)
-                  .map((location) => {
-                    return {
-                      value: location.city,
-                      label: location.city,
-                    };
-                  })
-                  .map((city) => (
-                    <FilterCard
-                      key={city.value}
-                      attribute="Locations"
-                      query={city.value}
-                      label={city.value}
-                      value={getCityCount(city.value)}
-                    />
-                  ))}
+              {locations
+                .sort(function (a, b) {
+                  if (a.city < b.city) {
+                    return -1;
+                  }
+                  if (a.city > b.city) {
+                    return 1;
+                  }
+                  return 0;
+                })
+                .filter((location) => location.category === params.category)
+                .map((location) => {
+                  return {
+                    value: location.city,
+                    label: location.city,
+                  };
+                })
+                .map((city) => (
+                  <FilterCard
+                    key={city.value}
+                    attribute="Locations"
+                    query={city.value}
+                    label={city.value}
+                    value={getCityCount(city.value)}
+                  />
+                ))}
             </Flex>
           </Flex>
           <Flex vertical gap="none">

@@ -15,8 +15,8 @@ const FilterCard = ({ attribute, query, label, value }) => {
     searchParams.set("query", query);
 
     attribute === "All"
-      ? naviagte("/")
-      : naviagte(`/restaurants/${params.category}?attribute=${attribute}&query=${query}`);
+      ? naviagte(`/restaurants/${params.category}`)
+      : naviagte(`/restaurants/${params.category}/?attribute=${attribute}&query=${query}`);
   };
 
   return (
