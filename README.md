@@ -8,7 +8,7 @@ The app allows for navigating to a location category (e.g. Dallas/Fort Worth) to
 
 ### Mobile
 
-|                                                                                                            |                                                                                                            |
-| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| ![Mobile_1](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_1_Dark.png) | ![Mobile_2](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_2_Dark.png) |
-| ![Mobile_3](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_3_Dark.png) | ![Mobile_4](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Todo_Mobile.png)   |
+|                                                                                                       |                                                                                                       |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| ![Mobile_1](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_1.png) | ![Mobile_2](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_2.png) |
+| ![Mobile_3](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_3.png) | ![Mobile_4](https://github.com/taylorzweigle/RestaurantApp/blob/main/img/Restaurant_App_Mobile_4.png) |
