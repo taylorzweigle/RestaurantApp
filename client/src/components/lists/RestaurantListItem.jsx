@@ -34,7 +34,7 @@ const RestaurantListItem = ({ category, restaurant }) => {
               )}
             </span>
             <span>
-              <Tag color="green" style={{ marginInlineEnd: "0px" }}>
+              <Tag color="green" className="me-0">
                 <Typography.Text type="success" strong>
                   {restaurant.cost}
                 </Typography.Text>
@@ -54,7 +54,7 @@ const RestaurantListItem = ({ category, restaurant }) => {
               return 0;
             })
             .map((location) => (
-              <Tag key={location.city} style={{ marginInlineEnd: "0px" }}>
+              <Tag key={location.city} className="me-0">
                 {location.city}
               </Tag>
             ))}

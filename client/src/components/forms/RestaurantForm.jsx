@@ -1,5 +1,5 @@
 //Taylor Zweigle, 2024
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd";
@@ -7,6 +7,7 @@ import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd"
 import { LoadingOutlined } from "@ant-design/icons";
 
 import DeleteRestaurantModal from "../../components/modals/DeleteRestaurantModal";
+import MultiSelectInput from "../../components/inputs/MultiSelectInput";
 
 import * as Actions from "../../actions/actions";
 
@@ -26,8 +27,6 @@ import { COST, TYPES, VISITED } from "../../api/attributes";
 const RestaurantForm = ({ id, category, data, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
-
-  const multiSelectRef = useRef(null);
 
   const { user } = useAuthContext();
   const { locations } = useLocationsContext();
@@ -212,8 +211,7 @@ const RestaurantForm = ({ id, category, data, edit }) => {
               style={{ marginBottom: "0px" }}
               validateStatus={selectedLocationsError ? "error" : null}
             >
-              <Select
-                ref={multiSelectRef}
+              <MultiSelectInput
                 options={locations
                   .sort(function (a, b) {
                     if (a.city < b.city) {
@@ -224,24 +222,20 @@ const RestaurantForm = ({ id, category, data, edit }) => {
                     }
                     return 0;
                   })
-                  .filter((location) => location.category === params.category)
-                  .map((location) => {
-                    return {
-                      value: location.city,
-                      label: location.city,
-                    };
-                  })}
-                mode="multiple"
-                size="large"
-                value={selectedLocations}
-                onFocus={() =>
-                  multiSelectRef.current.scrollTo({
-                    top: multiSelectRef.offsetTop,
-                    left: 0,
-                    behavior: "smooth",
+                  .filter((location) => location.category === params.category)}
+                value={
+                  selectedLocations &&
+                  selectedLocations.sort(function (a, b) {
+                    if (a < b) {
+                      return -1;
+                    }
+                    if (a > b) {
+                      return 1;
+                    }
+                    return 0;
                   })
                 }
-                onChange={(value) => setSelectedLocations(value)}
+                onChange={(locations) => setSelectedLocations(locations)}
               />
             </Form.Item>
             {selectedLocationsError && (
