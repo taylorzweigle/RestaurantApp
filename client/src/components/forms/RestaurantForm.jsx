@@ -1,5 +1,5 @@
 //Taylor Zweigle, 2024
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { Button, Flex, Form, Input, Rate, Select, Spin, Typography } from "antd";
@@ -26,6 +26,8 @@ import { COST, TYPES, VISITED } from "../../api/attributes";
 const RestaurantForm = ({ id, category, data, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
+
+  const multiSelectRef = useRef(null);
 
   const { user } = useAuthContext();
   const { locations } = useLocationsContext();
@@ -211,6 +213,7 @@ const RestaurantForm = ({ id, category, data, edit }) => {
               validateStatus={selectedLocationsError ? "error" : null}
             >
               <Select
+                ref={multiSelectRef}
                 options={locations
                   .sort(function (a, b) {
                     if (a.city < b.city) {
@@ -231,6 +234,13 @@ const RestaurantForm = ({ id, category, data, edit }) => {
                 mode="multiple"
                 size="large"
                 value={selectedLocations}
+                onFocus={() =>
+                  multiSelectRef.current.scrollTo({
+                    top: multiSelectRef.offsetTop,
+                    left: 0,
+                    behavior: "smooth",
+                  })
+                }
                 onChange={(value) => setSelectedLocations(value)}
               />
             </Form.Item>
