@@ -6,6 +6,7 @@ export const TYPES = [
   { value: "Bar", label: "Bar" },
   { value: "BBQ", label: "BBQ" },
   { value: "Breakfast", label: "Breakfast" },
+  { value: "Brewery", label: "Brewery" },
   { value: "Burger", label: "Burger" },
   { value: "Cajun", label: "Cajun" },
   { value: "Coffee", label: "Coffee" },

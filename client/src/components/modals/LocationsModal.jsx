@@ -32,11 +32,17 @@ const LocationsModal = ({ open, locations, defaultLocations, onSave, onCancelCli
   const handleOnSave = () => {
     setTempLocations([...selectedLocations]);
 
+    setSearchQuery("");
+    setFilteredLocations(locations);
+
     onSave([...selectedLocations]);
   };
 
   const handleOnCancel = () => {
     setSelectedLocations([...tempLocations]);
+
+    setSearchQuery("");
+    setFilteredLocations(locations);
 
     onCancelClick();
   };
@@ -52,7 +58,7 @@ const LocationsModal = ({ open, locations, defaultLocations, onSave, onCancelCli
   };
 
   return (
-    <Modal title="Locations" open={open} onOk={handleOnSave} onCancel={handleOnCancel}>
+    <Modal title="Locations" centered open={open} onOk={handleOnSave} onCancel={handleOnCancel}>
       <Flex vertical gap={16}>
         <Input
           size="large"

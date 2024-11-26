@@ -6,6 +6,8 @@ import { Flex, Tag, Typography } from "antd";
 
 import { StarFilled } from "@ant-design/icons";
 
+import { sortLocationsArray } from "../../utility/Sort";
+
 const RestaurantListItem = ({ category, restaurant }) => {
   return (
     <Link to={`/restaurants/${category}/${restaurant._id}`}>
@@ -43,17 +45,8 @@ const RestaurantListItem = ({ category, restaurant }) => {
           </Flex>
         </Flex>
         <Flex wrap gap="small">
-          {restaurant.locations
-            .sort(function (a, b) {
-              if (a.city < b.city) {
-                return -1;
-              }
-              if (a.city > b.city) {
-                return 1;
-              }
-              return 0;
-            })
-            .map((location) => (
+          {restaurant &&
+            sortLocationsArray(restaurant.locations).map((location) => (
               <Tag key={location.city} className="me-0">
                 {location.city}
               </Tag>

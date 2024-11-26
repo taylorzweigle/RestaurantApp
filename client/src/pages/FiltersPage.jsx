@@ -17,6 +17,8 @@ import { COST, RATING, TYPES } from "../api/attributes";
 
 import FilterListItem from "../components/lists/FilterListItem";
 
+import { sortLocationsArray } from "../utility/Sort";
+
 const FiltersPage = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -113,34 +115,26 @@ const FiltersPage = () => {
       children: (
         <Flex wrap gap="small">
           <List size="small" className="w-full">
-            {locations
-              .sort(function (a, b) {
-                if (a.city < b.city) {
-                  return -1;
-                }
-                if (a.city > b.city) {
-                  return 1;
-                }
-                return 0;
-              })
-              .filter((location) => location.category === params.category)
-              .map((location) => {
-                return {
-                  value: location.city,
-                  label: location.city,
-                };
-              })
-              .map((city) => (
-                <FilterListItem
-                  key={city.value}
-                  attribute="Locations"
-                  query={city.value}
-                  label={city.value}
-                  selected={selected === city.value}
-                  value={getCityCount(city.value)}
-                  onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
-                />
-              ))}
+            {locations &&
+              sortLocationsArray(locations)
+                .filter((location) => location.category === params.category)
+                .map((location) => {
+                  return {
+                    value: location.city,
+                    label: location.city,
+                  };
+                })
+                .map((city) => (
+                  <FilterListItem
+                    key={city.value}
+                    attribute="Locations"
+                    query={city.value}
+                    label={city.value}
+                    selected={selected === city.value}
+                    value={getCityCount(city.value)}
+                    onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+                  />
+                ))}
           </List>
         </Flex>
       ),

@@ -24,6 +24,8 @@ import {
 
 import { COST, TYPES, VISITED } from "../../api/attributes";
 
+import { sort, sortLocationsArray } from "../../utility/Sort";
+
 const RestaurantForm = ({ id, category, data, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
@@ -212,29 +214,11 @@ const RestaurantForm = ({ id, category, data, edit }) => {
               validateStatus={selectedLocationsError ? "error" : null}
             >
               <MultiSelectInput
-                options={locations
-                  .sort(function (a, b) {
-                    if (a.city < b.city) {
-                      return -1;
-                    }
-                    if (a.city > b.city) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .filter((location) => location.category === params.category)}
-                value={
-                  selectedLocations &&
-                  selectedLocations.sort(function (a, b) {
-                    if (a < b) {
-                      return -1;
-                    }
-                    if (a > b) {
-                      return 1;
-                    }
-                    return 0;
-                  })
+                options={
+                  locations &&
+                  sortLocationsArray(locations).filter((location) => location.category === params.category)
                 }
+                value={selectedLocations && sort(selectedLocations)}
                 onChange={(locations) => setSelectedLocations(locations)}
               />
             </Form.Item>

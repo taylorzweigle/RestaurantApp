@@ -29,9 +29,9 @@ const MultiSelectInput = ({ options, value, onChange }) => {
         className="w-full min-h-10 p-2 bg-white border border-neutral-300 hover:border-blue-500 focus:border-blue-500 rounded-lg cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        <Flex justify="space-between">
-          <Flex wrap gap={8}>
-            {value ? (
+        <Flex justify="space-between" align="center">
+          <Flex wrap gap={8} className="grow">
+            {value && value.length > 0 ? (
               value.map((value) => (
                 <Tag key={value} className="me-0">
                   <Typography.Text>{value}</Typography.Text>

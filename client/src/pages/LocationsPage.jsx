@@ -16,6 +16,8 @@ import { getLocations } from "../api/locations";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLocationsContext } from "../hooks/useLocationsContext";
 
+import { sortLocationsArray } from "../utility/Sort";
+
 const LocationsPage = () => {
   const navigate = useNavigate();
 
@@ -82,16 +84,7 @@ const LocationsPage = () => {
             </Typography.Text>
           </Flex>
           {locations &&
-            locations
-              .sort(function (a, b) {
-                if (a.city < b.city) {
-                  return -1;
-                }
-                if (a.city > b.city) {
-                  return 1;
-                }
-                return 0;
-              })
+            sortLocationsArray(locations)
               .filter(
                 (location) =>
                   location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
