@@ -237,7 +237,7 @@ const FiltersPage = () => {
           onClick={() => navigate(`/restaurants/${params.category}`)}
         />
       </Flex>
-      {restaurants && <Collapse items={items} defaultActiveKey={["1"]} />}
+      {restaurants && <Collapse items={items} defaultActiveKey={["1", "2", "3", "4", "5"]} />}
       <Button color="default" variant="filled" size="large" onClick={() => navigate(-1)}>
         Cancel
       </Button>
