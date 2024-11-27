@@ -233,7 +233,14 @@ const RestaurantForm = ({ id, category, data, edit }) => {
               style={{ marginBottom: "0px" }}
               validateStatus={typeError ? "error" : null}
             >
-              <Select options={TYPES} value={type} size="large" onChange={(value) => setType(value)} />
+              <Select
+                options={TYPES}
+                value={type}
+                size="large"
+                onFocus={() => document.body.classList.add("overflow-hidden")}
+                onBlur={() => document.body.classList.remove("overflow-hidden")}
+                onChange={(value) => setType(value)}
+              />
             </Form.Item>
             {typeError && <Typography.Text type="danger">{typeError}</Typography.Text>}
           </Flex>

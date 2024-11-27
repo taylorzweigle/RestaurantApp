@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Flex, FloatButton, Input, Typography } from "antd";
+import { Button, Flex, FloatButton, Input, Tag, Typography } from "antd";
 
 import { ArrowLeftOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 
 import LocationListItem from "../components/lists/LocationListItem";
+import LocationsFilterModal from "../components/modals/LocationsFilterModal";
 import NewLocationModal from "../components/modals/NewLocationModal";
 
 import * as Actions from "../actions/actions";
@@ -24,14 +25,23 @@ const LocationsPage = () => {
   const { user } = useAuthContext();
   const { locations, dispatchLocations } = useLocationsContext();
 
+  const [locationCategories, setLocationCategories] = useState([]);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const [locationsFilterModal, setLocationsFilterModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const fetchLocations = async () => {
       const locations = await getLocations(user.token);
 
       dispatchLocations({ type: Actions.GET_LOCATIONS, payload: locations.json });
+
+      if (locations) {
+        const categories = locations.json.map((location) => location.category);
+
+        setLocationCategories([...new Set(categories)].sort());
+      }
     };
 
     if (user) {
@@ -39,12 +49,24 @@ const LocationsPage = () => {
     }
   }, [dispatchLocations, user]);
 
+  const handleLocationFilterSave = (category) => {
+    setSelectedCategory(category);
+
+    setLocationsFilterModal(false);
+  };
+
   return (
     <>
       <NewLocationModal
         open={locationModalOpen}
         onSaveClick={() => setLocationModalOpen(false)}
         onCancelClick={() => setLocationModalOpen(false)}
+      />
+      <LocationsFilterModal
+        open={locationsFilterModal}
+        categories={locationCategories}
+        onSaveClick={(category) => handleLocationFilterSave(category)}
+        onCancelClick={() => setLocationsFilterModal(false)}
       />
       <FloatButton
         icon={<PlusOutlined />}
@@ -75,13 +97,21 @@ const LocationsPage = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             allowClear
           />
-          <Flex vertical className="p-1">
-            <Typography.Text strong>{`${locations && locations.length} Locations`}</Typography.Text>
-            <Typography.Text type="secondary">
-              {`${
-                locations && [...new Set(locations.map((location) => location.category))].length
-              } Categories`}
-            </Typography.Text>
+          <Flex justify="space-between" align="center" className="p-1">
+            <Flex vertical className="p-1">
+              <Typography.Text strong>{`${locations && locations.length} Locations`}</Typography.Text>
+              <Typography.Text type="secondary">
+                {`${
+                  locations && [...new Set(locations.map((location) => location.category))].length
+                } Categories`}
+              </Typography.Text>
+            </Flex>
+            <Button type="text" size="large" onClick={() => setLocationsFilterModal(true)}>
+              <Flex gap="small" align="center">
+                <span>Filter:</span>
+                <Tag className="me-0">{selectedCategory}</Tag>
+              </Flex>
+            </Button>
           </Flex>
           {locations &&
             sortLocationsArray(locations)
@@ -89,6 +119,9 @@ const LocationsPage = () => {
                 (location) =>
                   location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
                   location.state.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .filter((location) =>
+                selectedCategory === "All" ? location : location.category === selectedCategory
               )
               .map((location) => <LocationListItem key={location.city} location={location} />)}
         </Flex>

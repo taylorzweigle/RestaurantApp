@@ -203,10 +203,7 @@ const RestaurantsPage = () => {
             <Button type="text" size="large" onClick={() => navigate(`/${params.category}/filters`)}>
               <Flex gap="small" align="center">
                 <span>Filter:</span>
-                <Tag
-                  style={{ marginInlineEnd: "0px" }}
-                  icon={searchParams.get("attribute") === "Rating" && <StarFilled />}
-                >
+                <Tag className="me-0" icon={searchParams.get("attribute") === "Rating" && <StarFilled />}>
                   {searchParams.get("query") !== null ? searchParams.get("query") : "All"}
                 </Tag>
               </Flex>
