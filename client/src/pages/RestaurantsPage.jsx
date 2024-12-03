@@ -18,8 +18,9 @@ import { getLocations } from "../api/locations";
 import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useLogout } from "../hooks/useLogout";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useLocationsContext } from "../hooks/useLocationsContext";
+import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
@@ -31,8 +32,9 @@ const RestaurantsPage = () => {
   const [searchParams] = useSearchParams();
 
   const { user } = useAuthContext();
-  const { logout } = useLogout();
+  const [storageTheme, setStorageTheme] = useLocalStorage("theme", "dark");
   const { dispatchLocations } = useLocationsContext();
+  const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
 
   const [loading, setLoading] = useState(false);
@@ -73,6 +75,12 @@ const RestaurantsPage = () => {
       fetchLocations();
     }
   }, [dispatchLocations, user]);
+
+  const handleThemeButton = () => {
+    setStorageTheme(storageTheme === "dark" ? "light" : "dark");
+
+    document.documentElement.classList.toggle("dark");
+  };
 
   const filterRestaurants = () => {
     if (restaurants) {
@@ -147,6 +155,12 @@ const RestaurantsPage = () => {
       },
       {
         key: "2",
+        label: (
+          <div onClick={handleThemeButton}>{`Set ${storageTheme === "dark" ? "Light" : "Dark"} Theme`}</div>
+        ),
+      },
+      {
+        key: "3",
         label: <div onClick={() => setLogoutOpen(true)}>Logout</div>,
       },
     ];
@@ -172,7 +186,7 @@ const RestaurantsPage = () => {
         onClick={() => navigate(`/restaurants/${params.category}/create`)}
       />
       <FloatButton.BackTop style={{ width: "64px", height: "64px", insetInlineEnd: 94 }} />
-      <div className="min-h-screen bg-gray-100 p-3">
+      <div className="min-h-screen bg-stone-100 dark:bg-stone-950 p-3">
         <Flex vertical gap="small">
           <Flex justify="space-between">
             {renderTitle()}
