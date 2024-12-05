@@ -184,7 +184,7 @@ const RestaurantsPage = () => {
         onClick={() => navigate(`/restaurants/${params.category}/create`)}
       />
       <FloatButton.BackTop style={{ width: "64px", height: "64px", insetInlineEnd: 94 }} />
-      <div className="min-h-screen bg-stone-100 dark:bg-stone-950 p-3">
+      <div className="min-h-screen bg-neutral-100 dark:bg-neutral-950 p-3">
         <Flex vertical gap="small">
           <Flex justify="space-between">
             {renderTitle()}

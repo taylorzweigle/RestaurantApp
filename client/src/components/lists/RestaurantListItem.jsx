@@ -14,7 +14,7 @@ const RestaurantListItem = ({ category, restaurant }) => {
       <Flex
         vertical
         gap="small"
-        className="bg-white dark:bg-stone-900 border active:border-blue-500 sm:hover:border-blue-500 p-3 rounded-xl drop-shadow"
+        className="bg-white dark:bg-neutral-900 border border-white dark:border-neutral-800 active:border-blue-500 sm:hover:border-blue-500 p-3 rounded-xl drop-shadow"
       >
         <Flex justify="space-between" align="flex-start">
           <Flex vertical>

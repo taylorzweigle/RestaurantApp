@@ -57,7 +57,7 @@ const EditRestaurantPage = () => {
   };
 
   return (
-    <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
+    <Flex vertical gap="middle" className="bg-neutral-100 dark:bg-neutral-950 min-h-screen p-3">
       <Flex justify="space-between">
         <Button
           color="default"

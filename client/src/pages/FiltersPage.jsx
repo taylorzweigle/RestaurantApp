@@ -217,7 +217,7 @@ const FiltersPage = () => {
   ];
 
   return (
-    <Flex vertical gap="middle" className="bg-gray-100 p-3">
+    <Flex vertical gap="middle" className="bg-neutral-100 dark:bg-neutral-950 p-3">
       <Flex justify="space-between" align="center">
         <Button
           color="default"

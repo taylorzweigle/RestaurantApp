@@ -26,7 +26,7 @@ const MultiSelectInput = ({ options, value, onChange }) => {
         onCancelClick={() => setOpen(false)}
       />
       <div
-        className="w-full min-h-10 p-2 bg-white border border-neutral-300 hover:border-blue-500 focus:border-blue-500 rounded-lg cursor-pointer"
+        className="w-full min-h-10 p-2 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 hover:border-blue-500 focus:border-blue-500 rounded-lg cursor-pointer"
         onClick={() => setOpen(true)}
       >
         <Flex justify="space-between" align="center">

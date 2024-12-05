@@ -40,7 +40,7 @@ const LocationListItem = ({ location, onClick }) => {
       <Flex
         justify="space-between"
         align="flex-start"
-        className="bg-white p-3 rounded-xl drop-shadow"
+        className="bg-white dark:bg-neutral-900 border border-white dark:border-neutral-800 p-3 rounded-xl drop-shadow"
         onClick={onClick}
       >
         <Flex vertical>

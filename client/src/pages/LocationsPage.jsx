@@ -75,7 +75,7 @@ const LocationsPage = () => {
         onClick={() => setLocationModalOpen(true)}
       />
       <FloatButton.BackTop style={{ width: "64px", height: "64px", insetInlineEnd: 94 }} />
-      <Flex vertical gap="middle" className="bg-gray-100 min-h-screen p-3">
+      <Flex vertical gap="middle" className="bg-neutral-100 dark:bg-neutral-950 min-h-screen p-3">
         <Flex justify="space-between" align="center">
           <Button
             color="default"
