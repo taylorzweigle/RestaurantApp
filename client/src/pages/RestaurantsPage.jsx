@@ -18,10 +18,10 @@ import { getLocations } from "../api/locations";
 import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useLocationsContext } from "../hooks/useLocationsContext";
 import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
+import { useThemeContext } from "../hooks/useThemeContext";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 import LogoutModal from "../components/modals/LogoutModal";
@@ -32,10 +32,10 @@ const RestaurantsPage = () => {
   const [searchParams] = useSearchParams();
 
   const { user } = useAuthContext();
-  const [storageTheme, setStorageTheme] = useLocalStorage("theme", "dark");
   const { dispatchLocations } = useLocationsContext();
   const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
+  const { theme, dispatchTheme } = useThemeContext();
 
   const [loading, setLoading] = useState(false);
   const [locationCategories, setLocationCategories] = useState([]);
@@ -77,7 +77,7 @@ const RestaurantsPage = () => {
   }, [dispatchLocations, user]);
 
   const handleThemeButton = () => {
-    setStorageTheme(storageTheme === "dark" ? "light" : "dark");
+    dispatchTheme({ type: Actions.SET_THEME, payload: theme === "dark" ? "light" : "dark" });
 
     document.documentElement.classList.toggle("dark");
   };
@@ -155,9 +155,7 @@ const RestaurantsPage = () => {
       },
       {
         key: "2",
-        label: (
-          <div onClick={handleThemeButton}>{`Set ${storageTheme === "dark" ? "Light" : "Dark"} Theme`}</div>
-        ),
+        label: <div onClick={handleThemeButton}>{`Set ${theme === "dark" ? "Light" : "Dark"} Theme`}</div>,
       },
       {
         key: "3",

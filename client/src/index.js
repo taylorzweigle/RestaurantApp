@@ -10,6 +10,7 @@ import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
 import { LocationsContextProvider } from "./context/LocationsContext";
 import { RestaurantsContextProvider } from "./context/RestaurantsContext";
+import { ThemeContextProvider } from "./context/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -18,9 +19,11 @@ root.render(
     <AuthContextProvider>
       <LocationsContextProvider>
         <RestaurantsContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ThemeContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ThemeContextProvider>
         </RestaurantsContextProvider>
       </LocationsContextProvider>
     </AuthContextProvider>

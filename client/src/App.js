@@ -2,10 +2,12 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router";
 
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme as antdTheme } from "antd";
+
+import * as Actions from "./actions/actions";
 
 import { useAuthContext } from "./hooks/useAuthContext";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useThemeContext } from "./hooks/useThemeContext";
 
 import ScrollToTop from "./utility/ScrollToTop";
 
@@ -18,16 +20,20 @@ import RestaurantsPage from "./pages/RestaurantsPage";
 
 const App = () => {
   const { user } = useAuthContext();
-  const [storageTheme] = useLocalStorage("theme", "dark");
-
-  const { defaultAlgorithm, darkAlgorithm } = theme;
+  const { theme, dispatchTheme } = useThemeContext();
 
   useEffect(() => {
-    storageTheme === "dark" && document.documentElement.classList.add("dark");
+    dispatchTheme({ type: Actions.GET_THEME });
+  }, [dispatchTheme]);
+
+  useEffect(() => {
+    theme === "dark" && document.documentElement.classList.add("dark");
   });
 
+  const { defaultAlgorithm, darkAlgorithm } = antdTheme;
+
   return (
-    <ConfigProvider theme={{ algorithm: defaultAlgorithm }}>
+    <ConfigProvider theme={{ algorithm: theme === "dark" ? darkAlgorithm : defaultAlgorithm }}>
       <ScrollToTop>
         <Routes>
           <Route
