@@ -7,6 +7,7 @@ import { ConfigProvider, theme as antdTheme } from "antd";
 import * as Actions from "./actions/actions";
 
 import { useAuthContext } from "./hooks/useAuthContext";
+import { useCurrentLocationContext } from "./hooks/useCurrentLocationContext";
 import { useThemeContext } from "./hooks/useThemeContext";
 
 import ScrollToTop from "./utility/ScrollToTop";
@@ -20,11 +21,16 @@ import RestaurantsPage from "./pages/RestaurantsPage";
 
 const App = () => {
   const { user } = useAuthContext();
+  const { currentLocation, dispatchCurrentLocation } = useCurrentLocationContext();
   const { theme, dispatchTheme } = useThemeContext();
 
   useEffect(() => {
     dispatchTheme({ type: Actions.GET_THEME });
   }, [dispatchTheme]);
+
+  useEffect(() => {
+    dispatchCurrentLocation({ type: Actions.GET_CURRENT_LOCATION });
+  }, [dispatchCurrentLocation]);
 
   useEffect(() => {
     theme === "dark" && document.documentElement.classList.add("dark");
@@ -53,7 +59,15 @@ const App = () => {
           />
           <Route
             path="/"
-            element={user ? <Navigate to="/restaurants/Dallas - Fort Worth" /> : <Navigate to="/login" />}
+            element={
+              user ? (
+                <Navigate
+                  to={`/restaurants/${currentLocation ? currentLocation : "Dallas - Fort Worth"}`}
+                />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

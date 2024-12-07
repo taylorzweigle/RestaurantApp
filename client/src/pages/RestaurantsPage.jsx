@@ -6,6 +6,7 @@ import { Button, Dropdown, Empty, Flex, FloatButton, Input, Skeleton, Tag, Typog
 
 import {
   CaretDownOutlined,
+  HomeOutlined,
   MoreOutlined,
   PlusOutlined,
   SearchOutlined,
@@ -18,12 +19,14 @@ import { getLocations } from "../api/locations";
 import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useCurrentLocationContext } from "../hooks/useCurrentLocationContext";
 import { useLocationsContext } from "../hooks/useLocationsContext";
 import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 import { useThemeContext } from "../hooks/useThemeContext";
 
 import RestaurantListItem from "../components/lists/RestaurantListItem";
+import CurrentLocationModal from "../components/modals/CurrentLocationModal";
 import LogoutModal from "../components/modals/LogoutModal";
 
 const RestaurantsPage = () => {
@@ -32,6 +35,7 @@ const RestaurantsPage = () => {
   const [searchParams] = useSearchParams();
 
   const { user } = useAuthContext();
+  const { currentLocation, dispatchCurrentLocation } = useCurrentLocationContext();
   const { dispatchLocations } = useLocationsContext();
   const { logout } = useLogout();
   const { restaurants, dispatchRestaurants } = useRestaurantsContext();
@@ -39,6 +43,7 @@ const RestaurantsPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [locationCategories, setLocationCategories] = useState([]);
+  const [currentLocationOpen, setCurrentLocationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -75,6 +80,14 @@ const RestaurantsPage = () => {
       fetchLocations();
     }
   }, [dispatchLocations, user]);
+
+  const handleCurrentLocationModalClick = (value) => {
+    dispatchCurrentLocation({ type: Actions.SET_CURRENT_LOCATION, payload: value });
+
+    navigate(`/restaurants/${value}`);
+
+    setCurrentLocationOpen(false);
+  };
 
   const handleThemeButton = () => {
     dispatchTheme({ type: Actions.SET_THEME, payload: theme === "dark" ? "light" : "dark" });
@@ -134,6 +147,11 @@ const RestaurantsPage = () => {
         return {
           key: location,
           label: <div onClick={() => navigate(`/restaurants/${location}`)}>{location}</div>,
+          icon: location === currentLocation && (
+            <Tag color="blue">
+              <HomeOutlined />
+            </Tag>
+          ),
         };
       });
 
@@ -154,11 +172,21 @@ const RestaurantsPage = () => {
         label: <div onClick={() => navigate("/locations")}>Locations</div>,
       },
       {
+        type: "divider",
+      },
+      {
         key: "2",
-        label: <div onClick={handleThemeButton}>{`Set ${theme === "dark" ? "Light" : "Dark"} Theme`}</div>,
+        label: <div onClick={() => setCurrentLocationOpen(true)}>Set Current Location</div>,
       },
       {
         key: "3",
+        label: <div onClick={handleThemeButton}>{`Set ${theme === "dark" ? "Light" : "Dark"} Theme`}</div>,
+      },
+      {
+        type: "divider",
+      },
+      {
+        key: "4",
         label: <div onClick={() => setLogoutOpen(true)}>Logout</div>,
       },
     ];
@@ -172,6 +200,11 @@ const RestaurantsPage = () => {
 
   return (
     <>
+      <CurrentLocationModal
+        open={currentLocationOpen}
+        onSaveClick={(value) => handleCurrentLocationModalClick(value)}
+        onCancelClick={() => setCurrentLocationOpen(false)}
+      />
       <LogoutModal
         open={logoutOpen}
         onLogoutClick={() => logout()}

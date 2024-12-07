@@ -13,5 +13,8 @@ export const SET_LOCATION_CATEGORY = "SET_LOCATION_CATEGORY";
 export const GET_THEME = "GET_THEME";
 export const SET_THEME = "SET_THEME";
 
+export const GET_CURRENT_LOCATION = "GET_CURRENT_LOCATION";
+export const SET_CURRENT_LOCATION = "SET_CURRENT_LOCATION";
+
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
