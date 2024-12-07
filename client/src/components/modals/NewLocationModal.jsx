@@ -8,6 +8,8 @@ import LocationForm from "../forms/LocationForm";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useLocationsContext } from "../../hooks/useLocationsContext";
 
+import ModalNoScroll from "../../utility/ModalNoScroll";
+
 const NewLocationModal = ({ open, onSaveClick, onCancelClick }) => {
   const { user } = useAuthContext();
   const { locations } = useLocationsContext();
@@ -37,9 +39,11 @@ const NewLocationModal = ({ open, onSaveClick, onCancelClick }) => {
   };
 
   return (
-    <Modal title="New Location" open={open} onOk={handleOnSubmit} onCancel={onCancelClick}>
-      <LocationForm form={form} categories={locationCategories} onSubmit={handleOnSubmit} />
-    </Modal>
+    <ModalNoScroll open={open}>
+      <Modal title="New Location" open={open} onOk={handleOnSubmit} onCancel={onCancelClick}>
+        <LocationForm form={form} categories={locationCategories} onSubmit={handleOnSubmit} />
+      </Modal>
+    </ModalNoScroll>
   );
 };
 

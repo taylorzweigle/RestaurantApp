@@ -5,6 +5,8 @@ import { Checkbox, Flex, Input, Modal } from "antd";
 
 import { SearchOutlined } from "@ant-design/icons";
 
+import ModalNoScroll from "../../utility/ModalNoScroll";
+
 const LocationsModal = ({ open, locations, defaultLocations, onSave, onCancelClick }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -58,31 +60,33 @@ const LocationsModal = ({ open, locations, defaultLocations, onSave, onCancelCli
   };
 
   return (
-    <Modal title="Locations" centered open={open} onOk={handleOnSave} onCancel={handleOnCancel}>
-      <Flex vertical gap={16}>
-        <Input
-          size="large"
-          placeholder="Search"
-          prefix={<SearchOutlined />}
-          value={searchQuery}
-          onChange={(e) => handleOnSearch(e.target.value)}
-          allowClear
-        />
-        <Flex vertical gap={8}>
-          {filteredLocations &&
-            filteredLocations.map((location) => (
-              <Checkbox
-                key={location.city}
-                defaultChecked={selectedLocations ? selectedLocations.includes(location.city) : false}
-                checked={selectedLocations ? selectedLocations.includes(location.city) : false}
-                onChange={(event) => handleOnChange(location.city, event.target.checked)}
-              >
-                {location.city}
-              </Checkbox>
-            ))}
+    <ModalNoScroll open={open}>
+      <Modal title="Locations" centered open={open} onOk={handleOnSave} onCancel={handleOnCancel}>
+        <Flex vertical gap={16}>
+          <Input
+            size="large"
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            value={searchQuery}
+            onChange={(e) => handleOnSearch(e.target.value)}
+            allowClear
+          />
+          <Flex vertical gap={8}>
+            {filteredLocations &&
+              filteredLocations.map((location) => (
+                <Checkbox
+                  key={location.city}
+                  defaultChecked={selectedLocations ? selectedLocations.includes(location.city) : false}
+                  checked={selectedLocations ? selectedLocations.includes(location.city) : false}
+                  onChange={(event) => handleOnChange(location.city, event.target.checked)}
+                >
+                  {location.city}
+                </Checkbox>
+              ))}
+          </Flex>
         </Flex>
-      </Flex>
-    </Modal>
+      </Modal>
+    </ModalNoScroll>
   );
 };
 
