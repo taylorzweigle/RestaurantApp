@@ -6,6 +6,7 @@ import { Flex, Form, Modal, Select } from "antd";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCurrentLocationContext } from "../../hooks/useCurrentLocationContext";
 import { useLocationsContext } from "../../hooks/useLocationsContext";
+import ModalNoScroll from "../../utility/ModalNoScroll";
 
 const CurrentLocationModal = ({ open, onSaveClick, onCancelClick }) => {
   const { user } = useAuthContext();
@@ -36,34 +37,36 @@ const CurrentLocationModal = ({ open, onSaveClick, onCancelClick }) => {
   }, [locations, user]);
 
   return (
-    <Modal
-      title="Set Current Location"
-      open={open}
-      onOk={() => onSaveClick(selectedCurrentLocation)}
-      onCancel={onCancelClick}
-    >
-      <Form>
-        <Flex vertical>
-          <Form.Item label="Location Category" required style={{ marginBottom: "0px" }}>
-            <Select
-              value={selectedCurrentLocation}
-              size="large"
-              options={
-                locationCategories
-                  ? locationCategories.map((cat) => {
-                      return {
-                        label: cat,
-                        value: cat,
-                      };
-                    })
-                  : []
-              }
-              onChange={(value) => setSelectedCurrentLocation(value)}
-            />
-          </Form.Item>
-        </Flex>
-      </Form>
-    </Modal>
+    <ModalNoScroll open={open}>
+      <Modal
+        title="Set Current Location"
+        open={open}
+        onOk={() => onSaveClick(selectedCurrentLocation)}
+        onCancel={onCancelClick}
+      >
+        <Form>
+          <Flex vertical>
+            <Form.Item label="Location Category" required style={{ marginBottom: "0px" }}>
+              <Select
+                value={selectedCurrentLocation}
+                size="large"
+                options={
+                  locationCategories
+                    ? locationCategories.map((cat) => {
+                        return {
+                          label: cat,
+                          value: cat,
+                        };
+                      })
+                    : []
+                }
+                onChange={(value) => setSelectedCurrentLocation(value)}
+              />
+            </Form.Item>
+          </Flex>
+        </Form>
+      </Modal>
+    </ModalNoScroll>
   );
 };
 
