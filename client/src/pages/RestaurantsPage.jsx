@@ -9,6 +9,7 @@ import {
   HomeOutlined,
   MoreOutlined,
   PlusOutlined,
+  RetweetOutlined,
   SearchOutlined,
   StarFilled,
 } from "@ant-design/icons";
@@ -28,6 +29,7 @@ import { useThemeContext } from "../hooks/useThemeContext";
 import RestaurantListItem from "../components/lists/RestaurantListItem";
 import CurrentLocationModal from "../components/modals/CurrentLocationModal";
 import LogoutModal from "../components/modals/LogoutModal";
+import RandomRestaurantModal from "../components/modals/RandomRestaurantModal";
 
 const RestaurantsPage = () => {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ const RestaurantsPage = () => {
   const [locationCategories, setLocationCategories] = useState([]);
   const [currentLocationOpen, setCurrentLocationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [randomModalOpen, setRandomModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -95,13 +98,22 @@ const RestaurantsPage = () => {
     document.documentElement.classList.toggle("dark");
   };
 
+  const handleOnFiltersClick = () => {
+    navigate(`/${params.category}/filters`);
+  };
+
   const filterRestaurants = () => {
     if (restaurants) {
       switch (searchParams.get("attribute")) {
         case "Visited":
-          return restaurants.filter((restaurant) => restaurant.visited === true);
-        case "To Visit":
-          return restaurants.filter((restaurant) => restaurant.visited === false);
+          if (searchParams.get("query") === "Visited") {
+            return restaurants.filter((restaurant) => restaurant.visited === true);
+          }
+          if (searchParams.get("query") === "To Visit") {
+            return restaurants.filter((restaurant) => restaurant.visited === false);
+          }
+
+          break;
         case "Locations":
           let filtered = [];
 
@@ -205,6 +217,11 @@ const RestaurantsPage = () => {
         onSaveClick={(value) => handleCurrentLocationModalClick(value)}
         onCancelClick={() => setCurrentLocationOpen(false)}
       />
+      <RandomRestaurantModal
+        open={randomModalOpen}
+        restaurants={restaurants}
+        onCancelClick={() => setRandomModalOpen(false)}
+      />
       <LogoutModal
         open={logoutOpen}
         onLogoutClick={() => logout()}
@@ -223,6 +240,15 @@ const RestaurantsPage = () => {
             {renderTitle()}
             {renderMenu()}
           </Flex>
+          <Button
+            variant="solid"
+            color="primary"
+            size="large"
+            icon={<RetweetOutlined />}
+            onClick={() => setRandomModalOpen(true)}
+          >
+            Visit Random Restaurant
+          </Button>
           <Input
             size="large"
             placeholder="Search"
@@ -245,7 +271,7 @@ const RestaurantsPage = () => {
                   `${restaurants && filterRestaurants(restaurants).filter((r) => !r.visited).length} Todo`}
               </Typography.Text>
             </Flex>
-            <Button type="text" size="large" onClick={() => navigate(`/${params.category}/filters`)}>
+            <Button type="text" size="large" onClick={handleOnFiltersClick}>
               <Flex gap="small" align="center">
                 <span>Filter:</span>
                 <Tag className="me-0" icon={searchParams.get("attribute") === "Rating" && <StarFilled />}>

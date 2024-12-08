@@ -1,17 +1,14 @@
 //Taylor Zweigle, 2024
 import React from "react";
 
-import { List, Typography } from "antd";
-
-import { CheckOutlined } from "@ant-design/icons";
+import { Button, Typography } from "antd";
 
 const FilterListItem = ({ attribute, query, label, value, selected, onClick }) => {
   return (
-    <List.Item
-      actions={[
-        <Typography.Text type="secondary">{value}</Typography.Text>,
-        <CheckOutlined className={`text-lg text-blue-600 ${selected ? "opacity-100" : "opacity-0"}`} />,
-      ]}
+    <Button
+      type="default"
+      color={selected ? "primary" : "default"}
+      variant={selected ? "solid" : "outlined"}
       onClick={() =>
         onClick({
           label: query,
@@ -19,10 +16,10 @@ const FilterListItem = ({ attribute, query, label, value, selected, onClick }) =
           query: query,
         })
       }
-      className="w-full cursor-pointer"
     >
-      <List.Item.Meta title={<Typography.Text strong>{label}</Typography.Text>} />
-    </List.Item>
+      <Typography.Text strong>{label}</Typography.Text>
+      <Typography.Text>{value}</Typography.Text>
+    </Button>
   );
 };
 
