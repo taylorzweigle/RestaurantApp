@@ -9,7 +9,7 @@ import {
   HomeOutlined,
   MoreOutlined,
   PlusOutlined,
-  RetweetOutlined,
+  QuestionOutlined,
   SearchOutlined,
   StarFilled,
 } from "@ant-design/icons";
@@ -240,23 +240,23 @@ const RestaurantsPage = () => {
             {renderTitle()}
             {renderMenu()}
           </Flex>
-          <Button
-            variant="solid"
-            color="primary"
-            size="large"
-            icon={<RetweetOutlined />}
-            onClick={() => setRandomModalOpen(true)}
-          >
-            Visit Random Restaurant
-          </Button>
-          <Input
-            size="large"
-            placeholder="Search"
-            prefix={<SearchOutlined />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            allowClear
-          />
+          <Flex gap="small">
+            <Button
+              variant="outlined"
+              color="default"
+              size="large"
+              icon={<QuestionOutlined />}
+              onClick={() => setRandomModalOpen(true)}
+            />
+            <Input
+              size="large"
+              placeholder="Search"
+              prefix={<SearchOutlined />}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              allowClear
+            />
+          </Flex>
           <Flex justify="space-between" align="center" className="p-1">
             <Flex vertical>
               <Typography.Text strong>

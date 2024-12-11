@@ -1,7 +1,7 @@
 //Taylor Zweigle, 2024
 import React, { useState, useEffect } from "react";
 
-import { Button, Flex, Modal, Typography } from "antd";
+import { Button, Modal } from "antd";
 
 import ModalNoScroll from "../../utility/ModalNoScroll";
 
@@ -29,10 +29,9 @@ const RandomRestaurantModal = ({ open, restaurants, onCancelClick }) => {
         ]}
       >
         {randomRestaurant && (
-          <Flex vertical gap="middle" className="mb-4">
-            <Typography.Text>Here is your random restaurant!</Typography.Text>
+          <div className="mt-4 mb-4">
             <RestaurantListItem restaurant={randomRestaurant} />
-          </Flex>
+          </div>
         )}
       </Modal>
     </ModalNoScroll>

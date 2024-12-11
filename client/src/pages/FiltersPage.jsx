@@ -194,7 +194,11 @@ const FiltersPage = ({ values }) => {
               label={Array.apply(null, Array(cost.value.length))
                 .map((x, i) => i + 1)
                 .map((cost) => (
-                  <AttachMoneyIcon key={cost} fontSize="xsmall" className="text-teal-600 -ml-1" />
+                  <AttachMoneyIcon
+                    key={cost}
+                    fontSize="xsmall"
+                    className={`${selected === cost.value ? "text-white" : "text-teal-600"} -ml-1`}
+                  />
                 ))}
               selected={selected === cost.value}
               value={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}

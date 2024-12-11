@@ -14,6 +14,8 @@ export const TYPES = [
   { value: "Food Court", label: "Food Court" },
   { value: "Food Truck", label: "Food Truck" },
   { value: "French", label: "French" },
+  { value: "Hawaiian", label: "Hawaiian" },
+  { value: "Hot Dog", label: "Hot Dog" },
   { value: "Indian", label: "Indian" },
   { value: "Italian", label: "Italian" },
   { value: "Mediterranean", label: "Mediterranean" },
