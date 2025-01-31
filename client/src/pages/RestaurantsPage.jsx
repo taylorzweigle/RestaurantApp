@@ -1,4 +1,4 @@
-//Taylor Zweigle, 2024
+//Taylor Zweigle, 2025
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
@@ -21,6 +21,7 @@ import { getRestaurants } from "../api/restaurants";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useCurrentLocationContext } from "../hooks/useCurrentLocationContext";
+import { useFiltersContext } from "../hooks/useFiltersContext";
 import { useLocationsContext } from "../hooks/useLocationsContext";
 import { useLogout } from "../hooks/useLogout";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
@@ -38,11 +39,13 @@ const RestaurantsPage = () => {
 
   const { user } = useAuthContext();
   const { currentLocation, dispatchCurrentLocation } = useCurrentLocationContext();
+  const { dispatchFilters } = useFiltersContext();
   const { dispatchLocations } = useLocationsContext();
   const { logout } = useLogout();
-  const { restaurants, dispatchRestaurants } = useRestaurantsContext();
+  const { dispatchRestaurants } = useRestaurantsContext();
   const { theme, dispatchTheme } = useThemeContext();
 
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [locationCategories, setLocationCategories] = useState([]);
   const [currentLocationOpen, setCurrentLocationOpen] = useState(false);
@@ -58,13 +61,119 @@ const RestaurantsPage = () => {
 
       dispatchRestaurants({ type: Actions.GET_RESTAURANTS, payload: restaurants.json });
 
+      if (restaurants.json) {
+        let filteredRestaurants = [];
+
+        const attributes = searchParams.getAll("attribute");
+        const queries = searchParams.getAll("query");
+
+        const filters = attributes
+          .map((attribute, index) => ({
+            attribute,
+            query: queries[index],
+          }))
+          .reduce((acc, filter) => {
+            const { attribute, query } = filter;
+
+            if (!acc[attribute]) {
+              acc[attribute] = [];
+            }
+
+            acc[attribute].push(query);
+
+            return acc;
+          }, {});
+
+        if (Object.keys(filters).length === 0) {
+          filteredRestaurants = [...restaurants.json];
+        } else {
+          for (let i = 0; i < restaurants.json.length; i++) {
+            let addVisited = false;
+            let addLocation = false;
+            let addType = false;
+            let addRating = false;
+            let addCost = false;
+
+            if (filters.Visited && filters.Visited.length > 0) {
+              for (let j = 0; j < filters.Visited.length; j++) {
+                let visited = false;
+
+                if (filters.Visited[j] === "Visited") {
+                  visited = true;
+                } else if (filters.Visited[j] === "To Visit") {
+                  visited = false;
+                }
+
+                if (restaurants.json[i].visited === visited) {
+                  addVisited = true;
+                }
+              }
+            } else {
+              addVisited = true;
+            }
+
+            if (filters.Locations && filters.Locations.length > 0) {
+              for (let j = 0; j < filters.Locations.length; j++) {
+                if (restaurants.json[i].locations.some((l) => l.city === filters.Locations[j])) {
+                  addLocation = true;
+                }
+              }
+            } else {
+              addLocation = true;
+            }
+
+            if (filters.Type && filters.Type.length > 0) {
+              for (let j = 0; j < filters.Type.length; j++) {
+                if (restaurants.json[i].type === filters.Type[j]) {
+                  addType = true;
+                }
+              }
+            } else {
+              addType = true;
+            }
+
+            if (filters.Rating && filters.Rating.length > 0) {
+              for (let j = 0; j < filters.Rating.length; j++) {
+                if (
+                  (
+                    (parseInt(restaurants.json[i].rating.husband) +
+                      parseInt(restaurants.json[i].rating.wife)) /
+                    2
+                  ).toString() === filters.Rating[j]
+                ) {
+                  addRating = true;
+                }
+              }
+            } else {
+              addRating = true;
+            }
+
+            if (filters.Cost && filters.Cost.length > 0) {
+              for (let j = 0; j < filters.Cost.length; j++) {
+                if (restaurants.json[i].cost === filters.Cost[j]) {
+                  addCost = true;
+                }
+              }
+            } else {
+              addCost = true;
+            }
+
+            if (addVisited && addLocation && addType && addRating && addCost) {
+              filteredRestaurants.push(restaurants.json[i]);
+            }
+          }
+        }
+
+        setFilteredRestaurants(filteredRestaurants);
+      }
+
       setLoading(false);
     };
 
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatchRestaurants, user, params]);
+  }, [dispatchRestaurants, user, params, searchParams]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -84,6 +193,12 @@ const RestaurantsPage = () => {
     }
   }, [dispatchLocations, user]);
 
+  const handleLocationChange = (location) => {
+    navigate(`/restaurants/${location}`);
+
+    dispatchFilters({ type: Actions.RESET_FILTERS });
+  };
+
   const handleCurrentLocationModalClick = (value) => {
     dispatchCurrentLocation({ type: Actions.SET_CURRENT_LOCATION, payload: value });
 
@@ -102,46 +217,6 @@ const RestaurantsPage = () => {
     navigate(`/${params.category}/filters`);
   };
 
-  const filterRestaurants = () => {
-    if (restaurants) {
-      switch (searchParams.get("attribute")) {
-        case "Visited":
-          if (searchParams.get("query") === "Visited") {
-            return restaurants.filter((restaurant) => restaurant.visited === true);
-          }
-          if (searchParams.get("query") === "To Visit") {
-            return restaurants.filter((restaurant) => restaurant.visited === false);
-          }
-
-          break;
-        case "Locations":
-          let filtered = [];
-
-          for (let i = 0; i < restaurants.length; i++) {
-            for (let j = 0; j < restaurants[i].locations.length; j++) {
-              if (restaurants[i].locations[j].city === searchParams.get("query")) {
-                filtered.push(restaurants[i]);
-              }
-            }
-          }
-
-          return filtered;
-        case "Type":
-          return restaurants.filter((restaurant) => restaurant.type === searchParams.get("query"));
-        case "Rating":
-          return restaurants.filter(
-            (restaurant) =>
-              ((parseInt(restaurant.rating.husband) + parseInt(restaurant.rating.wife)) / 2).toString() ===
-              searchParams.get("query")
-          );
-        case "Cost":
-          return restaurants.filter((restaurant) => restaurant.cost === searchParams.get("query"));
-        default:
-          return restaurants;
-      }
-    }
-  };
-
   const renderSkeleton = (count) => {
     const skeleton = [];
 
@@ -158,7 +233,7 @@ const RestaurantsPage = () => {
       locationCategories.map((location) => {
         return {
           key: location,
-          label: <div onClick={() => navigate(`/restaurants/${location}`)}>{location}</div>,
+          label: <div onClick={() => handleLocationChange(location)}>{location}</div>,
           icon: location === currentLocation && (
             <Tag color="blue">
               <HomeOutlined />
@@ -219,7 +294,7 @@ const RestaurantsPage = () => {
       />
       <RandomRestaurantModal
         open={randomModalOpen}
-        restaurants={restaurants}
+        restaurants={filteredRestaurants}
         onCancelClick={() => setRandomModalOpen(false)}
       />
       <LogoutModal
@@ -242,8 +317,7 @@ const RestaurantsPage = () => {
           </Flex>
           <Flex gap="small">
             <Button
-              variant="outlined"
-              color="default"
+              type="primary"
               size="large"
               icon={<QuestionOutlined />}
               onClick={() => setRandomModalOpen(true)}
@@ -263,28 +337,36 @@ const RestaurantsPage = () => {
                 {loading ? (
                   <Skeleton.Button />
                 ) : (
-                  `${restaurants && filterRestaurants(restaurants).length} Restaurants`
+                  `${filteredRestaurants && filteredRestaurants.length} Restaurants`
                 )}
               </Typography.Text>
               <Typography.Text type="secondary">
                 {!loading &&
-                  `${restaurants && filterRestaurants(restaurants).filter((r) => !r.visited).length} Todo`}
+                  `${filteredRestaurants && filteredRestaurants.filter((r) => !r.visited).length} Todo`}
               </Typography.Text>
             </Flex>
             <Button type="text" size="large" onClick={handleOnFiltersClick}>
               <Flex gap="small" align="center">
                 <span>Filter:</span>
-                <Tag className="me-0" icon={searchParams.get("attribute") === "Rating" && <StarFilled />}>
-                  {searchParams.get("query") !== null ? searchParams.get("query") : "All"}
-                </Tag>
+                {searchParams.getAll("attribute").length === 1 ? (
+                  <Tag className="me-0" icon={searchParams.get("attribute") === "Rating" && <StarFilled />}>
+                    {searchParams.get("query") !== null ? searchParams.get("query") : "All"}
+                  </Tag>
+                ) : (
+                  <Tag className="me-0">
+                    {searchParams.getAll("attribute").length === 0
+                      ? "All"
+                      : `${searchParams.getAll("attribute").length} Applied`}
+                  </Tag>
+                )}
               </Flex>
             </Button>
           </Flex>
           <Flex vertical gap="small">
             {loading ? (
               renderSkeleton(7)
-            ) : restaurants && restaurants.length > 0 ? (
-              filterRestaurants(restaurants)
+            ) : filteredRestaurants && filteredRestaurants.length > 0 ? (
+              filteredRestaurants
                 .filter((restaurant) =>
                   restaurant.restaurant.toLowerCase().includes(searchQuery.toLowerCase())
                 )

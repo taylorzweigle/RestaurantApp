@@ -1,6 +1,6 @@
-//Taylor Zweigle, 2024
-import React, { useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+//Taylor Zweigle, 2025
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Collapse, Flex, Typography } from "antd";
 
@@ -10,6 +10,9 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalf from "@mui/icons-material/StarHalf";
 
+import * as Actions from "../actions/actions";
+
+import { useFiltersContext } from "../hooks/useFiltersContext";
 import { useLocationsContext } from "../hooks/useLocationsContext";
 import { useRestaurantsContext } from "../hooks/useRestaurantsContext";
 
@@ -19,17 +22,13 @@ import FilterListItem from "../components/lists/FilterListItem";
 
 import { sortLocationsArray } from "../utility/Sort";
 
-const FiltersPage = ({ values }) => {
+const FiltersPage = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [searchParams] = useSearchParams({ attribute: "", query: "" });
 
+  const { filters, dispatchFilters } = useFiltersContext();
   const { locations } = useLocationsContext();
   const { restaurants } = useRestaurantsContext();
-
-  const [selected, setSelected] = useState("");
-  const [attribute, setAttribute] = useState("");
-  const [query, setQuery] = useState("");
 
   const getCityCount = (city) => {
     let count = 0;
@@ -59,19 +58,35 @@ const FiltersPage = ({ values }) => {
     return stars;
   };
 
-  const handleOnClick = ({ label, attribute, query }) => {
-    setSelected(label);
-    setAttribute(attribute);
-    setQuery(query);
+  const handleOnClick = ({ attribute, query }) => {
+    if (filters.some((f) => f.query === query)) {
+      dispatchFilters({ type: Actions.DELETE_FILTER, payload: { attribute, query } });
+      return;
+    } else {
+      dispatchFilters({ type: Actions.CREATE_FILTER, payload: { attribute, query } });
+    }
   };
 
   const handleOnApply = () => {
-    searchParams.set("attribute", attribute);
-    searchParams.set("query", query);
+    if (filters) {
+      let searchParamsString = "";
 
-    query === "All"
-      ? navigate(`/restaurants/${params.category}`)
-      : navigate(`/restaurants/${params.category}/?attribute=${attribute}&query=${query}`);
+      for (let i = 0; i < filters.length; i++) {
+        searchParamsString += `attribute=${filters[i].attribute}&query=${filters[i].query}`;
+
+        if (i !== filters.length - 1) {
+          searchParamsString += "&";
+        }
+      }
+
+      navigate(`/restaurants/${params.category}/?${searchParamsString}`);
+    }
+  };
+
+  const handleOnReset = () => {
+    dispatchFilters({ type: Actions.RESET_FILTERS });
+
+    navigate(`/restaurants/${params.category}`);
   };
 
   const items = [
@@ -82,27 +97,19 @@ const FiltersPage = ({ values }) => {
         <Flex wrap gap="small">
           <FilterListItem
             attribute="Visited"
-            query="All"
-            label="All"
-            selected={selected === "All"}
-            value={restaurants.length}
-            onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
-          />
-          <FilterListItem
-            attribute="Visited"
             query="Visited"
             label="Visited"
-            selected={selected === "Visited"}
+            selected={filters.some((f) => f.query === "Visited")}
             value={restaurants.filter((restaurant) => restaurant.visited).length}
-            onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+            onClick={(attribute, query) => handleOnClick(attribute, query)}
           />
           <FilterListItem
             attribute="Visited"
             query="To Visit"
             label="To Visit"
-            selected={selected === "To Visit"}
+            selected={filters.some((f) => f.query === "To Visit")}
             value={restaurants.filter((restaurant) => !restaurant.visited).length}
-            onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+            onClick={(attribute, query) => handleOnClick(attribute, query)}
           />
         </Flex>
       ),
@@ -127,9 +134,9 @@ const FiltersPage = ({ values }) => {
                   attribute="Locations"
                   query={city.value}
                   label={city.value}
-                  selected={selected === city.value}
+                  selected={filters.some((f) => f.query === city.value)}
                   value={getCityCount(city.value)}
-                  onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+                  onClick={(attribute, query) => handleOnClick(attribute, query)}
                 />
               ))}
         </Flex>
@@ -146,9 +153,9 @@ const FiltersPage = ({ values }) => {
               attribute="Type"
               query={type.value}
               label={type.value}
-              selected={selected === type.value}
+              selected={filters.some((f) => f.query === type.value)}
               value={restaurants.filter((restaurant) => restaurant.type === type.value).length}
-              onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+              onClick={(attribute, query) => handleOnClick(attribute, query)}
             />
           ))}
         </Flex>
@@ -165,7 +172,7 @@ const FiltersPage = ({ values }) => {
               attribute="Rating"
               query={rating.value}
               label={renderStars(rating.value)}
-              selected={selected === rating.value}
+              selected={filters.some((f) => f.query === rating.value)}
               value={
                 restaurants.filter(
                   (restaurant) =>
@@ -175,7 +182,7 @@ const FiltersPage = ({ values }) => {
                     ).toString() === rating.value
                 ).length
               }
-              onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+              onClick={(attribute, query) => handleOnClick(attribute, query)}
             />
           ))}
         </Flex>
@@ -197,12 +204,12 @@ const FiltersPage = ({ values }) => {
                   <AttachMoneyIcon
                     key={cost}
                     fontSize="xsmall"
-                    className={`${selected === cost.value ? "text-white" : "text-teal-600"} -ml-1`}
+                    className={`${filters.includes(cost.value) ? "text-white" : "text-teal-600"} -ml-1`}
                   />
                 ))}
-              selected={selected === cost.value}
+              selected={filters.some((f) => f.query === cost.value)}
               value={restaurants.filter((restaurant) => restaurant.cost === cost.value).length}
-              onClick={(label, attribute, query) => handleOnClick(label, attribute, query)}
+              onClick={(attribute, query) => handleOnClick(attribute, query)}
             />
           ))}
         </Flex>
@@ -229,22 +236,14 @@ const FiltersPage = ({ values }) => {
             shape="circle"
             size="large"
             icon={<UndoOutlined />}
-            onClick={() => navigate(`/restaurants/${params.category}`)}
+            onClick={handleOnReset}
           />
         </Flex>
-        {restaurants && <Collapse items={items} defaultActiveKey={["1"]} />}
+        {restaurants && <Collapse items={items} defaultActiveKey={["1", "2", "3", "4", "5"]} />}
       </Flex>
       <Flex vertical gap="middle">
         <Button color="default" variant="filled" size="large" onClick={() => navigate(-1)}>
           Cancel
-        </Button>
-        <Button
-          color="default"
-          variant="outlined"
-          size="large"
-          onClick={() => navigate(`/restaurants/${params.category}`)}
-        >
-          Reset
         </Button>
         <Button color="primary" variant="solid" size="large" onClick={handleOnApply}>
           Apply

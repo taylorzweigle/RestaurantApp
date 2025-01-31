@@ -1,4 +1,4 @@
-//Taylor Zweigle, 2024
+//Taylor Zweigle, 2025
 import React from "react";
 
 import { Button, Typography } from "antd";
@@ -11,7 +11,6 @@ const FilterListItem = ({ attribute, query, label, value, selected, onClick }) =
       variant={selected ? "solid" : "outlined"}
       onClick={() =>
         onClick({
-          label: query,
           attribute: attribute,
           query: query,
         })
