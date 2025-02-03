@@ -12,7 +12,7 @@ export const filtersReducer = (state, action) => {
     case Actions.CREATE_FILTER:
       return { filters: [action.payload, ...state.filters] };
     case Actions.DELETE_FILTER:
-      return { filters: state.filters.filter((f) => f.filter !== action.payload.filter) };
+      return { filters: state.filters.filter((f) => f.query !== action.payload.query) };
     case Actions.RESET_FILTERS:
       return { filters: [] };
     default:
