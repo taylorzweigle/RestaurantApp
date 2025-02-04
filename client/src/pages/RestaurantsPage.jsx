@@ -221,9 +221,7 @@ const RestaurantsPage = () => {
     const skeleton = [];
 
     for (let i = 0; i < count; i++) {
-      skeleton.push(
-        <Skeleton.Node key={i} loading={loading} active={true} className="w-full sm:max-w-128" />
-      );
+      skeleton.push(<Skeleton.Node key={i} loading={loading} active={true} style={{ width: "512px" }} />);
     }
 
     return skeleton;
